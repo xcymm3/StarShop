@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.taro/
+.swc/
+.temp/
+*.log
+.env
+.env.*.local
+project.private.config.json
+.DS_Store
+Thumbs.db

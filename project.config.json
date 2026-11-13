@@ -1,0 +1,14 @@
+{
+  "miniprogramRoot": "dist/weapp/",
+  "projectname": "StarShop",
+  "description": "空间站商店",
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false,
+    "compileHotReLoad": false
+  }
+}
