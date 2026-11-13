@@ -2,6 +2,10 @@
 
 空间站商店模拟经营游戏首版，使用 Taro 4.3.2、React 18、TypeScript 和 Vite。H5 调试与微信小程序共用规则和界面代码。
 
+![柜台、仓库、升级和账本的实际运行画面](docs/界面预览.jpg)
+
+预览来自无窗口浏览器的确定性测试状态。
+
 ## 当前内容
 
 24 种原创商品、4 类顾客、收购与出售、一次付费鉴定、展示位、仓库扩容、店铺等级、五笔成交跨日、每周租金及欠租补缴、低价清仓、本地存档与坏档恢复入口。
@@ -64,4 +68,22 @@ npm run build:demo
 
 `release/StarShop-demo.zip` 是本次交付压缩包，包含 HTML 与说明；生成产物不提交 Git，可从仓库重新构建。
 
-24 项基础价参考原 Unity 工厂方法常数，映射见 `docs/商品数值对照.md`。保持本项目原创商品名称，美术由原截图色阶与柜台构图启发独立绘制，源码在 `scripts/generate-pixel-assets.py`。不声称逐物品或全部经济系统还原。
+24 项基础价参考原 Unity 工厂方法常数，映射见 `docs/商品数值对照.md`。保持本项目原创商品名称，不声称逐物品或全部经济系统还原。
+
+## 简笔原型与原创素材
+
+美术按“简笔可玩版 → Unity 真实参考册 → 逐项原创替换”制作，规格见 [美术制作流程](docs/美术制作流程.md)，逐项来源、提示词和运行时规格见 [素材清单](docs/素材清单.json)。31 项包括 24 件商品、4 类顾客、店铺背景、交易终端、鉴定工具。界面文字、按钮和边框使用 Taro 组件绘制。
+
+```sh
+npm run build:sketch
+```
+
+生成可独立游玩的 `release/StarShop-sketch.html`。之后执行 `npm run build:demo` 重新生成原创美术版，简笔版文件会保留。简笔图保存在 `src/assets/sketches/`，正式图按 `items/`、`visitors/`、`room/` 分类。
+
+原作图片与高清原创原稿留在本机 `D:/mydoc/probably-stolen-rea/starshop-art/`。`comparison-catalog.html` 为包含简笔、真实参考、原创成品的离线素材册；该目录不提交仓库。内置图像生成工具负责原创绘制，Python 只负责静态提取、预览排版和运行时尺寸打包。旧版代码像素绘制脚本仅输出到 `artifacts/legacy-pixel-assets/`，不覆盖正式美术。
+
+```sh
+python scripts/check-art.py
+```
+
+检查 31 项正式图片的尺寸、透明通道与校验值。制作脚本依赖 Pillow；`prepare-art-catalog.py` 还需要本机 REA 工具目录中的 UnityPy 和用户提供的游戏文件，普通构建和游玩不需要这些依赖。

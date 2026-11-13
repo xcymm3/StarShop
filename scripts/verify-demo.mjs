@@ -25,7 +25,7 @@ try {
     return route.abort()
   })
   await page.goto(
-    pathToFileURL(path.resolve('release/StarShop-demo.html')).href,
+    pathToFileURL(path.resolve(process.argv[2] || 'release/StarShop-demo.html')).href,
   )
   await page.getByText('店长手册', { exact: true }).waitFor()
   const loaded = await page.locator('.room-sprite').evaluate((e) => {

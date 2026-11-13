@@ -45,8 +45,10 @@ export default defineConfig<'vite'>({
   mini: {
     imageUrlLoaderOption: {
       limit: 0,
-      name: (filename: string) =>
-        `assets/${path.basename(filename.split('\\').join('/'))}`,
+      name: (filename: string) => {
+        const normalized = filename.split('\\').join('/')
+        return `assets/${path.basename(path.dirname(normalized))}_${path.basename(normalized)}`
+      },
     },
     postcss: { pxtransform: { enable: true }, cssModules: { enable: false } },
   },

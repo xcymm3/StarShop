@@ -1,0 +1,901 @@
+[
+  {
+    "id": "p0",
+    "name": "磁悬轴承",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 878,
+      "name": "current_converter",
+      "w": 16.0,
+      "h": 32.0
+    },
+    "source_size": [
+      16,
+      32
+    ],
+    "source_sha256": "c7b089d049001ac47cf1fa62f37331a3a878567aad7ea304ff9eaab2d5884e63",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p0.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A compact magnetic bearing: concentric steel rings around a dark hollow center, three ochre calibration notches, worn blue-grey outer housing. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "d9c022a0b4242f9f028864a076725f0027f3fc1684273f41cc212891da4f4ad6",
+    "runtime_sha256": "491db1326ad0426bc80a3346b85753d670417c25c2c545d1d7d2dacd9cb6714e",
+    "runtime_bytes": 7073
+  },
+  {
+    "id": "p1",
+    "name": "微型燃料泵",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 982,
+      "name": "faucet1",
+      "w": 160.0,
+      "h": 80.0
+    },
+    "source_size": [
+      160,
+      80
+    ],
+    "source_sha256": "8532b5f28339217f9871473f945aea092b74db008d314356cd59b3cccb2682c3",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p1.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A small fuel transfer pump: squat blue-grey cylindrical pump body, two brass hose connectors, a tiny red lever and reinforced foot. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "ed3f25dad98c8584401a95afbac2306f2e8bf0a1992af4f8b9abfe325cf37a92",
+    "runtime_sha256": "466bafb05a9ea7ea1483488a4ba6a04d883fd1c4b1fd29ccbd6a67ab4307a95a",
+    "runtime_bytes": 4410
+  },
+  {
+    "id": "p2",
+    "name": "导航陀螺",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 963,
+      "name": "electronic1",
+      "w": 48.0,
+      "h": 32.0
+    },
+    "source_size": [
+      48,
+      32
+    ],
+    "source_sha256": "fc517416695d82ad1a700e24c7d51edb48d7c4fa10f63ba1946fad04ecf4a3c8",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p2.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A navigation gyroscope with three interlocking tarnished brass gimbal rings around a teal sphere, mounted on a small square steel foot. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "ac3475f9a76cc8ce3ef7935a4089eb2b0f2d0047dd005fa6696f792c1fd9b4d5",
+    "runtime_sha256": "0847264873873cde2da94fa08606005b3abb3aa604462da0f8d2d6e0ec6709e0",
+    "runtime_bytes": 6870
+  },
+  {
+    "id": "p3",
+    "name": "气闸控制器",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1116,
+      "name": "alarm_system",
+      "w": 48.0,
+      "h": 48.0
+    },
+    "source_size": [
+      48,
+      48
+    ],
+    "source_sha256": "0039f0a634264f722fa209ec305a18a44c0644d63e3fb0c432361c4bc0ea8c03",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p3.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A handheld airlock controller: chunky blue-grey rectangular box, small blank amber display, one red guarded switch, two ivory keys and connector socket. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "f3bfc4ba7242a3bf31aed6202aca8c48569cd153b6bd112a5720dbd889ae7ea8",
+    "runtime_sha256": "c62e28afa5eadfc8bc0fe08f77f270a8d9dec0286a0fbbec3c0da47a3c21ecdc",
+    "runtime_bytes": 6060
+  },
+  {
+    "id": "p4",
+    "name": "聚变点火芯",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1297,
+      "name": "plasma_fuel_cell",
+      "w": 64.0,
+      "h": 32.0
+    },
+    "source_size": [
+      64,
+      32
+    ],
+    "source_sha256": "9797f31c3bc8b71c34aec72c46aab2d1d6d1c967b04a750179e6fe7107173f44",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p4.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A fusion ignition cartridge: short thick cylindrical cartridge, dark graphite caps and protective steel ribs around a small warm amber inner core. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "98705b93592de6c45350a832fc50a4b523910115e358369884b3a776183cad02",
+    "runtime_sha256": "ca60b4c49d391702243315adda114376134aae71cc0c0e93ecb294006999ab22",
+    "runtime_bytes": 4287
+  },
+  {
+    "id": "p5",
+    "name": "量子线圈",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 991,
+      "name": "electronic3",
+      "w": 48.0,
+      "h": 32.0
+    },
+    "source_size": [
+      48,
+      32
+    ],
+    "source_sha256": "1e84ce89ec25bb4d768d9c19d8e63f5dbdecc8394971da490521efffc65a0eae",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p5.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A compact toroidal quantum coil: thick aged copper windings around a graphite ring, two teal ceramic clamps and short insulated terminal leads. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "702298ac6b8709a8b84b9cf7d7b58b13afe3e947cb345ad6b31ad8948e8a0c0d",
+    "runtime_sha256": "ca675cc3e48e9aadfa1847f00422658789cb142b07da148cbc13fce4a6f11e67",
+    "runtime_bytes": 6572
+  },
+  {
+    "id": "p6",
+    "name": "藻类口粮",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1006,
+      "name": "water_ration",
+      "w": 32.0,
+      "h": 32.0
+    },
+    "source_size": [
+      32,
+      32
+    ],
+    "source_sha256": "65f9400dd3f20898d7e291985bce4bb524f04db8d0b189ceba97adac7fd750f8",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p6.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A sealed algae food ration pouch: worn olive-green foil packet, torn cream rectangular blank label, simple leaf pictogram, crimped top and bottom. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "3f8fe67947a892d01a7862638dfff6f9abc89bfbe233617af83a208f04fc6c91",
+    "runtime_sha256": "410b3a7fd8a2129601ab816f91ec05435e3c426415ced3d260fd5fbac67f6bb2",
+    "runtime_bytes": 6336
+  },
+  {
+    "id": "p7",
+    "name": "净水滤芯",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 440,
+      "name": "water_filter",
+      "w": 16.0,
+      "h": 32.0
+    },
+    "source_size": [
+      16,
+      32
+    ],
+    "source_sha256": "cc511d584b6f12712c30f16f81fe0aff89a19f4b164cbf46d107919d0484ab56",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p7.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A portable water filter cartridge: tall ribbed cream ceramic cylinder, dark teal end caps, two small brass pipe adapters and blue-grey retaining band. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "083668a52b7bb1b9aebc4d98609f55a6fe943ca7d9fc6e659cf049f914a141b5",
+    "runtime_sha256": "e315cdbc149cb82b6779ba6e15c357121345584a1de7ce256b9a1420a4754563",
+    "runtime_bytes": 3488
+  },
+  {
+    "id": "p8",
+    "name": "密封咖啡豆",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1090,
+      "name": "coffee_bean",
+      "w": 16.0,
+      "h": 16.0
+    },
+    "source_size": [
+      16,
+      16
+    ],
+    "source_sha256": "dc9a7c12ac3ff80b87f7951236e32f0dbd0447b14c720702cb681c869ab064cc",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p8.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A sealed coffee bean pouch: squat folded kraft-brown bag, dark plum resealable top clip, small blank cream label with three coffee-bean pictograms. No plant. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "ab6ac1974eb65ded15b683ec39bb9fdf8cf2cf4fe871a9a04eecdd20c6f04257",
+    "runtime_sha256": "8600b9fa0fd97b60511af19d924cb8541b38786f41cfb5fbf003128a9d2e4029",
+    "runtime_bytes": 7169
+  },
+  {
+    "id": "p9",
+    "name": "应急氧气罐",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1174,
+      "name": "water_bottle_full_premium",
+      "w": 16.0,
+      "h": 64.0
+    },
+    "source_size": [
+      16,
+      64
+    ],
+    "source_sha256": "c11abb51f31cb633025d1f922fbd4bd8cec250fd352547aedb4aa7aedd0c20b7",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p9.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: An emergency oxygen canister: squat steel blue cylinder, rounded shoulders, brass valve with protective collar, faded ochre stripe and a small analog gauge. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "a3494b47cc0b9fddc54e36d91edff64e39547b34a3f32598259f2f42598942af",
+    "runtime_sha256": "2fd07243f64d3f226267f1afd7cb08a838d0d99f397c9564c835a4e000bb2903",
+    "runtime_bytes": 5045
+  },
+  {
+    "id": "p10",
+    "name": "医疗补给包",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 894,
+      "name": "med2",
+      "w": 48.0,
+      "h": 32.0
+    },
+    "source_size": [
+      48,
+      32
+    ],
+    "source_sha256": "56d01cc1dd4470a5d403da0ca320e7a30a39dcacb7cfb3984a2010dad6c78f2e",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p10.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A compact medical supply satchel: muted rust fabric case with cream cross patch, dark straps, metal zipper and slight worn corners. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "52e3e2229582f7dfc6b7434ddb233b119c11dc7a4671d8b3f1ca784a6b954314",
+    "runtime_sha256": "1a8e60c0de2217e79245485f7a51342a8628498439f7418cd6d78aa5e9ae5ed7",
+    "runtime_bytes": 6448
+  },
+  {
+    "id": "p11",
+    "name": "恒温培养盒",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 988,
+      "name": "expedition_box",
+      "w": 96.0,
+      "h": 64.0
+    },
+    "source_size": [
+      96,
+      64
+    ],
+    "source_sha256": "0b98d6608ad022da8be3a3b4627614ed6d46a697bbce47a53442ed061de327d8",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p11.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A small insulated specimen incubator box: grey-green rugged case, clear dark teal top viewing panel showing two tiny seedling vials, amber status lamp, side handle. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "a5ab4aed98450ae1a48c646018e6fc501bc39fb095103a9b8da680970785e6ef",
+    "runtime_sha256": "7913c79b0656087fa534512925e1177c59e1b62baca3c46369f6f3dcf8dae080",
+    "runtime_bytes": 5296
+  },
+  {
+    "id": "p12",
+    "name": "旧地球邮票",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1365,
+      "name": "food_stamp",
+      "w": 32.0,
+      "h": 32.0
+    },
+    "source_size": [
+      32,
+      32
+    ],
+    "source_sha256": "4915883d231c286c75467fdb6887716b63f3c6c899f13a45518ffd31b940b21a",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p12.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A single vintage postage stamp with perforated cream paper edges, muted blue-green illustration of Earth and a tiny old rocket, faded rust circular postmark. No readable letters or digits. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "4328c801f725899d69d959d47c61bd703d72911f7a1033ba27ff3c48e2f93c80",
+    "runtime_sha256": "2c7adaad34de9e9a6c6fff3f5a1058e74ea7113c130fafe468c9c9f633579091",
+    "runtime_bytes": 8850
+  },
+  {
+    "id": "p13",
+    "name": "矿工纪念章",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 597,
+      "name": "scav_medal",
+      "w": 16.0,
+      "h": 32.0
+    },
+    "source_size": [
+      16,
+      32
+    ],
+    "source_sha256": "08f54b4260cc940f01f2776aaebaf7d324e95c461248f16780b81911aa3b8b71",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p13.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: An old miners commemorative medal: tarnished brass hexagonal medallion with crossed pick pictogram, worn burgundy ribbon, small dents. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "4fc93114d8e05d1bf1767a2ed33080d6517ce6c03fab505b88802b3c61f60769",
+    "runtime_sha256": "12198ca7257c0ade18aa3c11f5e9a44bb9198b56ae08ff64e7425b5050b33df3",
+    "runtime_bytes": 4332
+  },
+  {
+    "id": "p14",
+    "name": "轨道怀表",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1388,
+      "name": "the_coin",
+      "w": 16.0,
+      "h": 16.0
+    },
+    "source_size": [
+      16,
+      16
+    ],
+    "source_sha256": "74646fc2f8d0bee983d7ed5a35f192a5db2c19d771212bc2c2ea7f0555e61111",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p14.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: An antique orbital pocket watch: round weathered brass case, ivory face with simple ticks and two dark hands, short chain and small side crown. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "5e1474c1eefdf6a6d359ddd40c8497352df216af11978987cf6312d56c30e352",
+    "runtime_sha256": "755ac75233c53c59a11a30b577e214783dea6b8327f9c683ea58c66c9bc5efe9",
+    "runtime_bytes": 6959
+  },
+  {
+    "id": "p15",
+    "name": "航海铜星盘",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 936,
+      "name": "aquascan",
+      "w": 32.0,
+      "h": 48.0
+    },
+    "source_size": [
+      32,
+      48
+    ],
+    "source_sha256": "bec57a0866cf9c926037b37dcd684f9291c64ca2310744ef74cb6d13c063e019",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p15.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A brass celestial astrolabe: layered circular engraved rings and delicate star pointers, dark plum recesses, compact folding triangular stand. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "db1f0918e0a77d77408de5404dab9a3699aaf0f00f10229df8ba2ce26a99d372",
+    "runtime_sha256": "4149b6b1ae1a163bb7e6a6f8c9dcfabb0e05710d5f129742735059cc57a35cfa",
+    "runtime_bytes": 6177
+  },
+  {
+    "id": "p16",
+    "name": "殖民地唱片",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 917,
+      "name": "cassette13b",
+      "w": 32.0,
+      "h": 32.0
+    },
+    "source_size": [
+      32,
+      32
+    ],
+    "source_sha256": "3373c79c97dae9d76f0ee647b5b40a06bb17d78dfce02e23d09f783c349de7b6",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p16.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A vintage colony vinyl record half-sliding from a worn square cardboard sleeve; sleeve has a faded geometric teal coastline and ochre sun, disc dark plum with cream blank central label. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "fe6e67313f3580d2f4adc94c3010e05259bdafb71ba9e36a2b6ab13869dab906",
+    "runtime_sha256": "b64521ad70293aa29cd3dbb42130c22637310a6797e10686354c56f7177003ab",
+    "runtime_bytes": 5786
+  },
+  {
+    "id": "p17",
+    "name": "月海玻璃",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1154,
+      "name": "glass_shard",
+      "w": 48.0,
+      "h": 16.0
+    },
+    "source_size": [
+      48,
+      16
+    ],
+    "source_sha256": "00b4bb8c2454057fa5ae64e158d874bcc9d2b1c199075f37ac0c284bad753c5e",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p17.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A lunar sea glass specimen: irregular translucent blue-green glass shard with pale mineral swirls, amber inclusion and weathered cloudy edges, resting in a small dark metal sample cradle. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "e4d29a21441e64bfde581310c20d58533a522c5208c5f5ba8691a41d18686be1",
+    "runtime_sha256": "1c23245ea0c5d838251eea54c7796107f3b03d7536f8d6d034590e8e82543af9",
+    "runtime_bytes": 4410
+  },
+  {
+    "id": "p18",
+    "name": "港口星图",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1148,
+      "name": "book1",
+      "w": 32.0,
+      "h": 48.0
+    },
+    "source_size": [
+      32,
+      48
+    ],
+    "source_sha256": "c3cb1bd1bbef72a8004605884586fe5697ec8f58c775d282fb1c93c7b917e7bd",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p18.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A folded old port star chart on cream paper: simple teal orbital routes, small ochre star dots, dark plum border, curled corners and one metal clip. No letters. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "9d954ae48138108b802f7c97414e32d6dc508a9a27f2696536beabb090f75a82",
+    "runtime_sha256": "8dc1bbd1fce0015120a48d27364998edbeaf068ab6a9ca894fd017aff749cdf7",
+    "runtime_bytes": 6453
+  },
+  {
+    "id": "p19",
+    "name": "修理手册",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1143,
+      "name": "manual1",
+      "w": 32.0,
+      "h": 48.0
+    },
+    "source_size": [
+      32,
+      48
+    ],
+    "source_sha256": "f60c36b58eb93b13876460b3fd8b4e2ba7f75b7e094f08f223cbe00a87593d8b",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p19.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A thick worn repair handbook: muted petrol-blue hardcover, cream spine tape, simple wrench pictogram embossed on cover, several ochre page tabs and frayed corners. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "231f76fff93d5c445eb9fa90bb27f02395f04e8b01eb8ece67a9484e7ea44ccc",
+    "runtime_sha256": "7daf5d8e4584a44f4629b04e110dc9fa47a922b4c5e55c122b06e060aed6801b",
+    "runtime_bytes": 6661
+  },
+  {
+    "id": "p20",
+    "name": "植物样本记录",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1226,
+      "name": "book3",
+      "w": 32.0,
+      "h": 48.0
+    },
+    "source_size": [
+      32,
+      48
+    ],
+    "source_sha256": "2d26d5c7bbde0a68c0cab76fcd41869f1e8d9fddc6bf1cfac6f7b2048f3df81e",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p20.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A compact botanical sample logbook: grey-green cloth cover, cream label with small pressed leaf drawing, burgundy binding strap and worn paper page edges. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "1d3a69d26bf0cbbe9c909573ec97565d81d522a21bfbda0d6610dcdaa54a2a14",
+    "runtime_sha256": "ff2cd0926b94bad526beedee761407749da47478fb3d2fbcf7b6ffbf43cc978d",
+    "runtime_bytes": 5213
+  },
+  {
+    "id": "p21",
+    "name": "探测器日志",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1179,
+      "name": "book2",
+      "w": 32.0,
+      "h": 48.0
+    },
+    "source_size": [
+      32,
+      48
+    ],
+    "source_sha256": "d97630e084a76713c7f8a89bd1daa0206b6f6aa903d80bc5c820bd0750126ee3",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p21.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A rugged probe flight-log data recorder: dark blue-grey palm-sized rectangular drive with amber inset strip, metal corner guards and two teal indicator dots. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "bff5886227c045af3875e7e66d0bd3486ee6566e9a560e7b759e1794b5653f76",
+    "runtime_sha256": "c639e430957c9607d164f4bc217e23c89aa4139c44d5ecf24d6899597749e1bb",
+    "runtime_bytes": 4416
+  },
+  {
+    "id": "p22",
+    "name": "古航路坐标",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1358,
+      "name": "sec_keycard",
+      "w": 32.0,
+      "h": 32.0
+    },
+    "source_size": [
+      32,
+      32
+    ],
+    "source_sha256": "6a6b9e8a9deb412761a18f6f325a064ac07293851711cda2b1c2ba7829f0d0ca",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p22.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: An old navigation coordinate data card: wide dark teal chipped metal card with narrow brass contact strip, cream constellation pictogram and faded ochre diagonal corner marking. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "28fd221e887d695496b5945d8673fd77216da10487e875a8e1aa42fd254f8ef6",
+    "runtime_sha256": "207bfd6fa43f66f6c66e4e08f8cf335fcb179a08cff0357a7e65015844217c79",
+    "runtime_bytes": 3970
+  },
+  {
+    "id": "p23",
+    "name": "失落观测档案",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 379,
+      "name": "command_keycard",
+      "w": 32.0,
+      "h": 32.0
+    },
+    "source_size": [
+      32,
+      32
+    ],
+    "source_sha256": "1697bc389bed2ea3fcd5e5d514ce9f7fe9673871e552f74dcb1e47a0172737f2",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台、仓库、商品档案、展示柜",
+    "runtime": "items/p23.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A lost observatory archive cartridge: chunky plum-grey rectangular data cassette with recessed twin reels, tarnished brass lock tab, amber glass data window and blank aged label. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "2e0c9ab96080f4850a06cc34ad32da5aa708cd9eb5e0a9c58735386b6844a92d",
+    "runtime_sha256": "654e0d1f8122912869d5b021854c8e0658c7b885f985e6fbce0d5fe6bddb3b6f",
+    "runtime_bytes": 5782
+  },
+  {
+    "id": "v0",
+    "name": "拾荒者",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1697,
+      "name": "scavMale_0",
+      "w": 288.0,
+      "h": 211.0
+    },
+    "source_size": [
+      288,
+      211
+    ],
+    "source_sha256": "d477e9889066d27025d08179624f4727f4b9fa8513df50ff80130a21091604c4",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台顾客半身像",
+    "runtime": "visitors/v0.png",
+    "runtime_size": [
+      320,
+      400
+    ],
+    "prompt": "Use case: stylized-concept. Create ONE standalone original 2D pixel-art NPC bust sprite. Input is REFERENCE ONLY for front-facing waist-up composition, mature natural human proportions, muted retro industrial space-station pixel art and level of clothing detail. Design a distinctly NEW scavenger: weathered middle-aged woman, short silver hair tucked behind ears, angular face, old amber eyepiece pushed onto forehead, patched charcoal-purple jacket, ochre scarf, small oxygen cylinder behind one shoulder and canvas carrying strap. Calm appraising expression. Full head shoulders torso, no cropped sides, bust cutoff at waist. Natural anatomy, no chibi. Cohesive large intentional pixel clusters, about 180 logical pixels wide enlarged nearest-neighbor, restrained texture, purple dark occlusion. Different face hair clothes and backpack arrangement from reference, not a trace or recolor. Transparent background. Single centered character, 10% margin, no scene labels text frame. No smooth painterly rendering or 3D.",
+    "status": "installed",
+    "generation": "approved-pilot-reuse",
+    "master_sha256": "1f9c0167884e5b9d2d8effd80078ceb4a74f6075e7970cb5e9a6d7fd16f28732",
+    "runtime_sha256": "5fd1910bef3a51a62af822b164f7efd55e43ff6f10eb1967cf63f4c4b96fbf78",
+    "runtime_bytes": 30272
+  },
+  {
+    "id": "v1",
+    "name": "船员",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1093,
+      "name": "maleEng_0",
+      "w": 288.0,
+      "h": 211.0
+    },
+    "source_size": [
+      288,
+      211
+    ],
+    "source_sha256": "03275d61f0db374236217adb7bfced08e6fa14ca46fc23c1fc6afd0b17cfd512",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台顾客半身像",
+    "runtime": "visitors/v1.png",
+    "runtime_size": [
+      320,
+      400
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A NEW station crewman, young adult man with warm brown skin, close-cropped dark hair, pale steel-blue flight jacket, ochre collar, shoulder comms patch, cream harness and small headset. Calm slightly tired face. Front facing waist-up bust, complete shoulders. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "b828cbc8b1af14cd41999e01fa1d3c644c684c510e770fa998ed206318d0bf5e",
+    "runtime_sha256": "7bef13ff37b73fb2b396ad86481dfc471531131cd246ea7f4e59e4b432cc160e",
+    "runtime_bytes": 29899
+  },
+  {
+    "id": "v2",
+    "name": "商人",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1691,
+      "name": "maleBM_0",
+      "w": 288.0,
+      "h": 211.0
+    },
+    "source_size": [
+      288,
+      211
+    ],
+    "source_sha256": "c5e5dd94c50ea9e6cffb070d6f878171e8b3108ea2afc245ae4961d71ce59392",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台顾客半身像",
+    "runtime": "visitors/v2.png",
+    "runtime_size": [
+      320,
+      400
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A NEW interstellar merchant, middle-aged stocky man with olive skin, wavy dark hair and short beard, worn burgundy travelling coat, petrol-blue vest, brass clasp, cream scarf and small ledger tucked into breast pocket. Wry friendly expression. Front facing waist-up bust, complete shoulders. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "1622c450c02c4979dccc5b6a706e9ff9e6b2e88f19b3f85288ca3d1e89d6191c",
+    "runtime_sha256": "927c4337e73af375aca7a30898a761405c31d11a250b6d52f57a441df85c24a7",
+    "runtime_bytes": 24379
+  },
+  {
+    "id": "v3",
+    "name": "收藏家",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1037,
+      "name": "maleUpper_0",
+      "w": 288.0,
+      "h": 211.0
+    },
+    "source_size": [
+      288,
+      211
+    ],
+    "source_sha256": "52cdd9bce97cd133b8de56e8138b5b9511719dd4f6b46ab050ff8cc535ceaa40",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "柜台顾客半身像",
+    "runtime": "visitors/v3.png",
+    "runtime_size": [
+      320,
+      400
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A NEW antique collector, older woman with dark brown skin, neat silver hair bun, round brass spectacles, deep teal tailored coat with ochre lining, small astronomical brooch and cream blouse. Curious discerning expression. Front facing waist-up bust, complete shoulders. Complete centered subject, 10 percent clear margin, genuine transparent background. No scene, text, logo, border, flat vector style, chibi, 3D render, or photorealism. Readable silhouette on a phone. Do not draw the reference object when the requested subject is different. No glow, halo or background shading outside the object.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "b97c2c8cce42ab5a8ac6a8c4d3469f66a430f929d86d723476485860007d1cf3",
+    "runtime_sha256": "c492b1ee0bbf72cc0d52bd130d6e6aa7cad811a802551110187d83b28278da3a",
+    "runtime_bytes": 31629
+  },
+  {
+    "id": "counter",
+    "name": "店铺背景",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1273,
+      "name": "store_front_wall_lit",
+      "w": 960.0,
+      "h": 540.0
+    },
+    "source_size": [
+      960,
+      540
+    ],
+    "source_sha256": "4a3c60ed8b8193e76d19e1b31e3c83021499851c4141ffe2d93e9eddb8c0e6e1",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "店铺场景",
+    "runtime": "room/counter.png",
+    "runtime_size": [
+      960,
+      640
+    ],
+    "prompt": "Use case: stylized-concept. ONE original 2D game asset, a carefully crafted muted retro space-station pixel-style illustration. Input 1 is Unity reference for material, composition and atmosphere ONLY; redesign shapes and structure, do not trace. Input 2 (when present) is the approved ORIGINAL art style reference. Match its nuanced weathered industrial craft, steel blue/grey, warm ochre and cream accents, purple dark shadows, restrained pixel clusters and natural proportions. Subject: A richly detailed but quiet empty space-station secondhand shop viewed straight-on from behind the shop counter. Wide 3:2 composition. Worn blue-grey industrial walls, central open service hatch with dark purple station corridor beyond, stacked drawers and illuminated glass cabinet at left, shelves and bundles of old cable to right, amber practical lamp overhead, teal indicator lights. Strongest light and empty space at central hatch for a separate NPC bust overlay. Bottom 15 percent is a bare countertop ledge. NO people, NO terminal, NO loose merchandise on counter, NO text, logos, signage or UI. Original architecture; match reference visual language without tracing. Opaque background filling image. No border, interface, text, people, labels or watermark. Render a cohesive polished background, keeping a calm center for separately composited character.",
+    "status": "installed",
+    "generation": "built-in-image_gen",
+    "master_sha256": "49cc97fcf5b12301ce8a8645b0a114abc4c886de6ce103bc08413b0a587eb63b",
+    "runtime_sha256": "4d9ddec40d2eaf5dc09c1215ac18bfc6d4dcc775bf92014b4375124233be4ccd",
+    "runtime_bytes": 151120
+  },
+  {
+    "id": "terminal",
+    "name": "交易终端",
+    "source": {
+      "file": "sharedassets1.assets",
+      "path_id": 1216,
+      "name": "negociation_tablet",
+      "w": 960.0,
+      "h": 540.0
+    },
+    "source_size": [
+      960,
+      540
+    ],
+    "source_sha256": "04731dd1b9a4af1f8d51032dfec3db69248a12e19f25e8206ba16a67812fb714",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "店铺场景",
+    "runtime": "room/terminal.png",
+    "runtime_size": [
+      256,
+      224
+    ],
+    "prompt": "Use case: stylized-concept. Produce ONE standalone original 2D pixel-art game asset, a retro tabletop transaction terminal. Input image is a reference ONLY for object function, recognizable overall proportions, muted industrial space-station craft and three-quarter front view. Redesign the actual construction: squat chamfered blue-grey metal base, hinged display, warm amber blank screen with thin teal status line, sloped keyboard deck with THREE ivory mechanical keys and small red cancel button, card slot on right, coiled cable on left, worn corners and restrained scratches/dust. New hardware layout, not a trace or recolor. Whole terminal visible with 10% clear margin, transparent background, centered. Reference density about 150-200 logical pixels across enlarged with deliberate crisp pixel clusters, not ornate photoreal detail, not vector flat icon, no smooth 3D/painterly render. Purple dark occlusion, cream edge highlights. No readable text, no logos, no frames, no other objects or backdrop.",
+    "status": "installed",
+    "generation": "approved-pilot-reuse",
+    "master_sha256": "eed05e4944e1449f94e3d607d5e045ca272e7bb64aa9d6d5ebadb8e971d455ae",
+    "runtime_sha256": "1b3439feb73b4a67982173923019675feb76099a3187e4c7f9c1d330745251e7",
+    "runtime_bytes": 11524
+  },
+  {
+    "id": "magnifier",
+    "name": "鉴定工具",
+    "source": {
+      "file": "resources.assets",
+      "path_id": 1072,
+      "name": "magnifier",
+      "w": 48.0,
+      "h": 48.0
+    },
+    "source_size": [
+      48,
+      48
+    ],
+    "source_sha256": "5c3877edc7a5720cc1c46457f2ddf8218bbc8bc350f4388ceb6201e98d8a90a1",
+    "mapping": "用途或材质的视觉参考，非同物身份复刻；与价格参考分开",
+    "usage": "鉴定档案",
+    "runtime": "room/magnifier.png",
+    "runtime_size": [
+      128,
+      128
+    ],
+    "prompt": "{\"record\": \"上一轮提示词设计要点，非逐字记录\", \"subject\": \"环形放大镜；加厚多边形金属框、左下短肋纹握柄、独立琥珀校准表盘、钢蓝青色和沙色高光；重新设计结构\"}",
+    "status": "installed",
+    "generation": "approved-pilot-reuse",
+    "master_sha256": "57035bff2b2168a6e6a0afd3373b822680914147b2a45e97c8633d10687b9f4c",
+    "runtime_sha256": "4f4efaccdb9a72444b84fc97233e778212f0d13b8e057b434a5c2d360b7b16f0",
+    "runtime_bytes": 5342
+  }
+]

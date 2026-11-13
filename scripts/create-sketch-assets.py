@@ -44,7 +44,8 @@ for name in ['terminal','magnifier']:
         d.ellipse((55,10,145,100),outline=ink,width=5);d.line((68,86,18,140),fill=ink,width=12)
     im.save(O/f'{name}.png')
     # Until the production pass, every slot remains a sketch.
-    shutil.copy2(O/f'{name}.png',R/f'src/assets/room/{name}.png')
+    target=R/f'src/assets/room/{name}.png'
+    if not target.exists():shutil.copy2(O/f'{name}.png',target)
 imports += ["import counter from './counter.png'","import terminal from './terminal.png'","import magnifier from './magnifier.png'"]
 imports += ['export const sketchItems: Record<string,string> = {'+','.join(f'p{i}' for i in range(24))+'}',"export const sketchVisitors: Record<string,string> = {拾荒者:v0,船员:v1,商人:v2,收藏家:v3}",'export const sketchRoom=counter','export const sketchTerminal=terminal','export const sketchMagnifier=magnifier']
 (O/'index.ts').write_text('\n'.join(imports)+'\n','utf-8')

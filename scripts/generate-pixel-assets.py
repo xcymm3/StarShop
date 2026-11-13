@@ -1,4 +1,6 @@
-"""Original code-drawn pixel assets. Reference: local source-game palette/composition only.
+"""Legacy geometric prototype assets; no longer used for production art.
+Writes artifacts/legacy-pixel-assets, never overwrites the current production art.
+Reference: local source-game palette/composition only.
 No source-game pixels, sprites, typography, or audio are embedded.
 Run: python scripts/generate-pixel-assets.py (requires Pillow).
 """
@@ -6,7 +8,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 import random, json, html
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'src/assets'
+OUT=ROOT/'artifacts/legacy-pixel-assets'
 C={'edge':'#25212e','shadow':'#36303f','dark':'#48414d','metal':'#777c74','light':'#acb6a1','teal':'#7ba9a2','cyan':'#a4d0bf','paper':'#ddcfa1','gold':'#c7a268','amber':'#e0b674','rust':'#955e52','red':'#c68370','blue':'#577884','violet':'#80718a','glass':'#4d666d','white':'#efe5c6'}
 class Pixel:
  def __init__(self,w,h,bg=None):
