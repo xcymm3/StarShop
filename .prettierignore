@@ -1,0 +1,6 @@
+node_modules/
+dist/
+artifacts/
+package-lock.json
+# Taro matches the HTML script injection placeholder literally.
+src/index.html

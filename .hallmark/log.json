@@ -1,0 +1,12 @@
+[
+  {
+    "date": "2026-11-13",
+    "macrostructure": "Workbench adapted to mobile play",
+    "theme": "reference-derived; user override of catalog",
+    "palette": "dark purple-grey / grey-green border / warm paper",
+    "motion": "press feedback only; reduced-motion supported",
+    "review": "320/375/414/768 widths checked in headless Chromium, counter/warehouse/ledger screenshots inspected",
+    "self_critique": {"philosophy":4,"hierarchy":4,"execution":4,"specificity":5,"restraint":4,"variety":4},
+    "limits": "not a full 58-gate certification; no WeChat device run"
+  }
+]
