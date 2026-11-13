@@ -53,3 +53,15 @@ npm run test:e2e
 - `src/pages/index/`：竖屏经营界面。
 - `tests/`：规则测试；`e2e/`：无窗口浏览器流程验证。
 - `docs/`：首版方案与视觉参考说明。
+
+## 成品 Demo（五步计划交付）
+
+```sh
+npm run build:demo
+```
+
+生成 `release/StarShop-demo.html`，这是图片、代码、样式全部内嵌的离线单文件，直接用浏览器打开即可玩，不用安装依赖或联网。已验证 file:// 打开、真实交易、本地保存和刷新恢复，未发生网络请求。现代浏览器若限制本地文件存储，可以运行 `npm run demo:serve`，自行访问 `http://127.0.0.1:4179/`。
+
+`release/StarShop-demo.zip` 是本次交付压缩包，包含 HTML 与说明；生成产物不提交 Git，可从仓库重新构建。
+
+24 项基础价参考原 Unity 工厂方法常数，映射见 `docs/商品数值对照.md`。保持本项目原创商品名称，美术由原截图色阶与柜台构图启发独立绘制，源码在 `scripts/generate-pixel-assets.py`。不声称逐物品或全部经济系统还原。

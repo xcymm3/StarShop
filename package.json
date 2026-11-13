@@ -1,6 +1,6 @@
 {
   "name": "starshop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "空间站商店模拟经营游戏",
   "packageManager": "npm@10.9.3",
@@ -18,7 +18,9 @@
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "format": "prettier --write src tests e2e config playwright.config.ts",
-    "format:check": "prettier --check src tests e2e config playwright.config.ts"
+    "format:check": "prettier --check src tests e2e config playwright.config.ts",
+    "build:demo": "node scripts/build-demo.mjs",
+    "demo:serve": "node scripts/demo-server.mjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.4",
@@ -52,7 +54,8 @@
     "terser": "^5.30.4",
     "tsx": "^4.23.15",
     "typescript": "~5.9.3",
-    "vite": "^4.5.14"
+    "vite": "^4.5.14",
+    "vite-plugin-singlefile": "^0.13.5"
   },
   "browserslist": [
     "defaults and fully supports es6-module",
