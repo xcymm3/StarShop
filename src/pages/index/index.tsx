@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Button, Text, View, type ButtonProps } from '@tarojs/components'
+import { Button, Image, Text, View, type ButtonProps } from '@tarojs/components'
 import {
   capacity,
   CATEGORIES,
@@ -17,6 +17,7 @@ import {
   type Item,
 } from '../../game/engine'
 import { load, restart, save } from '../../platform/storage'
+import { itemArt, visitorArt, roomArt } from '../../assets'
 import './index.css'
 
 function GameButton({ className = '', disabled, ...props }: ButtonProps) {
@@ -37,8 +38,12 @@ function Merchandise({ item, small = false }: { item: Item; small?: boolean }) {
     <View
       className={`merch category-${CATEGORIES.indexOf(p.category)} ${small ? 'merch-small' : ''}`}
     >
-      <View className="merch-lines" />
-      <Text>{p.mark}</Text>
+      <Image
+        className="product-sprite"
+        src={itemArt[p.id]}
+        mode="aspectFit"
+        aria-label={p.name}
+      />
     </View>
   )
 }
@@ -202,12 +207,7 @@ export default function Index() {
       {tab === '柜台' && (
         <>
           <View className="store-scene">
-            <View className="wall-port">
-              <View className="orbit" />
-              <View className="planet" />
-              <View className="window-line" />
-              <Text>OUTER RING</Text>
-            </View>
+            <Image className="room-sprite" src={roomArt} mode="aspectFill" />
             <View className="scene-sign">
               <Text>远星杂货</Text>
               <Text className="sign-sub">收旧物 · 迎远客</Text>
@@ -225,30 +225,21 @@ export default function Index() {
                 {!shown.length && <Text className="muted">空柜待上架</Text>}
               </View>
             </View>
-            <View className="shutter" />
-            <View
-              className={`visitor-figure ${v?.role === '收藏家' ? 'collector' : ''}`}
-            >
-              <View className="head">
-                <View className="visor" />
-              </View>
-              <View className="collar" />
-              <View className="coat">
-                <View className="badge" />
-              </View>
-            </View>
+            {v && (
+              <Image
+                className="visitor-sprite"
+                src={visitorArt[v.role] || visitorArt['拾荒者']}
+                mode="aspectFit"
+                aria-label={v.role}
+              />
+            )}
             {!v && <View className="closed-label">等下一位客人</View>}
-            <View className="counter-top">
-              <View className="counter-terminal">
-                <Text>
-                  {v
-                    ? v.kind === 'seller'
-                      ? '收购来货'
-                      : '求购登记'
-                    : '交易已保存'}
-                </Text>
-              </View>
-              <View className="counter-light" />
+            <View className="counter-caption">
+              {v
+                ? v.kind === 'seller'
+                  ? '来货登记'
+                  : '旅客求购'
+                : '交易已保存'}
             </View>
           </View>
           <View className="trade-panel">
@@ -469,7 +460,7 @@ export default function Index() {
               <Text className="muted">累计成交 {game.trades} 笔</Text>
               <Text className="muted">
                 {level(game) === 3
-                  ? '全部商品品类已开放'
+                  ? '全部来货已开放'
                   : `下一等级：${level(game) === 1 ? 15 : 40} 笔成交`}
               </Text>
             </View>
