@@ -159,3 +159,53 @@ test('长程经营不会出现负资金，随机状态可恢复', () => {
     assert.ok(s.cash >= 0)
   }
 })
+
+test('商品基础价与已核实的原作价位映射保持一致', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const { PRODUCTS } = await import('../src/game/engine')
+  const refs = JSON.parse(
+    (
+      await readFile(
+        new URL('../docs/商品数值对照.json', import.meta.url),
+        'utf8',
+      )
+    ).replace(/^\uFEFF/, ''),
+  )
+  assert.equal(refs.products.length, 24)
+  for (const reference of refs.products) {
+    assert.equal(
+      PRODUCTS.find((p) => p.id === reference.demoId)?.base,
+      reference.sourceBase,
+    )
+    assert.ok(reference.sourceMethod && reference.source.price_constant)
+  }
+})
+
+test('高价库存也能遇到预算充足的买家', () => {
+  const s = createGame(123)
+  s.visitor = null
+  s.inventory = [
+    {
+      uid: 'expensive',
+      productId: 'p17',
+      quality: '稀有',
+      condition: '完好',
+      known: true,
+      cost: 900,
+    },
+  ]
+  s.display = ['expensive']
+  let cursor = s
+  let affordable = false
+  for (let i = 0; i < 80; i++) {
+    const next = transition(cursor, { type: 'next' })
+    if (
+      next.visitor?.kind === 'buyer' &&
+      next.visitor.category === '遗物' &&
+      next.visitor.budget >= value(next.inventory[0])
+    )
+      affordable = true
+    cursor = transition(next, { type: 'decline', visitorId: next.visitor!.id })
+  }
+  assert.ok(affordable)
+})
