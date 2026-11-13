@@ -13,6 +13,9 @@ export default defineConfig<'vite'>({
   sourceRoot: 'src',
   outputRoot: demo ? 'dist/demo' : `dist/${process.env.TARO_ENV || 'weapp'}`,
   framework: 'react',
+  defineConstants: {
+    __SKETCH_ART__: JSON.stringify(process.env.STARSHOP_ART === 'sketch'),
+  },
   compiler: {
     type: 'vite',
     vitePlugins: [

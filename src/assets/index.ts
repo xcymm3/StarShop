@@ -27,8 +27,17 @@ import v1 from './visitors/v1.png'
 import v2 from './visitors/v2.png'
 import v3 from './visitors/v3.png'
 import counter from './room/counter.png'
+import terminal from './room/terminal.png'
+import magnifier from './room/magnifier.png'
+import {
+  sketchItems,
+  sketchVisitors,
+  sketchRoom,
+  sketchTerminal,
+  sketchMagnifier,
+} from './sketches'
 
-export const itemArt: Record<string, string> = {
+const finishedItems: Record<string, string> = {
   p0,
   p1,
   p2,
@@ -54,10 +63,14 @@ export const itemArt: Record<string, string> = {
   p22,
   p23,
 }
-export const visitorArt: Record<string, string> = {
+const finishedVisitors: Record<string, string> = {
   拾荒者: v0,
   船员: v1,
   商人: v2,
   收藏家: v3,
 }
-export const roomArt = counter
+export const itemArt = __SKETCH_ART__ ? sketchItems : finishedItems
+export const visitorArt = __SKETCH_ART__ ? sketchVisitors : finishedVisitors
+export const roomArt = __SKETCH_ART__ ? sketchRoom : counter
+export const terminalArt = __SKETCH_ART__ ? sketchTerminal : terminal
+export const magnifierArt = __SKETCH_ART__ ? sketchMagnifier : magnifier

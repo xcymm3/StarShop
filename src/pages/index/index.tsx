@@ -17,7 +17,13 @@ import {
   type Item,
 } from '../../game/engine'
 import { load, restart, save } from '../../platform/storage'
-import { itemArt, visitorArt, roomArt } from '../../assets'
+import {
+  itemArt,
+  visitorArt,
+  roomArt,
+  terminalArt,
+  magnifierArt,
+} from '../../assets'
 import './index.css'
 
 function GameButton({ className = '', disabled, ...props }: ButtonProps) {
@@ -234,6 +240,15 @@ export default function Index() {
               />
             )}
             {!v && <View className="closed-label">等下一位客人</View>}
+            <View className="counter-front">
+              <Text>STARSHOP · 07</Text>
+            </View>
+            <Image
+              className="scene-terminal"
+              src={terminalArt}
+              mode="aspectFit"
+              aria-label="交易终端"
+            />
             <View className="counter-caption">
               {v
                 ? v.kind === 'seller'
@@ -581,6 +596,14 @@ export default function Index() {
               </GameButton>
             </View>
             <View className="detail-product">
+              {detailIsOffer && (
+                <Image
+                  className="identify-tool"
+                  src={magnifierArt}
+                  mode="aspectFit"
+                  aria-label="鉴定工具"
+                />
+              )}
               <Merchandise item={detail} />
               <Text className="page-title">{product(detail).name}</Text>
               <Text className="muted">

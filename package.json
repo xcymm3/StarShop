@@ -20,6 +20,7 @@
     "format": "prettier --write src tests e2e config playwright.config.ts",
     "format:check": "prettier --check src tests e2e config playwright.config.ts",
     "build:demo": "node scripts/build-demo.mjs",
+    "build:sketch": "node scripts/build-sketch.mjs",
     "demo:serve": "node scripts/demo-server.mjs"
   },
   "dependencies": {
