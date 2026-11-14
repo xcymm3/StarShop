@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">手机端主界面空间布局示意：三区格子版</title>
+  <desc id="desc">同一店铺的正面视角：左侧墙面展示柜内有格子，中央顾客站在柜台后方，柜台台面有暂放格子，下方嵌入格子仓库。日期和现金是墙上设备，不另设网页卡片。</desc>
+  <defs>
+    <pattern id="shutter" width="12" height="17" patternUnits="userSpaceOnUse">
+      <rect width="12" height="17" fill="#494450"/>
+      <path d="M0 1H12 M0 14H12" stroke="#635c68" stroke-width="2"/>
+    </pattern>
+    <pattern id="grid" width="37" height="37" patternUnits="userSpaceOnUse" x="47" y="536">
+      <rect width="37" height="37" fill="#302c38"/>
+      <path d="M0 0H37V37H0Z" fill="none" stroke="#615969" stroke-width="1"/>
+    </pattern>
+    <style>
+      text { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; fill: #e8e0c8; }
+      .label { font-size: 19px; font-weight: 700; }
+      .small { font-size: 12px; }
+      .line { stroke: #a0afa8; stroke-width: 2; stroke-linejoin: round; }
+      .darktext { fill: #34343b; }
+      .muted { fill: #bbb4ba; }
+    </style>
+  </defs>
+
+  <!-- A single continuous shop interior, not separate stacked page sections. -->
+  <rect width="390" height="844" fill="#3f4146"/>
+  <path d="M0 0H390V380H0Z" fill="#535457"/>
+  <path d="M12 0V844 M378 0V844" stroke="#292934" stroke-width="13"/>
+  <path d="M20 0V380 M370 0V380" stroke="#87837f" stroke-width="2"/>
+  <path d="M24 104H365 M24 356H365" stroke="#37343e" stroke-width="3"/>
+
+  <!-- Wall-mounted date and cash devices, as in the source scene. -->
+  <rect x="25" y="27" width="135" height="62" rx="4" fill="#37343e" class="line"/>
+  <rect x="32" y="34" width="121" height="48" fill="#d4cda9"/>
+  <text x="92" y="54" text-anchor="middle" class="small darktext">第 1 天 · 今日成交 0/5</text>
+  <text x="92" y="73" text-anchor="middle" class="small darktext">距离交租 7 天</text>
+  <rect x="180" y="37" width="83" height="42" fill="#30343c" class="line"/>
+  <text x="221" y="64" text-anchor="middle" fill="#a4cebe" font-size="22">650 ¢</text>
+  <text x="321" y="53" text-anchor="middle" font-size="15">远星杂货</text>
+  <text x="321" y="73" text-anchor="middle" class="small muted">店面正视图</text>
+
+  <!-- The central entrance sits behind the customer. -->
+  <rect x="134" y="108" width="206" height="280" fill="#302c37" stroke="#8c7b79" stroke-width="7"/>
+  <rect x="141" y="114" width="192" height="267" fill="url(#shutter)"/>
+  <path d="M143 365H331" stroke="#a0afa8" stroke-width="3"/>
+
+  <!-- Showcase: an explicit grid inside the wall-mounted glass cabinet. -->
+  <rect x="24" y="156" width="99" height="199" fill="#302c38" stroke="#817278" stroke-width="7"/>
+  <rect x="31" y="164" width="85" height="183" fill="#383845" stroke="#a0afa8"/>
+  <text x="74" y="191" text-anchor="middle" class="label">展示柜</text>
+  <rect x="34" y="203" width="78" height="130" fill="#302c38" stroke="#a0afa8" stroke-width="1.5"/>
+  <path d="M60 203V333 M86 203V333 M34 229H112 M34 255H112 M34 281H112 M34 307H112" stroke="#8d9190" stroke-width="1"/>
+  <rect x="36" y="205" width="22" height="48" fill="#687b7a" stroke="#a2b6ac" stroke-width="1.5"/>
+  <path d="M43 215H51V244H43Z" fill="#a2b6ac"/>
+  <rect x="88" y="205" width="22" height="22" fill="#897b69" stroke="#cab47f" stroke-width="1.5"/>
+  <circle cx="47" cy="294" r="9" fill="#77707c" stroke="#a0afa8" stroke-width="2"/>
+  <circle cx="47" cy="294" r="4" fill="#302c38" stroke="#a0afa8"/>
+  <rect x="62" y="309" width="48" height="22" fill="#867680" stroke="#bca8aa" stroke-width="1.5"/>
+  <path d="M68 316H103 M68 322H91" stroke="#e8e0c8"/>
+  <text x="73" y="346" text-anchor="middle" font-size="9" class="muted">商品按占格展示</text>
+
+  <!-- Customer: front-facing, standing behind the counter; lower body occluded. -->
+  <path d="M187 255Q170 259 163 295L153 402H315L303 295Q298 261 278 255Z" fill="#93968b" stroke="#292934" stroke-width="3"/>
+  <path d="M207 238V265L232 287L257 265V238" fill="#bfae91" stroke="#292934" stroke-width="3"/>
+  <path d="M198 188Q199 157 231 157Q263 157 266 188L262 222Q255 246 233 249Q211 245 202 224Z" fill="#c7b69b" stroke="#292934" stroke-width="3"/>
+  <path d="M198 196L198 179Q199 151 232 151Q268 155 268 187L255 182L248 170L231 183L209 183L206 197Z" fill="#55505b" stroke="#292934" stroke-width="3"/>
+  <path d="M214 205H223 M242 205H251 M225 230H242" stroke="#49404a" stroke-width="2"/>
+  <path d="M207 264L230 285L218 306L193 277 M257 264L235 285L250 306L275 277 M232 287V388" fill="#777e79" stroke="#45434b" stroke-width="2"/>
+  <path d="M176 296L171 378 M290 296L296 378" fill="none" stroke="#45434b" stroke-width="3"/>
+  <rect x="206" y="320" width="56" height="35" rx="2" fill="#37343e" opacity=".82"/>
+  <text x="234" y="344" text-anchor="middle" class="label">顾客</text>
+  <path d="M165 119H315V140H247L237 150L236 140H165Z" fill="#d4cda9" stroke="#35343d" stroke-width="2"/>
+  <text x="240" y="134" text-anchor="middle" class="small darktext">“老板，看看这件能收吗？”</text>
+
+  <!-- Small right-side physical tool, kept subordinate to the shop. -->
+  <rect x="348" y="206" width="22" height="65" fill="#37343e" class="line"/>
+  <rect x="352" y="212" width="14" height="21" fill="#d4cda9"/>
+  <path d="M353 241H365 M353 247H365 M353 253H365" stroke="#a0afa8"/>
+
+  <!-- Countertop itself is a gridded surface; perspective preserves the continuous scene. -->
+  <path d="M34 376H357L385 461H7Z" fill="#8a9085" stroke="#38343e" stroke-width="4"/>
+  <path d="M42 388H348L367 448H23Z" fill="#4a5356" stroke="#b6b8a2" stroke-width="2"/>
+  <path d="M80.25 388L66 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M118.5 388L109 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M156.75 388L152 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M195 388L195 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M233.25 388L238 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M271.5 388L281 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M309.75 388L324 448" stroke="#a0afa8" stroke-width="1"/>
+  <path d="M35.667 408H354.333 M29.333 428H360.667" stroke="#a0afa8" stroke-width="1"/>
+  <rect x="117" y="365" width="156" height="20" fill="#37343e" stroke="#a0afa8"/>
+  <text x="195" y="380" text-anchor="middle" font-size="14" font-weight="700">柜台 · 格子暂放区</text>
+  <!-- Goods align to footprints on the countertop. -->
+  <path d="M45 391H77L68 425H34Z" fill="#687b7a" stroke="#a2b6ac" stroke-width="1.5"/>
+  <circle cx="55" cy="408" r="9" fill="#393d47" stroke="#c7c5ac" stroke-width="2"/>
+  <circle cx="55" cy="408" r="4" fill="#687b7a"/>
+  <path d="M121 391H192V405H117Z" fill="#867680" stroke="#bca8aa" stroke-width="1.5"/>
+  <path d="M129 396H181 M128 400H163" stroke="#e8e0c8"/>
+  <path d="M278 411H312L317 425H281Z" fill="#897b69" stroke="#cab47f" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="297" y="422" text-anchor="middle" font-size="12">?</text>
+  <path d="M7 461H385V482H7Z" fill="#62666a" stroke="#35343d" stroke-width="3"/>
+
+  <!-- The warehouse is embedded below the counter, not another screen/card. -->
+  <path d="M22 483H369L378 798H13Z" fill="#48434e" stroke="#292934" stroke-width="4"/>
+  <path d="M25 490H366 M17 787H375" stroke="#746b76" stroke-width="3"/>
+  <rect x="140" y="476" width="110" height="24" fill="#777b73" stroke="#35343d" stroke-width="2"/>
+  <rect x="154" y="481" width="19" height="13" fill="#a2b6ac" stroke="#35343d"/>
+  <rect x="186" y="481" width="19" height="13" fill="#b0877e" stroke="#35343d"/>
+  <rect x="218" y="481" width="18" height="13" fill="#cab47f" stroke="#35343d"/>
+  <text x="195" y="521" text-anchor="middle" class="label">仓库 · 格子摆放</text>
+  <rect x="40" y="529" width="310" height="237" fill="#302c38" stroke="#8c7b79" stroke-width="6"/>
+  <rect x="47" y="536" width="296" height="222" fill="url(#grid)"/>
+
+  <!-- A few example footprints only, to show spatial inventory. -->
+  <rect x="49" y="538" width="70" height="70" fill="#687b7a" stroke="#a2b6ac" stroke-width="2"/>
+  <circle cx="84" cy="573" r="23" fill="#393d47" stroke="#c7c5ac" stroke-width="3"/>
+  <circle cx="84" cy="573" r="11" fill="#687b7a" stroke="#a2b6ac" stroke-width="3"/>
+  <rect x="123" y="538" width="33" height="107" fill="#897b69" stroke="#cab47f" stroke-width="2"/>
+  <path d="M134 550H145 M134 554H145 M132 565H147V627H132Z" fill="#b5af92" stroke="#cab47f"/>
+  <rect x="160" y="538" width="70" height="33" fill="#867680" stroke="#bca8aa" stroke-width="2"/>
+  <path d="M170 548H220 M170 555H204" stroke="#e8e0c8" stroke-width="2"/>
+  <text x="195" y="782" text-anchor="middle" class="small muted">物品按尺寸占格，可移动、旋转</text>
+
+  <text x="195" y="823" text-anchor="middle" class="small muted">展示柜、柜台、仓库均按格子摆放</text>
+</svg>
