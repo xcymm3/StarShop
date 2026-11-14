@@ -1,0 +1,387 @@
+[
+  {
+    "day": 1,
+    "trade": 1,
+    "operation": {
+      "op": "tap",
+      "selector": ".confirmation .primary"
+    },
+    "cash_before": 650,
+    "cash_after": 602,
+    "visitor": 14
+  },
+  {
+    "day": 1,
+    "trade": 2,
+    "operation": {
+      "op": "tap",
+      "selector": ".trade-footer .primary"
+    },
+    "cash_before": 602,
+    "cash_after": 628,
+    "visitor": 17
+  },
+  {
+    "day": 1,
+    "trade": 3,
+    "operation": {
+      "op": "tap",
+      "selector": ".trade-footer .primary"
+    },
+    "cash_before": 628,
+    "cash_after": 599,
+    "visitor": 19
+  },
+  {
+    "day": 1,
+    "trade": 4,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 599,
+    "cash_after": 552,
+    "visitor": 26
+  },
+  {
+    "day": 1,
+    "trade": 5,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 552,
+    "cash_after": 612,
+    "visitor": 31
+  },
+  {
+    "day": 2,
+    "trade": 6,
+    "operation": {
+      "op": "tap",
+      "selector": ".confirmation .primary"
+    },
+    "cash_before": 612,
+    "cash_after": 507,
+    "visitor": 33
+  },
+  {
+    "day": 2,
+    "trade": 7,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 507,
+    "cash_after": 491,
+    "visitor": 37
+  },
+  {
+    "day": 2,
+    "trade": 8,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 491,
+    "cash_after": 481,
+    "visitor": 37
+  },
+  {
+    "day": 2,
+    "trade": 9,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 481,
+    "cash_after": 639,
+    "visitor": 43
+  },
+  {
+    "day": 2,
+    "trade": 10,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 639,
+    "cash_after": 755,
+    "visitor": 45
+  },
+  {
+    "day": 3,
+    "trade": 11,
+    "operation": {
+      "op": "tap",
+      "selector": ".trade-footer .primary"
+    },
+    "cash_before": 575,
+    "cash_after": 501,
+    "visitor": 48
+  },
+  {
+    "day": 3,
+    "trade": 12,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 501,
+    "cash_after": 432,
+    "visitor": 48
+  },
+  {
+    "day": 3,
+    "trade": 13,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 432,
+    "cash_after": 388,
+    "visitor": 48
+  },
+  {
+    "day": 3,
+    "trade": 14,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 388,
+    "cash_after": 455,
+    "visitor": 56
+  },
+  {
+    "day": 3,
+    "trade": 15,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 455,
+    "cash_after": 508,
+    "visitor": 56
+  },
+  {
+    "day": 4,
+    "trade": 16,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 508,
+    "cash_after": 693,
+    "visitor": 60
+  },
+  {
+    "day": 4,
+    "trade": 17,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 685,
+    "cash_after": 841,
+    "visitor": 65
+  },
+  {
+    "day": 4,
+    "trade": 18,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 841,
+    "cash_after": 794,
+    "visitor": 70
+  },
+  {
+    "day": 4,
+    "trade": 19,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 794,
+    "cash_after": 748,
+    "visitor": 70
+  },
+  {
+    "day": 4,
+    "trade": 20,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 748,
+    "cash_after": 847,
+    "visitor": 76
+  },
+  {
+    "day": 5,
+    "trade": 21,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 847,
+    "cash_after": 659,
+    "visitor": 78
+  },
+  {
+    "day": 5,
+    "trade": 22,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 659,
+    "cash_after": 647,
+    "visitor": 78
+  },
+  {
+    "day": 5,
+    "trade": 23,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 647,
+    "cash_after": 606,
+    "visitor": 84
+  },
+  {
+    "day": 5,
+    "trade": 24,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 606,
+    "cash_after": 816,
+    "visitor": 88
+  },
+  {
+    "day": 5,
+    "trade": 25,
+    "operation": {
+      "op": "tap",
+      "selector": ".confirmation .primary"
+    },
+    "cash_before": 816,
+    "cash_after": 558,
+    "visitor": 90
+  },
+  {
+    "day": 6,
+    "trade": 26,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 558,
+    "cash_after": 476,
+    "visitor": 98
+  },
+  {
+    "day": 6,
+    "trade": 27,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 476,
+    "cash_after": 872,
+    "visitor": 102
+  },
+  {
+    "day": 6,
+    "trade": 28,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 872,
+    "cash_after": 908,
+    "visitor": 102
+  },
+  {
+    "day": 6,
+    "trade": 29,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 908,
+    "cash_after": 829,
+    "visitor": 105
+  },
+  {
+    "day": 6,
+    "trade": 30,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 829,
+    "cash_after": 813,
+    "visitor": 112
+  },
+  {
+    "day": 7,
+    "trade": 31,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 813,
+    "cash_after": 793,
+    "visitor": 112
+  },
+  {
+    "day": 7,
+    "trade": 32,
+    "operation": {
+      "op": "tap",
+      "selector": ".trade-footer .primary"
+    },
+    "cash_before": 793,
+    "cash_after": 1010,
+    "visitor": 120
+  },
+  {
+    "day": 7,
+    "trade": 33,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 1010,
+    "cash_after": 1094,
+    "visitor": 122
+  },
+  {
+    "day": 7,
+    "trade": 34,
+    "operation": {
+      "op": "tap",
+      "name": "确认收购"
+    },
+    "cash_before": 1094,
+    "cash_after": 1079,
+    "visitor": 124
+  },
+  {
+    "day": 7,
+    "trade": 35,
+    "operation": {
+      "op": "tap",
+      "name": "确认出售"
+    },
+    "cash_before": 1079,
+    "cash_after": 1229,
+    "visitor": 129
+  }
+]

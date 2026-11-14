@@ -1,0 +1,196 @@
+{
+  "day": 8,
+  "progress": 0,
+  "cash": 1109,
+  "trades": 35,
+  "debt": 0,
+  "notice": "第 8 天 · 今日热销 数据。当前顾客与货物已保留。",
+  "hot": "数据",
+  "displayCategory": null,
+  "level": 2,
+  "report": null,
+  "bills": [
+    {
+      "day": 7,
+      "amount": 120,
+      "paid": 120,
+      "deferred": false
+    }
+  ],
+  "inventory": [
+    {
+      "uid": "i34",
+      "name": "植物样本记录",
+      "cat": "数据",
+      "area": "warehouse",
+      "x": 6,
+      "y": 0,
+      "w": 2,
+      "h": 1,
+      "rotated": false,
+      "known": false,
+      "condition": "磨损",
+      "cost": 30,
+      "offer": 0,
+      "estimate": [
+        21,
+        47
+      ]
+    },
+    {
+      "uid": "i38",
+      "name": "应急氧气罐",
+      "cat": "补给",
+      "area": "warehouse",
+      "x": 0,
+      "y": 0,
+      "w": 1,
+      "h": 3,
+      "rotated": false,
+      "known": false,
+      "condition": "完好",
+      "cost": 16,
+      "offer": 0,
+      "estimate": [
+        20,
+        44
+      ]
+    },
+    {
+      "uid": "i40",
+      "name": "应急氧气罐",
+      "cat": "补给",
+      "area": "warehouse",
+      "x": 1,
+      "y": 0,
+      "w": 1,
+      "h": 3,
+      "rotated": false,
+      "known": false,
+      "condition": "损坏",
+      "cost": 10,
+      "offer": 0,
+      "estimate": [
+        12,
+        26
+      ]
+    },
+    {
+      "uid": "i81",
+      "name": "应急氧气罐",
+      "cat": "补给",
+      "area": "warehouse",
+      "x": 2,
+      "y": 1,
+      "w": 1,
+      "h": 3,
+      "rotated": false,
+      "known": false,
+      "condition": "损坏",
+      "cost": 12,
+      "offer": 0,
+      "estimate": [
+        12,
+        26
+      ]
+    },
+    {
+      "uid": "i85",
+      "name": "修理手册",
+      "cat": "数据",
+      "area": "warehouse",
+      "x": 6,
+      "y": 1,
+      "w": 2,
+      "h": 2,
+      "rotated": false,
+      "known": false,
+      "condition": "完好",
+      "cost": 41,
+      "offer": 0,
+      "estimate": [
+        50,
+        110
+      ]
+    },
+    {
+      "uid": "i114",
+      "name": "净水滤芯",
+      "cat": "补给",
+      "area": "warehouse",
+      "x": 5,
+      "y": 0,
+      "w": 1,
+      "h": 2,
+      "rotated": false,
+      "known": false,
+      "condition": "损坏",
+      "cost": 16,
+      "offer": 0,
+      "estimate": [
+        18,
+        40
+      ]
+    },
+    {
+      "uid": "i115",
+      "name": "植物样本记录",
+      "cat": "数据",
+      "area": "warehouse",
+      "x": 5,
+      "y": 3,
+      "w": 2,
+      "h": 1,
+      "rotated": false,
+      "known": false,
+      "condition": "完好",
+      "cost": 20,
+      "offer": 0,
+      "estimate": [
+        25,
+        55
+      ]
+    },
+    {
+      "uid": "i126",
+      "name": "微型燃料泵",
+      "cat": "机械",
+      "area": "warehouse",
+      "x": 3,
+      "y": 0,
+      "w": 1,
+      "h": 2,
+      "rotated": false,
+      "known": false,
+      "condition": "损坏",
+      "cost": 15,
+      "offer": 0,
+      "estimate": [
+        15,
+        33
+      ]
+    }
+  ],
+  "visitor": {
+    "id": 129,
+    "name": "阿岚",
+    "role": "船员",
+    "kind": "buyer",
+    "line": "明天出港，找点能用的东西。磨损和损坏也可以看看。",
+    "category": "补给",
+    "budget": 31,
+    "remaining": 0,
+    "minimumQuality": "普通",
+    "acceptsDamaged": true,
+    "bargained": false,
+    "variety": false,
+    "wholesaleDiscount": 14,
+    "stock": []
+  },
+  "quote": [],
+  "total": 0,
+  "wholesale": 0,
+  "visible": [],
+  "scrollY": 0,
+  "errors": []
+}
