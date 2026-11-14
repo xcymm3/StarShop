@@ -329,6 +329,46 @@ test('320/375/414/768竖屏布局无横向溢出，报价窗口不封锁柜台',
   }
 })
 
+test('首位卖家在矮窗口滚动后，来货无遮挡且付款按钮不随账单内容滚走', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 592, height: 590 })
+  await open(page, createGame())
+  const first = (await observation(page)).visitor!
+  expect(first.kind).toBe('seller')
+  const uid = first.stock[0].uid
+  await drag(page, uid, 'counter', 0, 0)
+  await tablet(page)
+  await page.evaluate(() => window.scrollTo(0, 200))
+  const layout = await page.evaluate(() => {
+    const quote = document
+      .querySelector('.trading-backdrop .sheet')!
+      .getBoundingClientRect()
+    const goods = document
+      .querySelector('.customer-counter')!
+      .getBoundingClientRect()
+    return { quoteBottom: quote.bottom, goodsTop: goods.top }
+  })
+  expect(layout.quoteBottom).toBeLessThanOrEqual(layout.goodsTop)
+  const confirm = page
+    .locator('.trade-footer')
+    .getByText('确认收购', { exact: true })
+  const before = await confirm.boundingBox()
+  await page.locator('.trade-scroll').evaluate((el) => {
+    el.scrollTop = el.scrollHeight
+  })
+  const after = await confirm.boundingBox()
+  expect(after!.y).toBeCloseTo(before!.y, 0)
+  expect(after!.y).toBeGreaterThanOrEqual(0)
+  expect(after!.y + after!.height).toBeLessThanOrEqual(590)
+  await page.screenshot({ path: 'artifacts/customer-trade-fixed.png' })
+  await confirm.click()
+  expect((await stored(page)).cash).toBe(650 - first.stock[0].sellerAsk!)
+  await expect(
+    page.getByText('这批货已收完，可送客', { exact: true }),
+  ).toBeVisible()
+})
+
 test('浏览器从新局通过同一单步接口完成第七日房租', async ({ page }) => {
   test.setTimeout(180000)
   await open(page, createGame(77))

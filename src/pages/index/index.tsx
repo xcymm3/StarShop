@@ -379,12 +379,15 @@ export default function Index() {
           ?
         </GameButton>
 
-        {v?.kind === 'seller' && v.stock.length > 0 && (
+        {v?.kind === 'seller' && (
           <View className="customer-counter">
             <Text className="customer-counter-label">
-              顾客来货 · 拖到下方柜台挑选
+              卖家来货 {v.stock.length} 件 · 拖到下方柜台
             </Text>
             {grid('customer')}
+            {v.stock.length === 0 && (
+              <Text className="customer-empty">这批货已收完，可送客</Text>
+            )}
           </View>
         )}
         <View className="counter-title">
@@ -578,6 +581,11 @@ export default function Index() {
             className={
               'sheet ' + (panel === 'help' ? 'metal-sheet' : 'paper-sheet')
             }
+            style={
+              panel === 'trade'
+                ? { fontSize: 'clamp(12px, 2.8vw, 16px)' }
+                : undefined
+            }
           >
             <View className="sheet-heading">
               <Text>
@@ -602,124 +610,125 @@ export default function Index() {
                   <Text>当前没有顾客，请先按铃接客。</Text>
                 ) : (
                   <>
-                    <View className="visitor-heading">
-                      <Text>
-                        {v.name} · {v.role}
-                      </Text>
-                      <Text>{v.kind === 'seller' ? '来卖货' : '来买货'}</Text>
-                    </View>
-                    <Text className="body-copy">{v.line}</Text>
-                    {v.kind === 'buyer' && (
-                      <View className="demand">
+                    <ScrollView className="trade-scroll" scrollY>
+                      <View className="visitor-heading">
                         <Text>
-                          求购 {v.category} · 剩余预算 {v.budget}
+                          {v.name} · {v.role}
                         </Text>
-                        <Text>
-                          {v.minimumQuality}起 ·{' '}
-                          {v.acceptsDamaged ? '可接受损坏' : '不收损坏'} · 还买{' '}
-                          {v.remaining} 件
-                        </Text>
+                        <Text>{v.kind === 'seller' ? '来卖货' : '来买货'}</Text>
                       </View>
-                    )}
-                    <Text className="trade-instruction">
-                      {v.kind === 'seller'
-                        ? '把来货拖到柜台，逐件核价；或接受整批折扣。'
-                        : '从仓库或展示柜把货拖上柜台，账单随台面更新。'}
-                    </Text>
-                    {v.kind === 'buyer' && v.variety && (
+                      <Text className="body-copy">{v.line}</Text>
+                      {v.kind === 'buyer' && (
+                        <View className="demand">
+                          <Text>
+                            求购 {v.category} · 剩余预算 {v.budget}
+                          </Text>
+                          <Text>
+                            {v.minimumQuality}起 ·{' '}
+                            {v.acceptsDamaged ? '可接受损坏' : '不收损坏'} ·
+                            还买 {v.remaining} 件
+                          </Text>
+                        </View>
+                      )}
                       <Text className="trade-instruction">
-                        多种多样：同种商品只买一件。
+                        {v.kind === 'seller'
+                          ? '把来货拖到柜台，逐件核价；或接受整批折扣。'
+                          : '从仓库或展示柜把货拖上柜台，账单随台面更新。'}
                       </Text>
-                    )}
-                    <View className="offer-list">
-                      {!rows.length && (
-                        <Text className="body-copy">
-                          柜台暂无报价物品。关闭平板也可以继续搬货。
+                      {v.kind === 'buyer' && v.variety && (
+                        <Text className="trade-instruction">
+                          多种多样：同种商品只买一件。
                         </Text>
                       )}
-                      {rows.map(({ item, price, reason, accepted }) => (
-                        <View
-                          className={
-                            'offer-row ' + (accepted ? 'selected' : 'refused')
-                          }
-                          key={item.uid}
-                        >
-                          <Image
-                            src={itemArt[item.productId]}
-                            mode="aspectFit"
-                            className="offer-art"
-                          />
-                          <View className="offer-copy">
-                            <Text className="item-name">
-                              {product(item).name}
-                            </Text>
-                            <Text>
-                              {reason ||
-                                (v.kind === 'seller'
-                                  ? '待购 · 尚未付款'
-                                  : '可出售')}
-                            </Text>
+                      <View className="offer-list">
+                        {!rows.length && (
+                          <Text className="body-copy">
+                            柜台暂无报价物品。关闭平板也可以继续搬货。
+                          </Text>
+                        )}
+                        {rows.map(({ item, price, reason, accepted }) => (
+                          <View
+                            className={
+                              'offer-row ' + (accepted ? 'selected' : 'refused')
+                            }
+                            key={item.uid}
+                          >
+                            <Image
+                              src={itemArt[item.productId]}
+                              mode="aspectFit"
+                              className="offer-art"
+                            />
+                            <View className="offer-copy">
+                              <Text className="item-name">
+                                {product(item).name}
+                              </Text>
+                              <Text>
+                                {reason ||
+                                  (v.kind === 'seller'
+                                    ? '待购 · 尚未付款'
+                                    : '可出售')}
+                              </Text>
+                            </View>
+                            <View className="offer-controls">
+                              <Text className="offer-price">
+                                {accepted ? price + '¢' : '不收'}
+                              </Text>
+                              <GameButton
+                                aria-label={'撤下 ' + item.uid}
+                                onClick={() => select(item)}
+                              >
+                                撤下
+                              </GameButton>
+                            </View>
                           </View>
-                          <View className="offer-controls">
-                            <Text className="offer-price">
-                              {accepted ? price + '¢' : '不收'}
-                            </Text>
-                            <GameButton
-                              aria-label={'撤下 ' + item.uid}
-                              onClick={() => select(item)}
-                            >
-                              撤下
-                            </GameButton>
-                          </View>
-                        </View>
-                      ))}
-                    </View>
-                    {v.kind === 'seller' && v.stock.length > 0 && (
-                      <View className="wholesale-offer">
-                        <Text>
-                          整批 {v.stock.length} 件 · 优惠{' '}
-                          {v.wholesaleDiscount ?? 15}% · 实付{' '}
-                          {wholesalePrice(game)}¢
-                        </Text>
-                        <GameButton
-                          aria-label="整批收购"
-                          disabled={game.cash < wholesalePrice(game)}
-                          onClick={() =>
-                            setConfirm({
-                              title:
-                                '以 ' +
-                                wholesalePrice(game) +
-                                ' 星币收购全部 ' +
-                                v.stock.length +
-                                ' 件？货物将留在柜台。',
-                              run: () => {
-                                if (
-                                  apply(
-                                    { type: 'wholesale', visitorId: v.id },
-                                    '确认整批价格后接受批发收购',
-                                  )
-                                )
-                                  setPanel(null)
-                              },
-                            })
-                          }
-                        >
-                          接受整批报价
-                        </GameButton>
+                        ))}
                       </View>
-                    )}
-                    {!v.stock.length && v.kind === 'seller' && (
-                      <Text className="body-copy">
-                        这批来货已经收完，可以送客。
-                      </Text>
-                    )}
+                      {v.kind === 'seller' && v.stock.length > 0 && (
+                        <View className="wholesale-offer">
+                          <Text>
+                            整批 {v.stock.length} 件 · 优惠{' '}
+                            {v.wholesaleDiscount ?? 15}% · 实付{' '}
+                            {wholesalePrice(game)}¢
+                          </Text>
+                          <GameButton
+                            aria-label="整批收购"
+                            disabled={game.cash < wholesalePrice(game)}
+                            onClick={() =>
+                              setConfirm({
+                                title:
+                                  '以 ' +
+                                  wholesalePrice(game) +
+                                  ' 星币收购全部 ' +
+                                  v.stock.length +
+                                  ' 件？货物将留在柜台。',
+                                run: () => {
+                                  if (
+                                    apply(
+                                      { type: 'wholesale', visitorId: v.id },
+                                      '确认整批价格后接受批发收购',
+                                    )
+                                  )
+                                    setPanel(null)
+                                },
+                              })
+                            }
+                          >
+                            接受整批报价
+                          </GameButton>
+                        </View>
+                      )}
+                      {!v.stock.length && v.kind === 'seller' && (
+                        <Text className="body-copy">
+                          这批来货已经收完，可以送客。
+                        </Text>
+                      )}
+                    </ScrollView>
                     <View className="trade-footer">
                       <Text>
                         台面 {rows.length} 件 · 可成交{' '}
                         {rows.filter((r) => r.accepted).length} 件 · 合计{' '}
                         {total}
                       </Text>
-                      <Text>每次确认成交计一笔，顾客继续留店。</Text>
                       <View className="toolbar">
                         <GameButton
                           disabled={!game.staged.length || v.bargained}
@@ -885,7 +894,9 @@ export default function Index() {
               </View>
             )}
             {error && <Text className="inline-error">{error}</Text>}
-            <Text className="feedback">{game.notice}</Text>
+            {panel !== 'trade' && (
+              <Text className="feedback">{game.notice}</Text>
+            )}
           </View>
         </View>
       )}

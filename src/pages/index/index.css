@@ -3,6 +3,7 @@
  * All four inventories, signs, customer, dialogue and controls are live components.
  */
 .game-shell {
+  position: relative;
   width: 100%;
   max-width: 480px;
   margin: auto;
@@ -1050,40 +1051,86 @@
   padding: 8px;
 }
 .modal-backdrop.trading-backdrop {
+  position: absolute;
   background: transparent;
   pointer-events: none;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-end;
   padding: 0;
-  top: min(12vh, 25vw);
-  left: 50%;
-  right: auto;
+  top: 11%;
+  left: auto;
+  right: 2%;
   bottom: auto;
-  width: min(96vw, 460px);
-  transform: translateX(-50%);
+  width: 96%;
+  height: 26%;
+  transform: none;
 }
 .trading-backdrop .sheet {
   pointer-events: auto;
-  width: 72%;
-  max-height: min(27vh, 52vw);
+  width: 65%;
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   margin: 0 0 0 auto;
-  padding: 14px;
+  padding: 0.55em;
   box-shadow: 0 5px 18px #0008;
 }
 .trading-backdrop .sheet-heading {
-  position: sticky;
-  top: -14px;
-  z-index: 2;
-  background: var(--sheet);
-  font-size: 24px;
+  position: static;
+  flex-shrink: 0;
+  padding: 0 0 0.4em;
+  margin: 0;
+  font-size: 1.05em;
 }
-.trading-backdrop .sheet-heading .game-button {
-  min-height: 56px;
-  font-size: 21px;
+.trading-backdrop .sheet-heading .game-button,
+.trading-backdrop .toolbar .game-button,
+.trading-backdrop .offer-controls .game-button {
+  min-height: 2.1em;
+  height: auto;
+  padding: 0.2em 0.4em;
+  font-size: 1em;
+}
+.trade-scroll {
+  flex: 1;
+  height: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+.trading-backdrop .trade-footer {
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  padding-top: 0.3em;
+}
+.trading-backdrop .trade-footer > text {
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+.trading-backdrop .trade-footer .toolbar {
+  margin-top: 0.3em;
 }
 .trading-backdrop .body-copy,
 .trading-backdrop .visitor-heading,
 .trading-backdrop .demand,
+.trading-backdrop .trade-instruction,
+.trading-backdrop .offer-copy,
+.trading-backdrop .wholesale-offer {
+  font-size: 0.9em;
+  line-height: 1.45;
+}
+.customer-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.7em;
+  pointer-events: none;
+}
 .trade-instruction {
   font-size: 21px;
   line-height: 1.5;
@@ -1098,13 +1145,11 @@
   flex-shrink: 0;
 }
 .trading-backdrop .item-name {
-  font-size: 22px;
+  font-size: 1em;
 }
-.trading-backdrop .offer-controls .game-button {
-  min-height: 54px;
-}
+
 .trading-backdrop .offer-price {
-  font-size: 24px;
+  font-size: 1em;
 }
 .offer-row.refused {
   opacity: 0.75;
