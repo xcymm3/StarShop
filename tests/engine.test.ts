@@ -11,6 +11,9 @@ import {
   debt,
   value,
   migrateV1,
+  migrateV2,
+  tradeRows,
+  wholesalePrice,
   type Game,
   type Visitor,
   type Action,
@@ -25,9 +28,9 @@ function seller(s: Game, prices = [30, 20]): Visitor {
     known: false,
     quality: '普通' as const,
     claimedQuality: '稀有' as const,
-    x: 0,
+    x: n * 3,
     y: 0,
-    area: 'counter' as const,
+    area: 'customer' as const,
     cost: 0,
     rotated: false,
     productId: n % 2 ? 'p12' : 'p0',
@@ -153,7 +156,7 @@ test('暂放不转移归属，批量收购只算一笔，未知品质不会因�
         y: 4,
         rotated: false,
       }),
-    /自己的/,
+    /未付款/,
   )
   s = step(s, { type: 'buy', visitorId: v.id })
   assert.equal(s.cash, 600)
@@ -243,7 +246,12 @@ test('买家共享预算、数量与偏好，选货阶段没有出售', () => {
     uid = s.inventory[0].uid
   assert.ok(quote(s, s.inventory[0]) > 0)
   assert.equal(quote(s, s.inventory[2]), 0)
-  assert.throws(() => transition(s, { type: 'stage', uid }), /预算/)
+  const over = step(s, { type: 'stage', uid })
+  assert.equal(over.inventory[0].area, 'counter')
+  assert.throws(
+    () => transition(over, { type: 'sell', visitorId: v.id }),
+    /预算/,
+  )
   v.budget = 200
   s = step(s, { type: 'stage', uid })
   assert.equal(s.inventory.length, 3)
@@ -263,13 +271,12 @@ test('收藏家不收普通/损坏货，未匹配需求不能直接成交', () =
   v.minimumQuality = '精良'
   v.acceptsDamaged = false
   assert.equal(quote(s, s.inventory[0]), 0)
-  assert.throws(
-    () => transition(s, { type: 'stage', uid: s.inventory[0].uid }),
-    /不接受/,
-  )
+  const staged = step(s, { type: 'stage', uid: s.inventory[0].uid })
+  assert.match(tradeRows(staged)[0].reason, /品质/)
+  assert.equal(staged.cash, s.cash)
   assert.throws(
     () => transition(s, { type: 'sell', visitorId: v.id }),
-    /先选入/,
+    /没有可出售/,
   )
 })
 test('还价仅一次，有接受、拒绝、离开与声望反馈', () => {
@@ -605,8 +612,48 @@ function fullWeek(seed: number) {
       } else perform({ type: 'ackDay' }, '确认日结，正常进入下一天')
       continue
     }
+    const carry = o.inventory.find(
+      (i) =>
+        i.area === 'counter' &&
+        o.actions.some(
+          (a) =>
+            a.enabled &&
+            a.action.type === 'autoPlace' &&
+            a.action.uid === i.uid &&
+            a.action.area === 'warehouse',
+        ),
+    )
+    if (carry) {
+      perform(
+        { type: 'autoPlace', uid: carry.uid, area: 'warehouse' },
+        '清理柜台，单件核对下一笔报价',
+      )
+      continue
+    }
     const v = o.visitor
     if (!v) {
+      const stocked = o.inventory.find(
+        (i) =>
+          i.area !== 'showcase' &&
+          o.actions.some(
+            (a) =>
+              a.enabled &&
+              a.action.type === 'autoPlace' &&
+              a.action.uid === i.uid &&
+              a.action.area === 'showcase',
+          ),
+      )
+      if (
+        stocked &&
+        o.inventory.filter((i) => i.area === 'showcase').length < 3
+      ) {
+        perform(
+          { type: 'autoPlace', uid: stocked.uid, area: 'showcase' },
+          '布置展示柜吸引对应类别的买家',
+        )
+        continue
+      }
+
       perform({ type: 'next' }, '按铃接待下一位')
       continue
     }
@@ -615,6 +662,7 @@ function fullWeek(seed: number) {
         .filter(
           (i) =>
             i.buyerOffer! > 0 &&
+            !o.tradeRows.some((r) => r.uid === i.uid && r.reason) &&
             i.buyerOffer! <= v.budget &&
             i.buyerOffer! >= i.cost!,
         )
@@ -665,6 +713,194 @@ function fullWeek(seed: number) {
   }
   throw new Error('六千步内未完成正常一周')
 }
+test('真实搬货不付款，来货可撤回但不能进入自有区域', () => {
+  let s = createGame()
+  const v = seller(s)
+  const item = v.stock[0]
+  s = step(s, {
+    type: 'move',
+    uid: item.uid,
+    area: 'counter',
+    x: 0,
+    y: 0,
+    rotated: false,
+  })
+  assert.equal(s.cash, 650)
+  assert.equal(s.inventory.length, 3)
+  assert.equal(s.staged[0], item.uid)
+  const saved = JSON.stringify(s)
+  assert.throws(
+    () =>
+      transition(s, {
+        type: 'move',
+        uid: item.uid,
+        area: 'showcase',
+        x: 0,
+        y: 0,
+        rotated: false,
+      }),
+    /未付款/,
+  )
+  assert.equal(JSON.stringify(s), saved)
+  s = step(s, {
+    type: 'move',
+    uid: item.uid,
+    area: 'customer',
+    x: 0,
+    y: 0,
+    rotated: false,
+  })
+  assert.equal(s.staged.length, 0)
+  assert.equal(s.cash, 650)
+  assert.deepEqual(observe(s).visitor!.stock[0].area, 'customer')
+})
+
+test('整批折扣独立于暂放选择，扣一次款且货留柜台', () => {
+  let s = createGame()
+  const v = seller(s, [30, 20])
+  v.wholesaleDiscount = 20
+  const ids = v.stock.map((i) => i.uid)
+  assert.equal(wholesalePrice(s), 40)
+  s = step(s, { type: 'wholesale', visitorId: v.id })
+  assert.equal(s.cash, 610)
+  assert.equal(s.progress, 1)
+  assert.ok(
+    ids.every((uid) =>
+      s.inventory.some(
+        (i) => i.uid === uid && i.area === 'counter' && !i.known,
+      ),
+    ),
+  )
+  assert.equal(s.visitor!.stock.length, 0)
+  assert.throws(
+    () => transition(s, { type: 'wholesale', visitorId: v.id }),
+    /没有整批/,
+  )
+  s = step(s, { type: 'collectCounter' })
+  assert.equal(s.cash, 610)
+  assert.ok(
+    ids.every(
+      (uid) => s.inventory.find((i) => i.uid === uid)?.area === 'warehouse',
+    ),
+  )
+})
+
+test('整批容量不足保持原状态，不丢货或预先扣款', () => {
+  const s = createGame()
+  const v = seller(s, [30])
+  for (let n = 0; n < 4; n++)
+    s.inventory.push({
+      ...s.inventory[0],
+      uid: 'block-' + n,
+      productId: 'p3',
+      area: 'counter',
+      x: n * 2,
+      y: 0,
+      rotated: false,
+    })
+  const before = JSON.stringify(s)
+  assert.throws(
+    () => transition(s, { type: 'wholesale', visitorId: v.id }),
+    /柜台放不下/,
+  )
+  assert.equal(JSON.stringify(s), before)
+})
+
+test('先挑选后再整批收购，自动找位不得抢占已暂放来货的位置', () => {
+  let s = createGame()
+  const v = seller(s, [30, 20])
+  const second = v.stock[1].uid
+  s = step(s, {
+    type: 'move',
+    uid: second,
+    area: 'counter',
+    x: 0,
+    y: 0,
+    rotated: false,
+  })
+  s = step(s, { type: 'wholesale', visitorId: v.id })
+  assert.equal(s.inventory.find((i) => i.uid === second)?.x, 0)
+  assert.equal(s.inventory.find((i) => i.uid === second)?.y, 0)
+  assert.equal(s.inventory.filter((i) => i.area === 'counter').length, 2)
+  assert.equal(s.progress, 1)
+})
+
+test('拒收商品能摆上台面，只出售实际接受子集，重复品留台', () => {
+  let s = createGame()
+  const v = buyer(s, 500)
+  v.variety = true
+  const item = s.inventory[0]
+  s.inventory.push({ ...item, uid: 'duplicate', area: 'warehouse', x: 0, y: 3 })
+  for (const uid of [item.uid, 'duplicate', s.inventory[2].uid])
+    s = step(s, { type: 'stage', uid })
+  const rows = tradeRows(s)
+  assert.equal(rows.filter((r) => r.accepted).length, 1)
+  assert.ok(rows.some((r) => r.reason.includes('同种')))
+  assert.ok(rows.some((r) => r.reason.includes('类别')))
+  const expected = rows.find((r) => r.accepted)!.price
+  s = step(s, { type: 'sell', visitorId: v.id })
+  assert.equal(s.cash, 650 + expected)
+  assert.equal(s.inventory.filter((i) => i.area === 'counter').length, 2)
+  assert.equal(s.visitor?.remaining, 2)
+  assert.equal(tradeRows(s).filter((r) => r.accepted).length, 0)
+  s = step(s, { type: 'autoPlace', uid: 'duplicate', area: 'warehouse' })
+  assert.equal(
+    s.inventory.find((i) => i.uid === 'duplicate')?.area,
+    'warehouse',
+  )
+})
+
+test('v2迁移保留未付款报价与现金，买家选货迁移为实物柜台', () => {
+  let s = createGame()
+  const v = seller(s, [30])
+  s = step(s, { type: 'stage', uid: v.stock[0].uid })
+  const old = JSON.parse(JSON.stringify(s))
+  old.version = 2
+  for (const i of old.visitor.stock) i.area = 'counter'
+  const migrated = migrateV2(old)
+  assert.equal(migrated.version, 3)
+  assert.equal(migrated.cash, 650)
+  assert.equal(migrated.visitor!.stock[0].area, 'customer')
+  assert.equal(migrated.stagePositions[v.stock[0].uid].area, 'counter')
+  assert.equal(migrated.visitor!.asks[v.stock[0].uid], 30)
+  const b = createGame()
+  buyer(b)
+  const oldBuyer = JSON.parse(JSON.stringify(b))
+  oldBuyer.version = 2
+  oldBuyer.staged = [b.inventory[0].uid]
+  const fixed = migrateV2(oldBuyer)
+  assert.equal(fixed.inventory[0].area, 'counter')
+  assert.equal(fixed.cash, b.cash)
+})
+
+test('收回按钮只收自有货，仓库满保留台面物品', () => {
+  let s = createGame()
+  const v = seller(s, [30])
+  s = step(s, { type: 'stage', uid: v.stock[0].uid })
+  const before = JSON.stringify(s.stagePositions)
+  s = step(s, { type: 'collectCounter' })
+  assert.equal(JSON.stringify(s.stagePositions), before)
+  assert.equal(s.cash, 650)
+  s = step(s, { type: 'autoPlace', uid: s.inventory[0].uid, area: 'counter' })
+  const uid = s.inventory[0].uid
+  s.inventory = s.inventory.filter((i) => i.area !== 'warehouse')
+  for (let y = 0; y < 6; y++)
+    for (let x = 0; x < 8; x++)
+      s.inventory.push({
+        ...s.inventory[0],
+        productId: 'p12',
+        uid: 'full-' + x + '-' + y,
+        area: 'warehouse',
+        x,
+        y,
+        rotated: false,
+      })
+  assert.ok(validateGame(s))
+  s = step(s, { type: 'collectCounter' })
+  assert.equal(s.inventory.find((i) => i.uid === uid)?.area, 'counter')
+  assert.equal(s.cash, 650)
+})
+
 test('完整周流程：新局正常买卖35笔、日结、付清首租，不注入资金日期或顾客', () => {
   const reports = [42, 77, 20261114].map(fullWeek)
   mkdirSync('artifacts', { recursive: true })

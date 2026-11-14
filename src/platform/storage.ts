@@ -1,7 +1,13 @@
 import Taro from '@tarojs/taro'
-import { createGame, validateGame, migrateV1, type Game } from '../game/engine'
+import {
+  createGame,
+  validateGame,
+  migrateV1,
+  migrateV2,
+  type Game,
+} from '../game/engine'
 
-export const KEY = 'starshop-save-v2'
+export const KEY = 'starshop-save-v3'
 export const save = (state: Game) =>
   Taro.setStorageSync(KEY, JSON.stringify(state))
 export function load(): Game {
@@ -9,6 +15,18 @@ export function load(): Game {
   if (raw === '' || raw === null || raw === undefined) {
     if (Taro.getStorageInfoSync().keys.includes(KEY))
       throw new Error('存档封装已损坏，原数据已保留。')
+    const v2 = Taro.getStorageSync('starshop-save-v2')
+    if (
+      (v2 === '' || v2 === null || v2 === undefined) &&
+      Taro.getStorageInfoSync().keys.includes('starshop-save-v2')
+    )
+      throw new Error('旧存档封装已损坏，原数据已保留。')
+    if (v2 !== '' && v2 !== null && v2 !== undefined) {
+      Taro.setStorageSync('starshop-save-v2-backup', v2)
+      const state = migrateV2(typeof v2 === 'string' ? JSON.parse(v2) : v2)
+      save(state)
+      return state
+    }
     const legacy = Taro.getStorageSync('starshop-save-v1')
     if (legacy !== '' && legacy !== null && legacy !== undefined) {
       Taro.setStorageSync('starshop-save-v1-backup', legacy)

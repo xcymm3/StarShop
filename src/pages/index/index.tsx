@@ -16,8 +16,10 @@ import {
   level,
   hot,
   debt,
-  quote,
   selectedTotal,
+  tradeRows,
+  wholesalePrice,
+  displayCategory,
   clearanceValue,
   upgradeCost,
   type Game,
@@ -36,6 +38,7 @@ import {
   magnifierArt,
 } from '../../assets'
 import { GridInventory } from './GridInventory'
+import { useInventoryDrag } from './useInventoryDrag'
 import './index.css'
 
 function GameButton({ className = '', disabled, ...props }: ButtonProps) {
@@ -50,7 +53,12 @@ function GameButton({ className = '', disabled, ...props }: ButtonProps) {
   )
 }
 type Panel = 'trade' | 'ledger' | 'upgrade' | 'help' | null
-const areaName = { warehouse: '仓库', counter: '柜台', showcase: '展示柜' }
+const areaName = {
+  warehouse: '仓库',
+  counter: '柜台',
+  showcase: '展示柜',
+  customer: '顾客台面',
+}
 function Price({ item }: { item: Item }) {
   const range = estimate(item)
   return (
@@ -111,6 +119,7 @@ export default function Index() {
       return false
     }
   }
+  const drag = useInventoryDrag(game, apply, setError)
   useEffect(() => {
     if (
       process.env.TARO_ENV !== 'h5' ||
@@ -192,11 +201,15 @@ export default function Index() {
   const detailOwned =
     !!detail && game.inventory.some((i) => i.uid === detail.uid)
   const movingItem = game.inventory.find((i) => i.uid === moving) ?? null
+  const draggedItem = [...game.inventory, ...(v?.stock ?? [])].find(
+    (i) => i.uid === drag.view?.uid,
+  )
+  const rows = tradeRows(game)
   const shown = game.inventory.filter((i) => i.area === 'showcase')
   const total = selectedTotal(game)
   const canTrade =
     !!v &&
-    !!game.staged.length &&
+    total > 0 &&
     (v.kind === 'seller' ? total <= game.cash : total <= v.budget)
   const doMove = (area: Area, x: number, y: number) => {
     if (
@@ -241,6 +254,7 @@ export default function Index() {
       area={area}
       compact={compact}
       fill
+      drag={drag}
       selected={movingItem && target === area ? movingItem : null}
       rotated={rotated}
       onItem={(item) => inspect(item)}
@@ -295,7 +309,11 @@ export default function Index() {
             <Text>展示柜</Text>
             <Text className="showcase-count">{shown.length}件</Text>
           </View>
-          <ScrollView className="showcase-scroll" scrollY>
+          <ScrollView
+            className="showcase-scroll inventory-viewport"
+            data-area="showcase"
+            scrollY={!drag.scrollLock}
+          >
             <View
               className="showcase-content"
               style={{
@@ -306,6 +324,9 @@ export default function Index() {
               {grid('showcase')}
             </View>
           </ScrollView>
+          <Text className="display-prediction">
+            吸引 · {displayCategory(game) ?? '未布置'}
+          </Text>
         </View>
 
         {v ? (
@@ -358,6 +379,14 @@ export default function Index() {
           ?
         </GameButton>
 
+        {v?.kind === 'seller' && v.stock.length > 0 && (
+          <View className="customer-counter">
+            <Text className="customer-counter-label">
+              顾客来货 · 拖到下方柜台挑选
+            </Text>
+            {grid('customer')}
+          </View>
+        )}
         <View className="counter-title">
           <Text>柜台</Text>
         </View>
@@ -365,13 +394,25 @@ export default function Index() {
           <View
             className="counter-plane"
             style={{
-              transform: 'perspective(min(85vw, 408px)) rotateX(26deg)',
+              transform: 'none',
             }}
           >
             {grid('counter')}
           </View>
         </View>
 
+        <GameButton
+          className="collect-key"
+          aria-label="收回柜台自有货物"
+          onClick={() =>
+            apply(
+              { type: 'collectCounter' },
+              '将柜台自有货物收回仓库，放不下的留台',
+            )
+          }
+        >
+          ↓ 收回
+        </GameButton>
         <View className="console-actions">
           <GameButton
             className="console-key call-key"
@@ -427,7 +468,11 @@ export default function Index() {
           <View className="warehouse-heading">
             <Text>仓库</Text>
           </View>
-          <ScrollView className="warehouse-scroll" scrollY>
+          <ScrollView
+            className="warehouse-scroll inventory-viewport"
+            data-area="warehouse"
+            scrollY={!drag.scrollLock}
+          >
             <View
               className="warehouse-content"
               style={{
@@ -449,6 +494,21 @@ export default function Index() {
           </View>
         </View>
 
+        {drag.view && draggedItem && (
+          <View
+            className="drag-ghost"
+            style={{
+              position: 'fixed',
+              left: drag.view.x + 12 + 'px',
+              top: drag.view.y + 12 + 'px',
+              width: Math.min(120, drag.view.width) + 'px',
+              height: Math.min(120, drag.view.height) + 'px',
+            }}
+          >
+            <Image src={itemArt[draggedItem.productId]} mode="aspectFit" />
+            <Text>{drag.view.message}</Text>
+          </View>
+        )}
         {movingItem && (
           <View className="placement-tools">
             <Text>整理 · {product(movingItem).name}</Text>
@@ -483,7 +543,9 @@ export default function Index() {
               </GameButton>
               <GameButton onClick={() => setMoving(null)}>取消整理</GameButton>
             </View>
-            <Text className="muted">点目标格子放置，重叠或越界不生效。</Text>
+            <Text className="muted">
+              可直接拖动；此处也可旋转后点目标格子，重叠或越界不生效。
+            </Text>
           </View>
         )}
 
@@ -507,7 +569,11 @@ export default function Index() {
       </View>
 
       {panel && !detail && !game.report && !game.job.active && (
-        <View className="modal-backdrop">
+        <View
+          className={
+            'modal-backdrop ' + (panel === 'trade' ? 'trading-backdrop' : '')
+          }
+        >
           <View
             className={
               'sheet ' + (panel === 'help' ? 'metal-sheet' : 'paper-sheet')
@@ -555,93 +621,93 @@ export default function Index() {
                         </Text>
                       </View>
                     )}
+                    <Text className="trade-instruction">
+                      {v.kind === 'seller'
+                        ? '把来货拖到柜台，逐件核价；或接受整批折扣。'
+                        : '从仓库或展示柜把货拖上柜台，账单随台面更新。'}
+                    </Text>
+                    {v.kind === 'buyer' && v.variety && (
+                      <Text className="trade-instruction">
+                        多种多样：同种商品只买一件。
+                      </Text>
+                    )}
                     <View className="offer-list">
-                      {(v.kind === 'seller' ? v.stock : game.inventory).map(
-                        (item) => {
-                          const price =
-                            v.kind === 'seller'
-                              ? Math.round(v.asks[item.uid] * v.priceFactor)
-                              : quote(game, item)
-                          const acceptable = v.kind === 'seller' || price > 0
-                          return (
-                            <View
-                              className={
-                                'offer-row ' +
-                                (game.staged.includes(item.uid)
-                                  ? 'selected'
-                                  : '')
-                              }
-                              key={item.uid}
-                            >
-                              <Button
-                                className="offer-art-button"
-                                aria-label={
-                                  '查看 ' + product(item).name + ' ' + item.uid
-                                }
-                                onClick={() => inspect(item)}
-                              >
-                                <Image
-                                  src={itemArt[item.productId]}
-                                  mode="aspectFit"
-                                  className="offer-art"
-                                />
-                              </Button>
-                              <View className="offer-copy">
-                                <Text className="item-name">
-                                  {product(item).name}
-                                </Text>
-                                <Text>
-                                  {item.condition} ·{' '}
-                                  {item.known ? item.quality : '品质待鉴定'} ·{' '}
-                                  {product(item).width}×{product(item).height}
-                                </Text>
-                                <Price item={item} />
-                                <Text>
-                                  {v.kind === 'seller'
-                                    ? '对方声明 ' + item.claimedQuality
-                                    : areaName[item.area]}
-                                </Text>
-                                <GameButton
-                                  className="text-link"
-                                  onClick={() => inspect(item)}
-                                >
-                                  查看商品
-                                </GameButton>
-                              </View>
-                              <View className="offer-controls">
-                                <Text className="offer-price">
-                                  {acceptable ? price : '不收'}
-                                </Text>
-                                <GameButton
-                                  aria-label={
-                                    (game.staged.includes(item.uid)
-                                      ? '撤下 '
-                                      : '选入 ') + item.uid
-                                  }
-                                  disabled={
-                                    !acceptable ||
-                                    (!game.staged.includes(item.uid) &&
-                                      v.remaining === 0)
-                                  }
-                                  className={
-                                    game.staged.includes(item.uid)
-                                      ? 'selected'
-                                      : ''
-                                  }
-                                  onClick={() => select(item)}
-                                >
-                                  {game.staged.includes(item.uid)
-                                    ? '撤下'
-                                    : v.kind === 'seller'
-                                      ? '暂放'
-                                      : '选入'}
-                                </GameButton>
-                              </View>
-                            </View>
-                          )
-                        },
+                      {!rows.length && (
+                        <Text className="body-copy">
+                          柜台暂无报价物品。关闭平板也可以继续搬货。
+                        </Text>
                       )}
+                      {rows.map(({ item, price, reason, accepted }) => (
+                        <View
+                          className={
+                            'offer-row ' + (accepted ? 'selected' : 'refused')
+                          }
+                          key={item.uid}
+                        >
+                          <Image
+                            src={itemArt[item.productId]}
+                            mode="aspectFit"
+                            className="offer-art"
+                          />
+                          <View className="offer-copy">
+                            <Text className="item-name">
+                              {product(item).name}
+                            </Text>
+                            <Text>
+                              {reason ||
+                                (v.kind === 'seller'
+                                  ? '待购 · 尚未付款'
+                                  : '可出售')}
+                            </Text>
+                          </View>
+                          <View className="offer-controls">
+                            <Text className="offer-price">
+                              {accepted ? price + '¢' : '不收'}
+                            </Text>
+                            <GameButton
+                              aria-label={'撤下 ' + item.uid}
+                              onClick={() => select(item)}
+                            >
+                              撤下
+                            </GameButton>
+                          </View>
+                        </View>
+                      ))}
                     </View>
+                    {v.kind === 'seller' && v.stock.length > 0 && (
+                      <View className="wholesale-offer">
+                        <Text>
+                          整批 {v.stock.length} 件 · 优惠{' '}
+                          {v.wholesaleDiscount ?? 15}% · 实付{' '}
+                          {wholesalePrice(game)}¢
+                        </Text>
+                        <GameButton
+                          aria-label="整批收购"
+                          disabled={game.cash < wholesalePrice(game)}
+                          onClick={() =>
+                            setConfirm({
+                              title:
+                                '以 ' +
+                                wholesalePrice(game) +
+                                ' 星币收购全部 ' +
+                                v.stock.length +
+                                ' 件？货物将留在柜台。',
+                              run: () => {
+                                if (
+                                  apply(
+                                    { type: 'wholesale', visitorId: v.id },
+                                    '确认整批价格后接受批发收购',
+                                  )
+                                )
+                                  setPanel(null)
+                              },
+                            })
+                          }
+                        >
+                          接受整批报价
+                        </GameButton>
+                      </View>
+                    )}
                     {!v.stock.length && v.kind === 'seller' && (
                       <Text className="body-copy">
                         这批来货已经收完，可以送客。
@@ -649,7 +715,9 @@ export default function Index() {
                     )}
                     <View className="trade-footer">
                       <Text>
-                        已选 {game.staged.length} 件 · 合计 {total}
+                        台面 {rows.length} 件 · 可成交{' '}
+                        {rows.filter((r) => r.accepted).length} 件 · 合计{' '}
+                        {total}
                       </Text>
                       <Text>每次确认成交计一笔，顾客继续留店。</Text>
                       <View className="toolbar">
@@ -680,7 +748,9 @@ export default function Index() {
                         <Text className="inline-error">
                           {v.kind === 'seller'
                             ? '现金不足，可撤下一件或取消交易。'
-                            : '合计超过预算。'}
+                            : total > v.budget
+                              ? '合计超过剩余预算，请从柜台拖回一件或撤下。'
+                              : '没有符合需求的台面货物，请查看逐件拒收原因。'}
                         </Text>
                       )}
                     </View>
@@ -780,16 +850,16 @@ export default function Index() {
             {panel === 'help' && (
               <View className="help-copy">
                 <Text>
-                  收货：打开交易平板，查看来货，暂放后确认收购。虚线货物尚不属于你。
+                  收货：把顾客台面的虚线来货拖到柜台，打开平板核价并确认收购；也可接受整批折扣。移动本身不付款。
                 </Text>
                 <Text>
-                  整理：点柜台上的自有商品，选择整理。点目标格子放置，可旋转或自动找空位。
+                  整理：按住商品拖到仓库、展示柜或柜台，绿色落点可放，红色不可放。拖动时按R旋转、Esc取消；触屏可先点商品在整理工具中旋转。↓收回只收自有货物。
                 </Text>
                 <Text>
                   鉴定：花8币揭示品质。买下不会自动鉴定；卖家声明可能不准确。
                 </Text>
                 <Text>
-                  出售：根据顾客需求选货，共享预算。每位顾客可还价一次，可能拒绝或离开。
+                  出售：把自有货拖上柜台查看逐件报价，拖回即撤销。确认只卖被接受的货，拒收货留台。每位顾客共享预算，可还价一次。
                 </Text>
                 <Text>
                   展示：商品放进左侧展示柜会影响来客需求，但不保证立即有人购买。
@@ -877,7 +947,6 @@ export default function Index() {
               <>
                 <GameButton
                   className="primary wide"
-                  disabled={game.staged.includes(detail.uid)}
                   onClick={() => {
                     setMoving(detail.uid)
                     setRotated(detail.rotated)
@@ -891,14 +960,13 @@ export default function Index() {
                 {v?.kind === 'buyer' && (
                   <GameButton
                     className="wide"
-                    disabled={!quote(game, detail)}
                     onClick={() => {
                       if (select(detail)) setDetailId(null)
                     }}
                   >
                     {game.staged.includes(detail.uid)
                       ? '撤下报价'
-                      : '选入出售报价'}
+                      : '移上柜台报价'}
                   </GameButton>
                 )}
                 <GameButton

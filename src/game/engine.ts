@@ -40,6 +40,9 @@ export interface Visitor {
   bargained: boolean
   priceFactor: number
   tolerance: number
+  variety?: boolean
+  purchased?: string[]
+  wholesaleDiscount?: number
 }
 export interface Entry {
   id: number
@@ -83,7 +86,7 @@ export interface Audit {
   }
 }
 export interface Game {
-  version: 2
+  version: 3
   cash: number
   day: number
   progress: number
@@ -112,6 +115,8 @@ export type Action =
   | { type: 'stage'; uid: string }
   | { type: 'unstage'; uid: string }
   | { type: 'buy'; visitorId: number }
+  | { type: 'wholesale'; visitorId: number }
+  | { type: 'collectCounter' }
   | { type: 'sell'; visitorId: number }
   | { type: 'bargain'; visitorId: number }
   | {
@@ -164,7 +169,7 @@ export const estimate = (item: Item) =>
 export const bounds = (s: Game, area: Area): Bounds =>
   area === 'warehouse'
     ? { width: 8, height: 6 + s.storage * 3 }
-    : area === 'counter'
+    : area === 'counter' || area === 'customer'
       ? { width: 8, height: 3 }
       : { width: 4, height: 3 + s.shelves }
 export const capacity = (s: Game) => {
@@ -189,10 +194,8 @@ export const located = (item: Item): Located => ({
 export function occupied(s: Game): Located[] {
   const out = s.inventory.map(located)
   if (s.visitor?.kind === 'seller')
-    for (const uid of s.staged) {
-      const item = s.visitor.stock.find((i) => i.uid === uid)
-      if (item && s.stagePositions[uid])
-        out.push({ ...located(item), ...s.stagePositions[uid] })
+    for (const item of s.visitor.stock) {
+      out.push({ ...located(item), ...s.stagePositions[item.uid] })
     }
   return out
 }
@@ -212,6 +215,7 @@ export function quote(s: Game, item: Item): number {
     !v ||
     v.kind !== 'buyer' ||
     v.remaining <= 0 ||
+    (v.variety && v.purchased?.includes(item.productId)) ||
     product(item).category !== v.category ||
     (!v.acceptsDamaged && item.condition === '损坏') ||
     qualities.indexOf(item.quality) < qualities.indexOf(v.minimumQuality)
@@ -228,20 +232,106 @@ export function quote(s: Game, item: Item): number {
     ),
   )
 }
-export function selectedTotal(s: Game): number {
+export function refusal(s: Game, item: Item): string {
   const v = s.visitor
-  if (!v) return 0
-  return s.staged.reduce((a, uid) => {
-    const i = itemById(s, uid)
-    return (
-      a +
-      (i
-        ? v.kind === 'seller'
-          ? Math.max(1, Math.round(v.asks[uid] * v.priceFactor))
-          : quote(s, i)
-        : 0)
+  if (!v || v.kind !== 'buyer') return '当前没有买家'
+  if (v.remaining <= 0) return '顾客已经买够'
+  if (product(item).category !== v.category) return '不符合求购类别'
+  if (!v.acceptsDamaged && item.condition === '损坏') return '不接受损坏商品'
+  if (qualities.indexOf(item.quality) < qualities.indexOf(v.minimumQuality))
+    return '不符合顾客品质要求'
+  if (v.variety && v.purchased?.includes(item.productId))
+    return '这类商品已经买过'
+  return ''
+}
+export function tradeRows(s: Game) {
+  const v = s.visitor
+  const seen = new Set(v?.purchased ?? [])
+  let accepted = 0
+  return occupied(s)
+    .filter((i) => i.area === 'counter')
+    .map((placed) => {
+      const item = itemById(s, placed.uid)!
+      const owned = s.inventory.some((i) => i.uid === item.uid)
+      let reason = !v
+        ? '当前没有顾客'
+        : v.kind === 'seller'
+          ? owned
+            ? '自有商品，不属于本次来货'
+            : ''
+          : !owned
+            ? '不是自有商品'
+            : refusal(s, item)
+      if (!reason && v?.kind === 'buyer') {
+        if (v.variety && seen.has(item.productId)) reason = '同种商品只买一件'
+        else if (accepted >= v.remaining) reason = '超过本次购买数量'
+        else {
+          accepted++
+          seen.add(item.productId)
+        }
+      }
+      const price =
+        v?.kind === 'seller'
+          ? owned
+            ? 0
+            : Math.max(1, Math.round(v.asks[item.uid] * v.priceFactor))
+          : quote(s, item)
+      return { item, owned, price, reason, accepted: !reason && price > 0 }
+    })
+}
+export function selectedTotal(s: Game): number {
+  return tradeRows(s)
+    .filter((r) => r.accepted)
+    .reduce((sum, r) => sum + r.price, 0)
+}
+export function wholesalePrice(s: Game): number {
+  const v = s.visitor
+  return v?.kind === 'seller'
+    ? v.stock.reduce((sum, i) => sum + wholesaleItemPrice(s, i), 0)
+    : 0
+}
+function wholesaleItemPrice(s: Game, item: Item) {
+  return Math.max(
+    1,
+    Math.round(
+      s.visitor!.asks[item.uid] *
+        s.visitor!.priceFactor *
+        (1 - (s.visitor!.wholesaleDiscount ?? 15) / 100),
+    ),
+  )
+}
+function syncStaged(s: Game) {
+  s.staged =
+    s.visitor?.kind === 'buyer'
+      ? s.inventory.filter((i) => i.area === 'counter').map((i) => i.uid)
+      : (s.visitor?.stock
+          .filter((i) => !!s.stagePositions[i.uid])
+          .map((i) => i.uid) ?? [])
+}
+function layoutStock(s: Game) {
+  const placed: Located[] = []
+  for (const item of s.visitor?.stock ?? []) {
+    const pos = firstFit(
+      bounds(s, 'customer'),
+      product(item),
+      'customer',
+      item.uid,
+      placed,
     )
-  }, 0)
+    need(pos, '顾客台面放不下来货，原状态保留。')
+    Object.assign(item, pos)
+    placed.push(located(item))
+  }
+}
+export function displayCategory(s: Game): Category | null {
+  const totals = CATEGORIES.map((category) => ({
+    category,
+    total: s.inventory
+      .filter((i) => i.area === 'showcase' && product(i).category === category)
+      .reduce((sum, i) => sum + estimate(i)[0], 0),
+  }))
+  totals.sort((a, b) => b.total - a.total)
+  return totals[0].total ? totals[0].category : null
 }
 function need(ok: unknown, reason: string): asserts ok {
   if (!ok) throw new Error(reason)
@@ -285,8 +375,7 @@ function generate(s: Game): Visitor {
     : pick(s, ['船员', '船员', '商人', '收藏家'])
   let category = pick(s, CATEGORIES)
   const displayed = s.inventory.filter((i) => i.area === 'showcase')
-  if (!seller && displayed.length && rand(s) < 0.55)
-    category = product(pick(s, displayed)).category
+  if (!seller && displayed.length) category = displayCategory(s) ?? category
   const v: Visitor = {
     id: ++s.sequence,
     name: pick(s, [
@@ -312,6 +401,9 @@ function generate(s: Game): Visitor {
     bargained: false,
     priceFactor: 1,
     tolerance: rand(s),
+    variety: !seller && rand(s) < 0.3,
+    purchased: [],
+    wholesaleDiscount: 10 + Math.floor(rand(s) * 16),
   }
   if (seller) {
     const goods = PRODUCTS.filter((p) => p.level <= level(s))
@@ -360,7 +452,7 @@ function generate(s: Game): Visitor {
 }
 function blank(seed: number): Game {
   return {
-    version: 2,
+    version: 3,
     cash: 650,
     day: 1,
     progress: 0,
@@ -404,6 +496,8 @@ export function createGame(seed = 20261114): Game {
     s.inventory.push({ ...item, ...pos })
   }
   s.visitor = generate(s)
+  layoutStock(s)
+  syncStaged(s)
   return s
 }
 function finish(s: Game, text: string, delta: number, profit = 0) {
@@ -438,6 +532,7 @@ export function transition(input: Game, action: Action): Game {
     case 'next':
       need(!v, '先送走当前顾客。')
       s.visitor = generate(s)
+      layoutStock(s)
       s.notice = s.visitor.line
       break
     case 'dismiss':
@@ -458,47 +553,105 @@ export function transition(input: Game, action: Action): Game {
     }
     case 'stage': {
       need(v, '没有顾客。')
-      need(!s.staged.includes(action.uid), '商品已经选中。')
       const item = itemById(s, action.uid)
       need(item, '未找到商品。')
-      if (v.kind === 'seller') {
-        need(
-          v.stock.some((i) => i.uid === item.uid),
-          '只能暂放当前顾客的来货。',
-        )
+      const pos = firstFit(
+        bounds(s, 'counter'),
+        product(item),
+        'counter',
+        item.uid,
+        occupied(s),
+      )
+      need(pos, '柜台放不下这件货，请先整理或旋转。')
+      if (s.inventory.some((i) => i.uid === item.uid)) Object.assign(item, pos)
+      else s.stagePositions[item.uid] = pos
+      s.notice = '物品已放到柜台，尚未成交。'
+      break
+    }
+    case 'unstage': {
+      need(v, '没有顾客。')
+      const item = itemById(s, action.uid)
+      need(item && s.staged.includes(item.uid), '商品尚未选中。')
+      if (s.inventory.some((i) => i.uid === item.uid)) {
         const pos = firstFit(
-          bounds(s, 'counter'),
+          bounds(s, 'warehouse'),
           product(item),
-          'counter',
+          'warehouse',
           item.uid,
           occupied(s),
         )
-        need(pos, '柜台放不下这件货，请先整理自有货物或撤下一件来货。')
-        s.stagePositions[item.uid] = pos
+        need(pos, '仓库没有完整空位，请直接拖到其他空位。')
+        Object.assign(item, pos)
       } else {
-        need(
-          s.inventory.some((i) => i.uid === item.uid),
-          '不能出售他人的货物。',
+        const pos = firstFit(
+          bounds(s, 'customer'),
+          product(item),
+          'customer',
+          item.uid,
+          occupied(s),
         )
-        need(quote(s, item) > 0, '顾客不接受这件商品的类别、状态或品质。')
-        need(s.staged.length < v.remaining, '超过顾客本次可购买数量。')
-        need(
-          selectedTotal(s) + quote(s, item) <= v.budget,
-          '合计报价超过顾客剩余预算。',
-        )
+        need(pos, '顾客台面放不下，请先整理来货。')
+        Object.assign(item, pos)
+        delete s.stagePositions[item.uid]
       }
-      s.staged.push(item.uid)
-      s.notice =
-        v.kind === 'seller'
-          ? '来货已暂放，尚未付款。'
-          : '已选入报价，尚未出售。'
+      s.notice = '已撤回，资金没有变化。'
       break
     }
-    case 'unstage':
-      need(s.staged.includes(action.uid), '商品尚未选中。')
-      s.staged = s.staged.filter((id) => id !== action.uid)
-      delete s.stagePositions[action.uid]
+    case 'wholesale': {
+      need(v?.kind === 'seller' && v.stock.length, '当前没有整批来货。')
+      const total = wholesalePrice(s)
+      need(total <= s.cash, '整批收购资金不足。')
+      // Reserve every already staged position before finding space for the rest.
+      const layout = occupied(s).filter((i) => i.area !== 'customer')
+      const acquired: Item[] = []
+      for (const item of v.stock) {
+        const pos =
+          s.stagePositions[item.uid] ??
+          firstFit(
+            bounds(s, 'counter'),
+            product(item),
+            'counter',
+            item.uid,
+            layout,
+          )
+        need(
+          pos &&
+            fits(bounds(s, 'counter'), { ...located(item), ...pos }, layout),
+          '柜台放不下整批来货，请先整理柜台或改为单件收购。',
+        )
+        const bought = { ...item, ...pos, cost: wholesaleItemPrice(s, item) }
+        acquired.push(bought)
+        const prior = layout.findIndex((i) => i.uid === item.uid)
+        if (prior >= 0) layout[prior] = located(bought)
+        else layout.push(located(bought))
+      }
+      s.cash -= total
+      s.inventory.push(...acquired)
+      v.stock = []
+      v.asks = {}
+      v.remaining = 0
+      finish(s, '整批收购 ' + acquired.length + ' 件，留在柜台待整理', -total)
       break
+    }
+    case 'collectCounter': {
+      let count = 0
+      for (const item of s.inventory.filter((i) => i.area === 'counter')) {
+        const pos = firstFit(
+          bounds(s, 'warehouse'),
+          product(item),
+          'warehouse',
+          item.uid,
+          occupied(s),
+        )
+        if (pos) {
+          Object.assign(item, pos)
+          count++
+        }
+      }
+      s.notice =
+        '收回 ' + count + ' 件自有物品；未购来货和放不下的货物留在柜台。'
+      break
+    }
     case 'buy': {
       need(v?.kind === 'seller', '当前没有卖货顾客。')
       need(s.staged.length, '先挑选并暂放来货。')
@@ -530,23 +683,22 @@ export function transition(input: Game, action: Action): Game {
     }
     case 'sell': {
       need(v?.kind === 'buyer', '当前没有买货顾客。')
-      need(
-        s.staged.length && s.staged.length <= v.remaining,
-        '先选入可出售的货物。',
-      )
-      const selected = s.inventory.filter((i) => s.staged.includes(i.uid))
-      need(
-        selected.length === s.staged.length &&
-          selected.every((i) => quote(s, i) > 0),
-        '选中的商品已不符合需求。',
-      )
+      const selected = tradeRows(s)
+        .filter((r) => r.accepted)
+        .map((r) => r.item)
+      need(selected.length, '柜台没有可出售商品，请查看拒收原因。')
       const total = selectedTotal(s)
       need(total > 0 && total <= v.budget, '超过顾客预算。')
       const profit = total - selected.reduce((a, i) => a + i.cost, 0)
       s.cash += total
       v.budget -= total
       v.remaining -= selected.length
-      s.inventory = s.inventory.filter((i) => !s.staged.includes(i.uid))
+      v.purchased = [
+        ...(v.purchased ?? []),
+        ...selected.map((i) => i.productId),
+      ]
+      const sold = new Set(selected.map((i) => i.uid))
+      s.inventory = s.inventory.filter((i) => !sold.has(i.uid))
       finish(
         s,
         '出售 ' + selected.length + ' 件 · 毛利 ' + profit,
@@ -589,12 +741,20 @@ export function transition(input: Game, action: Action): Game {
     }
     case 'move':
     case 'autoPlace': {
-      const item = s.inventory.find((i) => i.uid === action.uid)
-      need(item, '只能整理自己的商品。')
-      need(!s.staged.includes(item.uid), '先撤下交易选中的商品。')
+      const item = itemById(s, action.uid)
+      need(item, '未找到物品。')
+      const owned = s.inventory.some((i) => i.uid === item.uid)
       need(
-        ['warehouse', 'showcase', 'counter'].includes(action.area),
+        ['warehouse', 'showcase', 'counter', 'customer'].includes(action.area),
         '不存在的库存区域。',
+      )
+      need(
+        owned
+          ? action.area !== 'customer'
+          : ['counter', 'customer'].includes(action.area),
+        owned
+          ? '自有商品不能放到顾客台面。'
+          : '未付款来货不能放进自己的仓库或展示柜。',
       )
       const pos =
         action.type === 'move'
@@ -607,27 +767,32 @@ export function transition(input: Game, action: Action): Game {
               occupied(s),
             )
       need(pos, '这个区域没有完整空位。')
-      const placed = {
-        ...located(item),
+      need(
+        fits(bounds(s, action.area), { ...located(item), ...pos }, occupied(s)),
+        '位置越界或与其他货物重叠。',
+      )
+      const placement = {
         area: action.area,
         x: pos.x,
         y: pos.y,
         rotated: pos.rotated,
       }
-      need(
-        fits(bounds(s, action.area), placed, occupied(s)),
-        '位置越界或与其他货物重叠。',
-      )
-      Object.assign(item, {
-        area: action.area,
-        x: pos.x,
-        y: pos.y,
-        rotated: pos.rotated,
-      })
+      if (owned) Object.assign(item, placement)
+      else if (action.area === 'counter') s.stagePositions[item.uid] = placement
+      else {
+        Object.assign(item, placement)
+        delete s.stagePositions[item.uid]
+      }
       s.notice =
         product(item).name +
         '已放入' +
-        { warehouse: '仓库', counter: '柜台', showcase: '展示柜' }[item.area]
+        {
+          warehouse: '仓库',
+          counter: '交易柜台',
+          showcase: '展示柜',
+          customer: '顾客台面',
+        }[action.area] +
+        '；移动不产生付款。'
       break
     }
     case 'clearance': {
@@ -715,6 +880,7 @@ export function transition(input: Game, action: Action): Game {
       entry(s, '完成港口理货委托', 20, '委托')
       break
   }
+  syncStaged(s)
   need(validateGame(s), '操作产生了无效状态，未保存。')
   return s
 }
@@ -725,7 +891,7 @@ export function validateGame(raw: unknown): raw is Game {
       typeof n === 'number' && Number.isSafeInteger(n) && n >= 0
     if (
       !s ||
-      s.version !== 2 ||
+      s.version !== 3 ||
       ![
         s.cash,
         s.day,
@@ -754,13 +920,13 @@ export function validateGame(raw: unknown): raw is Game {
       ['损坏', '磨损', '完好'].includes(i.condition) &&
       typeof i.known === 'boolean' &&
       integer(i.cost) &&
-      ['warehouse', 'counter', 'showcase'].includes(i.area) &&
+      ['warehouse', 'counter', 'showcase', 'customer'].includes(i.area) &&
       integer(i.x) &&
       integer(i.y) &&
       typeof i.rotated === 'boolean'
     if (
       !Array.isArray(s.inventory) ||
-      !s.inventory.every(validItem) ||
+      !s.inventory.every((i) => validItem(i) && i.area !== 'customer') ||
       !Array.isArray(s.staged) ||
       new Set(s.staged).size !== s.staged.length ||
       !s.stagePositions ||
@@ -788,7 +954,13 @@ export function validateGame(raw: unknown): raw is Game {
         v.tolerance < 0 ||
         v.tolerance >= 1 ||
         !Array.isArray(v.stock) ||
-        !v.stock.every(validItem) ||
+        !v.stock.every((i) => validItem(i) && i.area === 'customer') ||
+        (v.variety !== undefined && typeof v.variety !== 'boolean') ||
+        (v.purchased !== undefined &&
+          (!Array.isArray(v.purchased) ||
+            !v.purchased.every((id) => PRODUCTS.some((p) => p.id === id)))) ||
+        (v.wholesaleDiscount !== undefined &&
+          (!integer(v.wholesaleDiscount) || v.wholesaleDiscount > 50)) ||
         !v.asks)
     )
       return false
@@ -833,9 +1005,10 @@ export function validateGame(raw: unknown): raw is Game {
       return false
     if (
       v?.kind === 'buyer' &&
-      (s.staged.length > v.remaining ||
-        s.staged.some((uid) => !quote(s, itemById(s, uid)!)) ||
-        selectedTotal(s) > v.budget)
+      s.staged.some(
+        (uid) =>
+          !s.inventory.some((i) => i.uid === uid && i.area === 'counter'),
+      )
     )
       return false
     const layout = occupied(s)
@@ -1069,6 +1242,42 @@ export function migrateV1(raw: unknown): Game {
       .slice(0, 180)
       .map((e) => ({ ...e, kind: '旧账' }))
   s.notice = '旧店铺已迁移，资金、当前报价和未知信息保留。商品已安排格子位置。'
+  layoutStock(s)
+  syncStaged(s)
+  need(validateGame(s), '旧存档迁移验证失败，原档已保留。')
+  return s
+}
+
+// Preserve saved cash, quotes, goods and unpaid staging when adopting physical trading.
+export function migrateV2(raw: unknown): Game {
+  const previous = raw as Game & { version: number }
+  need(
+    previous &&
+      Number(previous.version) === 2 &&
+      Array.isArray(previous.inventory),
+    '无法识别旧存档。',
+  )
+  const s = JSON.parse(JSON.stringify(raw)) as Game
+  s.version = 3
+  layoutStock(s)
+  if (s.visitor?.kind === 'buyer') {
+    for (const uid of s.staged) {
+      const item = s.inventory.find((i) => i.uid === uid)
+      need(item, '旧报价物品不存在，原档保留。')
+      if (item.area !== 'counter') {
+        const pos = firstFit(
+          bounds(s, 'counter'),
+          product(item),
+          'counter',
+          uid,
+          occupied(s),
+        )
+        need(pos, '旧报价无法安全放上柜台，原档保留。')
+        Object.assign(item, pos)
+      }
+    }
+  }
+  syncStaged(s)
   need(validateGame(s), '旧存档迁移验证失败，原档已保留。')
   return s
 }

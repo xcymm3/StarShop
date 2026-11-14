@@ -1,4 +1,4 @@
-import { Button, Image, Text, View } from '@tarojs/components'
+import { Button, Image, Text, View, type ITouchEvent } from '@tarojs/components'
 import {
   bounds,
   product,
@@ -8,6 +8,10 @@ import {
 } from '../../game/engine'
 import { dimensions } from '../../game/grid'
 import { itemArt } from '../../assets'
+import type { InventoryDrag } from './useInventoryDrag'
+// Native mini-program View with catchMove prevents scrolling while dragging an item.
+// Empty grid space remains scrollable; H5 keeps its normal button semantics.
+const ItemSurface = process.env.TARO_ENV === 'h5' ? Button : View
 
 export function GridInventory({
   game,
@@ -18,6 +22,7 @@ export function GridInventory({
   onCell,
   compact = false,
   fill = false,
+  drag,
 }: {
   game: Game
   area: Area
@@ -25,17 +30,19 @@ export function GridInventory({
   rotated?: boolean
   compact?: boolean
   fill?: boolean
+  drag?: InventoryDrag
   onItem(item: Item, owned: boolean): void
   onCell(x: number, y: number): void
 }) {
   const b = bounds(game, area)
   const owned = game.inventory.filter((i) => i.area === area)
   const incoming =
-    area === 'counter' && game.visitor?.kind === 'seller'
+    game.visitor?.kind === 'seller'
       ? game.visitor.stock
-          .filter((i) => game.staged.includes(i.uid))
           .map((i) => ({ ...i, ...game.stagePositions[i.uid] }))
+          .filter((i) => i.area === area)
       : []
+  const preview = drag?.view?.target?.area === area ? drag.view : null
   return (
     <View
       className={
@@ -50,7 +57,11 @@ export function GridInventory({
       }
       data-area={area}
     >
-      <View className="grid-interior">
+      <View
+        className="grid-interior inventory-drop-zone"
+        id={'grid-' + area}
+        data-area={area}
+      >
         {Array.from({ length: b.width * b.height }, (_, n) => {
           const x = n % b.width,
             y = Math.floor(n / b.width)
@@ -76,14 +87,19 @@ export function GridInventory({
           const isOwned = owned.some((i) => i.uid === item.uid),
             size = dimensions(product(item), item.rotated)
           return (
-            <Button
+            <ItemSurface
               {...{ role: 'button' }}
               key={item.uid}
+              {...(process.env.TARO_ENV !== 'h5' ? { catchMove: true } : {})}
+              id={'item-' + item.uid}
+              data-uid={item.uid}
               className={
                 'grid-item ' +
                 (!isOwned ? 'unowned ' : '') +
                 (game.staged.includes(item.uid) ? 'reserved ' : '') +
-                (selected?.uid === item.uid ? 'moving' : '')
+                (selected?.uid === item.uid || drag?.view?.uid === item.uid
+                  ? 'moving'
+                  : '')
               }
               aria-label={
                 (isOwned ? '库存 ' : '暂放 ') +
@@ -98,8 +114,22 @@ export function GridInventory({
                 height: (size.height / b.height) * 100 + '%',
               }}
               onClick={() =>
-                selected ? onCell(item.x, item.y) : onItem(item, isOwned)
+                drag?.canClick() !== false &&
+                (selected ? onCell(item.x, item.y) : onItem(item, isOwned))
               }
+              onTouchStart={(e) =>
+                (e as ITouchEvent).touches[0] &&
+                drag?.touchStart(item.uid, (e as ITouchEvent).touches[0])
+              }
+              onTouchMove={(e) =>
+                (e as ITouchEvent).touches[0] &&
+                drag?.touchMove((e as ITouchEvent).touches[0])
+              }
+              onTouchEnd={(e) =>
+                (e as ITouchEvent).changedTouches[0] &&
+                drag?.touchEnd((e as ITouchEvent).changedTouches[0])
+              }
+              onTouchCancel={() => drag?.cancel()}
             >
               <Image
                 src={itemArt[item.productId]}
@@ -111,9 +141,32 @@ export function GridInventory({
               {!compact && (
                 <Text className="grid-item-name">{product(item).name}</Text>
               )}
-            </Button>
+            </ItemSurface>
           )
         })}
+        {preview?.target &&
+          (() => {
+            const item = [
+              ...owned,
+              ...incoming,
+              ...game.inventory,
+              ...(game.visitor?.stock ?? []),
+            ].find((i) => i.uid === preview.uid)!
+            const size = dimensions(product(item), preview.rotated)
+            return (
+              <View
+                className={
+                  'drop-preview ' + (preview.valid ? 'valid' : 'invalid')
+                }
+                style={{
+                  left: (preview.target.x / b.width) * 100 + '%',
+                  top: (preview.target.y / b.height) * 100 + '%',
+                  width: (size.width / b.width) * 100 + '%',
+                  height: (size.height / b.height) * 100 + '%',
+                }}
+              />
+            )
+          })()}
         {selected && (
           <Text className="grid-hint">
             {dimensions(product(selected), !!rotated).width}×

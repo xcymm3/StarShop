@@ -9,6 +9,9 @@ import {
   debt,
   level,
   hot,
+  tradeRows,
+  wholesalePrice,
+  displayCategory,
   type Action,
   type Game,
   type Item,
@@ -40,12 +43,12 @@ export function visibleItem(s: Game, item: Item, owned: boolean) {
     cost: owned ? item.cost : null,
     width: p.width,
     height: p.height,
-    area: owned ? item.area : (s.stagePositions[item.uid]?.area ?? 'customer'),
-    x: owned ? item.x : (s.stagePositions[item.uid]?.x ?? null),
-    y: owned ? item.y : (s.stagePositions[item.uid]?.y ?? null),
+    area: owned ? item.area : (s.stagePositions[item.uid]?.area ?? item.area),
+    x: owned ? item.x : (s.stagePositions[item.uid]?.x ?? item.x),
+    y: owned ? item.y : (s.stagePositions[item.uid]?.y ?? item.y),
     rotated: owned
       ? item.rotated
-      : (s.stagePositions[item.uid]?.rotated ?? false),
+      : (s.stagePositions[item.uid]?.rotated ?? item.rotated),
     staged: s.staged.includes(item.uid),
     buyerOffer: owned ? quote(s, item) : null,
     sellerAsk:
@@ -70,6 +73,7 @@ export function actionOptions(s: Game) {
       const id = s.visitor.id
       candidates.push(
         { type: 'dismiss', visitorId: id },
+        { type: 'wholesale', visitorId: id },
         { type: 'bargain', visitorId: id },
         { type: s.visitor.kind === 'seller' ? 'buy' : 'sell', visitorId: id },
       )
@@ -78,6 +82,9 @@ export function actionOptions(s: Game) {
           type: s.staged.includes(item.uid) ? 'unstage' : 'stage',
           uid: item.uid,
         })
+      for (const item of s.visitor.stock)
+        for (const area of ['customer', 'counter'] as const)
+          candidates.push({ type: 'autoPlace', uid: item.uid, area })
     }
     for (const item of [...s.inventory, ...(s.visitor?.stock ?? [])])
       if (!item.known) candidates.push({ type: 'identify', uid: item.uid })
@@ -87,6 +94,7 @@ export function actionOptions(s: Game) {
       candidates.push({ type: 'clearance', uid: item.uid })
     }
     candidates.push(
+      { type: 'collectCounter' },
       { type: 'upgrade', target: 'storage' },
       { type: 'upgrade', target: 'shelves' },
       { type: 'payRent' },
@@ -127,6 +135,7 @@ export function observe(s: Game) {
       warehouse: bounds(s, 'warehouse'),
       counter: bounds(s, 'counter'),
       showcase: bounds(s, 'showcase'),
+      customer: bounds(s, 'customer'),
     },
     inventory: s.inventory.map((i) => visibleItem(s, i, true)),
     visitor: v
@@ -142,10 +151,20 @@ export function observe(s: Game) {
           minimumQuality: v.minimumQuality,
           acceptsDamaged: v.acceptsDamaged,
           bargained: v.bargained,
+          variety: !!v.variety,
+          wholesaleDiscount: v.wholesaleDiscount ?? 15,
           stock: v.stock.map((i) => visibleItem(s, i, false)),
         }
       : null,
     selectedTotal: selectedTotal(s),
+    displayCategory: displayCategory(s),
+    wholesalePrice: wholesalePrice(s),
+    tradeRows: tradeRows(s).map((r) => ({
+      uid: r.item.uid,
+      price: r.price,
+      reason: r.reason,
+      accepted: r.accepted,
+    })),
     report: s.report ? { ...s.report } : null,
     bills: s.bills.map((b) => ({ ...b })),
     entries: s.entries.map((e) => ({ ...e })),
@@ -155,8 +174,8 @@ export function observe(s: Game) {
     actions: actionOptions(s),
     moveSchema: {
       type: 'move',
-      uid: '自有且未选入交易的物品ID',
-      area: ['warehouse', 'counter', 'showcase'],
+      uid: '当前可见物品ID；未购来货仅允许在顾客台面和柜台之间移动',
+      area: ['warehouse', 'counter', 'showcase', 'customer'],
       x: '从0开始的整数',
       y: '从0开始的整数',
       rotated: 'boolean；服务器校验边界与碰撞',
@@ -211,6 +230,8 @@ export class PlayerController {
       'stage',
       'unstage',
       'buy',
+      'wholesale',
+      'collectCounter',
       'sell',
       'bargain',
       'move',

@@ -7,7 +7,7 @@ import {
   mkdirSync,
 } from 'node:fs'
 import path from 'node:path'
-import { createGame, validateGame } from '../src/game/engine'
+import { createGame, validateGame, migrateV2 } from '../src/game/engine'
 import { PlayerController, type Request } from '../src/game/interface'
 const args = process.argv.slice(2)
 const fileIndex = args.indexOf('--file')
@@ -34,9 +34,15 @@ if (command === 'init') {
   persistence.save(createGame())
   console.log('新店已创建，没有执行经营操作。')
 } else {
-  const state: unknown = JSON.parse(
+  let state: unknown = JSON.parse(
     readFileSync(file, 'utf8').replace(/^\uFEFF/, ''),
   )
+  if ((state as { version?: number })?.version === 2) {
+    if (!existsSync(file + '.v2-backup'))
+      writeFileSync(file + '.v2-backup', readFileSync(file), 'utf8')
+    state = migrateV2(state)
+    persistence.save(state)
+  }
   if (!validateGame(state)) throw new Error('存档无效，文件未修改。')
   const controller = new PlayerController(state, persistence)
   if (command === 'observe')

@@ -1,4 +1,4 @@
-export type Area = 'warehouse' | 'counter' | 'showcase'
+export type Area = 'warehouse' | 'counter' | 'showcase' | 'customer'
 export interface Placement {
   area: Area
   x: number

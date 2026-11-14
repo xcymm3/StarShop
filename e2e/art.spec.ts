@@ -40,7 +40,16 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
     line: '看看今天的来货。',
     category: '机械',
     budget: 0,
-    stock: [{ ...s.inventory[0], uid: 'art-offer', known: false }],
+    stock: [
+      {
+        ...s.inventory[0],
+        uid: 'art-offer',
+        known: false,
+        area: 'customer',
+        x: 0,
+        y: 0,
+      },
+    ],
     asks: { 'art-offer': 45 },
     remaining: 1,
     minimumQuality: '普通',
@@ -55,14 +64,14 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
       : route.abort(),
   )
   await page.addInitScript((s) => {
-    if (!localStorage.getItem('starshop-save-v2'))
+    if (!localStorage.getItem('starshop-save-v3'))
       localStorage.setItem(
-        'starshop-save-v2',
+        'starshop-save-v3',
         JSON.stringify({ data: JSON.stringify(s) }),
       )
   }, s)
   await page.goto('/')
-  await mkdir('artifacts/art-review-v04', { recursive: true })
+  await mkdir('artifacts/art-review-v05', { recursive: true })
   async function loaded(selector: string, count: number) {
     const imgs = page.locator(selector)
     await expect(imgs).toHaveCount(count)
@@ -85,7 +94,7 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
   await loaded('[data-area="warehouse"] .grid-item img', 24)
   for (const [n, role] of ['拾荒者', '船员', '商人', '收藏家'].entries()) {
     await page.evaluate((role) => {
-      const key = 'starshop-save-v2'
+      const key = 'starshop-save-v3'
       const s = JSON.parse(JSON.parse(localStorage.getItem(key)!).data)
       s.visitor.role = role
       localStorage.setItem(key, JSON.stringify({ data: JSON.stringify(s) }))
@@ -93,18 +102,14 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
     await page.reload()
     await loaded('.visitor-sprite img,img.visitor-sprite', 1)
     await page.screenshot({
-      path: 'artifacts/art-review-v04/visitor-' + n + '.png',
+      path: 'artifacts/art-review-v05/visitor-' + n + '.png',
       fullPage: true,
     })
   }
-  await page
-    .getByRole('button', { name: '交易平板', exact: true })
-    .first()
-    .click()
-  await page.getByText('查看商品', { exact: true }).first().click()
+  await page.locator('.grid-item[data-uid="art-offer"]').click()
   await loaded('.identify-tool img,img.identify-tool', 1)
   await page.screenshot({
-    path: 'artifacts/art-review-v04/item-inspection.png',
+    path: 'artifacts/art-review-v05/item-inspection.png',
     fullPage: true,
   })
 })

@@ -14,7 +14,7 @@ const browser = await chromium.launch({
 try {
   const demoFile = path.resolve(process.argv[2] || 'release/StarShop-demo.html')
   const output = path.join(
-    'artifacts/offline-v04',
+    'artifacts/offline-v05',
     path.basename(demoFile, '.html'),
   )
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } })
@@ -52,8 +52,31 @@ try {
     .click()
   const item = before.visitor.stock.find((i) => i.sellerAsk <= before.cash)
   assert.ok(item)
+  await page.getByRole('button', { name: '关闭工具面板', exact: true }).click()
+  const source = await page
+    .locator('.grid-item[data-uid="' + item.uid + '"]')
+    .boundingBox()
+  const target = await page
+    .getByRole('button', { name: 'counter格子 0,0', exact: true })
+    .boundingBox()
+  await page.mouse.move(source.x + 4, source.y + 4)
+  await page.mouse.down()
+  await page.mouse.move(
+    target.x + target.width / 2,
+    target.y + target.height / 2,
+    { steps: 12 },
+  )
+  await page.mouse.up()
+  await page.waitForTimeout(460)
+  assert.deepEqual(
+    (await page.evaluate(() => window.starshop.observe())).visitor.stock.find(
+      (i) => i.uid === item.uid,
+    ).area,
+    'counter',
+  )
   await page
-    .getByRole('button', { name: '选入 ' + item.uid, exact: true })
+    .getByRole('button', { name: '交易平板', exact: true })
+    .first()
     .click()
   await page.getByText('确认收购', { exact: true }).last().click()
   const bought = await page.evaluate(() => window.starshop.observe())
