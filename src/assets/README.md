@@ -1,11 +1,12 @@
-# StarShop 原创像素资源
+# StarShop 美术资源
 
-这些资源通过 `scripts/generate-pixel-assets.py` 独立绘制，参考原作截图的低饱和紫灰、青灰金属与暖色纸张配色，以及柜台/货架的功能关系；没有嵌入原作贴图、字体、角色图或截图像素。
+当前主界面以用户确认的竖屏风格参考为准。新增空店面和四顾客图集由内置image_gen绘制，提示词、分层和运行尺寸见 docs/主界面素材与布局.md。
 
-- `items/p0..p23`：24 种 48×48 透明商品图。
-- `visitors/v0..v3`：64×96 透明上半身立绘，分别用于拾荒者、船员、商人、收藏家。
-- `room/counter`：320×220 柜台背景，前景不含来客，中央台面留作商品展示。
-- 同名 SVG 为可编辑矢量绘图源，PNG 用于 H5/微信小程序。
-- `preview-contact-sheet.png` 为开发查看联系表，不由产品代码引用。
+- room/shop-portrait.png：852×1846空店面原稿；运行时使用同尺寸WebP。
+- visitors/customers-sheet.png：1254×1254透明2×2顾客图集；运行时使用同尺寸WebP，alpha保持不变。
+- items/p0..p23.png：此前认可的24项原创重绘商品，继续由真实库存位置驱动。
+- visitors/v0..v3.png、room/counter.png、终端和放大镜：此前版本素材保留，放大镜继续用于检视面板。
+- sketches/：历史简笔商品/顾客层；当前build:sketch沿用同一竖屏空店面，替换商品与人物为简笔层。
+- 同名旧SVG是早期代码绘制源，不能宣称是当前AI原稿的可编辑源。generate-pixel-assets.py为历史方案，不覆盖当前正式素材。
 
-复现需要 Python + Pillow：`python scripts/generate-pixel-assets.py`。像素图建议 `image-rendering: pixelated`，不要使用平滑拉伸。
+不复制原Unity截图到产品。背景没有固定数字、顾客、商品或格线，均由真实交互层渲染。PNG原稿与运行WebP均保留；源码资源校验脚本的旧31项基线仍适用于旧素材，不涵盖新增两项。

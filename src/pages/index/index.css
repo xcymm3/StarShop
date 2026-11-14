@@ -1,230 +1,461 @@
-/* Hallmark · screenshot-derived workbench · P5 H4 E4 S5 R4 V4
- * References: local Unity captures 13 and 18. Existing original sprites retained.
- * Mobile: in-scene showcase + customer + tools, physical counter, persistent warehouse.
+/* Hallmark · approved portrait reference implementation · P5 H5 E4 S5 R5 V4
+ * One continuous shop interior. Image layer contains no character, text, goods or grids.
+ * All three inventories, signs, customer, dialogue and controls are live components.
  */
 .game-shell {
-  max-width: 960px;
+  width: 100%;
+  max-width: 480px;
   margin: auto;
-  padding: 12px 16px 24px;
+  padding: 0;
   min-height: 100vh;
-  background: var(--paper);
-}
-.status-rack {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 4px 16px;
-  border-bottom: 2px solid var(--line);
-}
-.status-rack text {
-  display: block;
-}
-.wordmark {
-  font: 700 25px var(--font-display);
-  letter-spacing: 2px;
-  color: var(--accent);
-}
-.status-sub {
-  font-size: 19px;
-  color: var(--muted);
-  margin-top: 4px;
-}
-.cash-display {
-  padding: 4px 14px;
   background: var(--shadow);
-  border: 3px double var(--line);
-  text-align: right;
 }
-.cash {
-  font: 700 36px var(--font-display);
-  color: var(--accent);
-}
-.date-display {
-  font-size: 22px;
-  text-align: right;
-}
-.store-scene {
-  height: 390px;
+.shop-stage {
+  width: 100%;
+  height: 0;
+  padding-bottom: 216.666667%;
   position: relative;
   overflow: hidden;
-  border: 2px solid var(--line);
-  border-top: 0;
-  background: var(--surface-raised);
+  isolation: isolate;
 }
 .room-sprite {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  inset: 0;
+  pointer-events: none;
   image-rendering: pixelated;
+  z-index: 0;
 }
-.station-sign {
+.shop-stage .game-button {
+  font-size: 1em;
+}
+.shop-stage .date-display {
   position: absolute;
-  left: 20px;
-  top: 12px;
-  padding: 6px 12px;
-  background: var(--paper);
-  color: var(--gold);
-  border: 2px solid var(--line);
-  font-size: 23px;
+  left: 8.7%;
+  top: 5.3%;
+  width: 28.6%;
+  height: 6.1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  z-index: 4;
+  color: var(--terminal-amber-ink);
+  text-align: center;
+  line-height: 1.25;
 }
-.station-sign text {
-  display: block;
+.day-number {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.rent-line {
+  font-size: 1em;
+}
+.progress-line {
+  font-size: 0.72em;
+  opacity: 0.85;
+}
+.game-button.cash-display {
+  position: absolute;
+  left: 46.4%;
+  top: 7.1%;
+  width: 17.8%;
+  height: 3.4%;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: var(--clear);
+  color: var(--cash-ink);
+  z-index: 4;
+}
+.cash {
+  font-family: var(--font-display);
+  font-size: 1.7em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.game-button.station-sign {
+  position: absolute;
+  left: 71.1%;
+  top: 6.9%;
+  width: 22.9%;
+  height: 3.9%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  background: var(--clear);
+  color: var(--ink);
+  z-index: 4;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 .sign-sub {
-  font-size: 17px;
+  font-size: 0.7em;
+  font-weight: 400;
   color: var(--muted);
-  padding-top: 4px;
-}
-.visitor-sprite {
-  position: absolute;
-  bottom: 55px;
-  left: 32%;
-  width: 270px;
-  height: 310px;
-  image-rendering: pixelated;
 }
 .display-case {
   position: absolute;
-  left: 20px;
-  top: 104px;
-  width: 190px;
-  border: 5px solid var(--surface-raised);
-  padding: 5px;
-  background: var(--shadow);
-  z-index: 2;
+  left: 7.8%;
+  top: 21.8%;
+  width: 20.9%;
+  height: 19.6%;
+  z-index: 3;
 }
 .scene-label {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 17%;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
-  color: var(--accent);
-  font-size: 19px;
-  padding: 4px 2px 8px;
+  color: var(--ink);
+  font-size: 1.2em;
+  font-weight: 700;
 }
-.tool-rack {
+.showcase-count {
+  font-size: 0.65em;
+  font-weight: 400;
+  color: var(--muted);
+}
+.showcase-scroll {
   position: absolute;
-  right: 14px;
-  top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 3;
+  left: 0;
+  top: 17%;
+  width: 100%;
+  height: 83%;
 }
-.tool-rack .game-button {
-  padding: 0 12px;
-  min-height: 70px;
-  font-size: 22px;
-  background: var(--paper);
-  border: 3px double var(--line);
+.showcase-content,
+.warehouse-content {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
 }
-.dialogue-strip {
+.visitor-window {
   position: absolute;
-  left: 225px;
-  right: 115px;
-  bottom: 14px;
-  padding: 10px 12px;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  font-size: 21px;
-  line-height: 1.5;
-  z-index: 4;
+  left: 35.4%;
+  top: 21.8%;
+  width: 46.6%;
+  height: 23.6%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
 }
-.dialogue-strip text {
-  display: block;
-}
-.client-name {
-  color: var(--gold);
-  font-size: 22px;
-  padding-bottom: 4px;
-}
-.scene-terminal {
+.visitor-sprite {
   position: absolute;
-  right: 10px;
-  bottom: 5px;
-  width: 102px;
-  height: 100px;
-  z-index: 3;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.atlas-visitor {
+  width: 200%;
+  height: 200%;
+  max-width: none;
+}
+.single-visitor {
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 .closed-label {
   position: absolute;
-  left: 33%;
-  top: 35%;
-  padding: 12px;
-  color: var(--gold);
-  background: var(--paper);
-  font-size: 24px;
+  left: 41%;
+  top: 31%;
+  width: 41%;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1em;
+  z-index: 2;
 }
-.counter-console {
-  background: var(--surface);
-  border: 4px double var(--line);
-  padding: 8px 10px 12px;
-  position: relative;
+.dialogue-strip {
+  position: absolute;
+  left: 41.6%;
+  top: 17%;
+  width: 42.3%;
+  box-sizing: border-box;
+  max-height: 5.7%;
+  padding: 5px 10px;
+  background: var(--sheet);
+  color: var(--sheet-ink);
+  border: 2px solid var(--sheet-ink);
+  z-index: 5;
+  line-height: 1.35;
 }
-.console-actions {
+.dialogue-strip::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 36%;
+  width: 14px;
+  height: 14px;
+  background: var(--sheet);
+  border-right: 2px solid var(--sheet-ink);
+  border-bottom: 2px solid var(--sheet-ink);
+  transform: skewY(-35deg);
+}
+.client-name {
+  display: block;
+  font-size: 0.72em;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.dialogue-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.95em;
+}
+.game-button.intercom-key {
+  position: absolute;
+  left: 91.5%;
+  top: 26.5%;
+  width: 7%;
+  height: 6.6%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: var(--clear);
+  color: var(--sheet-ink);
+  font-size: 1.3em;
+  font-weight: 700;
+  z-index: 5;
+}
+.counter-title {
+  position: absolute;
+  left: 38.7%;
+  top: 44.7%;
+  width: 23.9%;
+  height: 1.8%;
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--ink);
+  z-index: 5;
+}
+.counter-console {
+  position: absolute;
+  left: 4.3%;
+  top: 44.7%;
+  width: 91.4%;
+  height: 11.1%;
+  z-index: 4;
+}
+.counter-plane {
+  position: absolute;
+  inset: 0;
+  transform: perspective(85vw) rotateX(26deg);
+  transform-origin: center bottom;
+}
+.console-actions {
+  position: absolute;
+  left: 38.6%;
+  top: 58.3%;
+  width: 18.5%;
+  height: 2.5%;
+  display: flex;
+  align-items: stretch;
   justify-content: space-between;
-  gap: 10px;
-  padding: 2px 0 10px;
+  gap: 8%;
+  z-index: 5;
 }
-.console-actions .game-button {
+.console-actions .game-button.console-key {
+  min-height: 0;
+  width: 28%;
+  padding: 0;
+  border: 0;
+  background: var(--clear);
+  font: 700 1.35em var(--font-display);
+  color: var(--button-ink);
+  text-shadow: 1px 1px var(--button-light);
+}
+.console-actions .game-button[disabled] {
+  opacity: 0.3;
+}
+.deal-strip {
+  position: absolute;
+  right: 3%;
+  top: 58%;
+  width: 27%;
+  z-index: 7;
+  color: var(--ink);
+  text-align: center;
+  font-size: 0.75em;
+}
+.deal-strip > text {
+  display: block;
+  line-height: 1.5;
+  padding-bottom: 3px;
+  background: var(--toast);
+}
+.deal-strip .game-button {
+  width: 100%;
   min-height: 68px;
-  font-size: 22px;
-  padding: 0 14px;
+  padding: 0 5px;
+  border: 2px solid var(--line);
+  font-size: 0.95em;
 }
-.market-label {
-  font-size: 22px;
-  color: var(--gold);
-  margin-right: auto;
+.warehouse-panel {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
 }
-.danger-key {
-  color: var(--danger);
+.warehouse-heading {
+  position: absolute;
+  left: 39.5%;
+  top: 62.6%;
+  width: 21.7%;
+  height: 2.4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-size: 1.2em;
+  font-weight: 600;
 }
-.tray-heading {
+.warehouse-scroll {
+  position: absolute;
+  left: 7.2%;
+  top: 66.1%;
+  width: 85.7%;
+  height: 24.9%;
+  pointer-events: auto;
+}
+.warehouse-meter {
+  position: absolute;
+  left: 8%;
+  top: 93%;
+  width: 84%;
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  font-size: 19px;
-  padding: 2px 0 10px;
+  color: var(--muted);
+  font-size: 0.7em;
+}
+.shop-stage .grid-frame {
+  padding-bottom: 0;
+  height: 100%;
+  width: 100%;
+  border: 0;
+  background: var(--clear);
+  box-sizing: border-box;
+}
+.shop-stage .grid-cell {
+  border: 1px solid var(--grid-line);
+  background: var(--clear);
   color: var(--muted);
 }
-.tray-heading text:first-child {
-  color: var(--accent);
+.shop-stage .grid-item {
+  border: 1px solid var(--clear);
+  background: var(--clear);
+  padding: 4%;
 }
-.deal-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 10px;
-  font-size: 22px;
+.shop-stage .grid-item.unowned {
+  border: 2px dashed var(--gold);
+  background: var(--selection-wash);
 }
-.deal-strip .game-button {
-  min-height: 72px;
-  padding: 0 16px;
-  font-size: 23px;
+.shop-stage .grid-item.reserved {
+  border-color: var(--gold);
 }
-.warehouse-panel {
-  margin-top: 14px;
+.shop-stage .grid-item.moving {
+  opacity: 0.35;
+}
+.shop-stage .grid-item:focus-visible,
+.shop-stage .grid-cell:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+.shop-stage .grid-item:hover {
+  border-color: var(--line);
+}
+.shop-stage .grid-hint {
+  font-size: 0.7em;
+}
+.shop-stage .unknown-mark {
+  font-size: 1.2em;
+  text-shadow: 1px 1px var(--shadow);
+}
+.shop-stage .ownership-mark {
+  font-size: 0.65em;
+}
+.shop-stage .placement-tools {
+  position: absolute;
+  left: 34%;
+  top: 20.6%;
+  width: 56%;
   padding: 10px;
-  border: 4px solid var(--surface-raised);
-  background: var(--shadow);
+  background: var(--toast);
+  border: 2px solid var(--line);
+  color: var(--ink);
+  font-size: 0.9em;
+  z-index: 8;
 }
-.panel-heading {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 2px 10px;
-  color: var(--accent);
-  font-size: 24px;
+.shop-stage .placement-tools > text {
+  padding: 2px 0;
 }
-.warehouse-tip {
-  display: block;
-  font-size: 19px;
+.shop-stage .placement-tools .toolbar {
+  gap: 4px;
+  margin-top: 6px;
+}
+.shop-stage .placement-tools .game-button {
+  padding: 0 3px;
+  min-height: 60px;
+  font-size: 0.88em;
+}
+.shop-stage .placement-tools .muted {
+  font-size: 0.72em;
+  line-height: 1.5;
+}
+.stage-notice {
+  position: absolute;
+  left: 8%;
+  bottom: 1.1%;
+  width: 84%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-align: center;
   color: var(--muted);
-  margin-bottom: 10px;
+  font-size: 0.78em;
+  line-height: 1.5;
+  z-index: 4;
 }
+.shop-stage .error {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 1%;
+  margin: 0;
+  padding: 8px;
+  background: var(--paper);
+  z-index: 10;
+  font-size: 1em;
+}
+.shop-stage .error .game-button {
+  min-height: 50px;
+  font-size: 0.9em;
+}
+.shop-stage .relief-button {
+  position: absolute;
+  left: 8%;
+  bottom: 1%;
+  width: 84%;
+  min-height: 76px;
+  font-size: 1em;
+  background: var(--paper);
+  z-index: 7;
+}
+
 .grid-frame {
   position: relative;
   height: 0;
@@ -712,25 +943,19 @@
   gap: 24px;
   padding-top: 80px;
 }
-@media (max-width: 350px) {
-  .status-rack {
-    gap: 8px;
-  }
-  .date-display {
-    font-size: 20px;
-  }
-  .dialogue-strip {
-    left: 205px;
-    right: 105px;
-    font-size: 20px;
-  }
-  .display-case {
-    width: 170px;
-  }
-}
 @media (min-width: 640px) {
   .game-shell {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 0;
+    padding-right: 0;
   }
+}
+
+.shop-stage .grid-item,
+.shop-stage .grid-cell {
+  font-size: inherit;
+}
+
+.taro_router,
+.taro_page {
+  background: var(--shadow);
 }

@@ -29,6 +29,8 @@ import v3 from './visitors/v3.png'
 import counter from './room/counter.png'
 import terminal from './room/terminal.png'
 import magnifier from './room/magnifier.png'
+import shopPortrait from './room/shop-portrait.webp'
+import customerAtlas from './visitors/customers-sheet.webp'
 import {
   sketchItems,
   sketchVisitors,
@@ -74,3 +76,11 @@ export const visitorArt = __SKETCH_ART__ ? sketchVisitors : finishedVisitors
 export const roomArt = __SKETCH_ART__ ? sketchRoom : counter
 export const terminalArt = __SKETCH_ART__ ? sketchTerminal : terminal
 export const magnifierArt = __SKETCH_ART__ ? sketchMagnifier : magnifier
+export const portraitRoomArt = shopPortrait
+export const customerSheet = __SKETCH_ART__ ? null : customerAtlas
+export const customerCell: Record<string, number> = {
+  拾荒者: 0,
+  船员: 1,
+  商人: 2,
+  收藏家: 3,
+}

@@ -77,15 +77,15 @@ async function stored(page: Page): Promise<Game> {
   )
 }
 async function snap(page: Page, name: string) {
-  await mkdir('artifacts/screenshots-v03', { recursive: true })
+  await mkdir('artifacts/screenshots-v04', { recursive: true })
   await page.screenshot({
-    path: 'artifacts/screenshots-v03/' + name + '.png',
+    path: 'artifacts/screenshots-v04/' + name + '.png',
     fullPage: true,
   })
 }
 async function tablet(page: Page) {
   await page
-    .getByText(/^交易平板/)
+    .getByRole('button', { name: '交易平板', exact: true })
     .first()
     .click()
 }
@@ -127,6 +127,26 @@ test('工作台真实暂放、鉴定、收购、格子整理与刷新恢复', as
   expect((await stored(page)).cash).toBe(642)
   await page.reload()
   expect((await stored(page)).staged).toEqual(['offer-a'])
+  await expect(page.locator('.shop-stage')).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: '暂放 磁悬轴承 offer-a', exact: true }),
+  ).toBeVisible()
+  await expect
+    .poll(() =>
+      page
+        .locator('.shop-stage img')
+        .evaluateAll(
+          (images) =>
+            images.length > 0 &&
+            images.every(
+              (image) =>
+                (image as HTMLImageElement).complete &&
+                (image as HTMLImageElement).naturalWidth > 0,
+            ),
+        ),
+    )
+    .toBe(true)
+  await snap(page, '17-live-counter-main')
   await tablet(page)
   await snap(page, '04-staged-restored')
   await page.getByText('确认收购', { exact: true }).last().click()
@@ -350,6 +370,11 @@ test('320/375/414/768工作台、平板和工具面板无横向溢出', async ({
   await open(page)
   for (const width of [320, 375, 414, 768]) {
     await page.setViewportSize({ width, height: 900 })
+    const scene = await page.locator('.shop-stage').boundingBox()
+    expect(scene!.width).toBeCloseTo(Math.min(width, 480), 0)
+    expect(scene!.height / scene!.width).toBeCloseTo(1846 / 852, 2)
+    await expect(page.locator('.shop-stage [data-area]')).toHaveCount(3)
+
     const check = async () => {
       const size = await page.evaluate(() => ({
         w: document.documentElement.clientWidth,
@@ -452,4 +477,35 @@ test('浏览器从新局通过同一单步接口完成第七日房租', async ({
     await act(page, { type: 'dismiss', visitorId: v.id })
   }
   throw new Error('未完成正常一周')
+})
+
+test('柜台透视格子可点击，扩仓末行可在店内滚动后操作', async ({ page }) => {
+  const s = fixture()
+  s.storage = 5
+  s.inventory[0].y = 19
+  await open(page, s)
+  await act(page, { type: 'stage', uid: 'offer-a' })
+  await act(page, { type: 'buy', visitorId: 100 })
+  await page
+    .getByRole('button', { name: '库存 磁悬轴承 offer-a', exact: true })
+    .click()
+  await page.getByText('整理此物', { exact: true }).click()
+  await page
+    .getByRole('button', { name: 'counter格子 5,0', exact: true })
+    .click()
+  expect(
+    (await stored(page)).inventory.find((i) => i.uid === 'offer-a'),
+  ).toMatchObject({ area: 'counter', x: 5, y: 0 })
+  const warehouseItem = page.getByRole('button', {
+    name: '库存 磁悬轴承 ' + s.inventory[0].uid,
+    exact: true,
+  })
+  await warehouseItem.scrollIntoViewIfNeeded()
+  const frame = await page.locator('.warehouse-scroll').boundingBox()
+  const target = await warehouseItem.boundingBox()
+  expect(target!.y + target!.height / 2).toBeGreaterThan(frame!.y)
+  expect(target!.y + target!.height / 2).toBeLessThan(frame!.y + frame!.height)
+  await warehouseItem.click()
+  await expect(page.getByText('商品检视', { exact: true })).toBeVisible()
+  await snap(page, '16-expanded-warehouse-interaction')
 })

@@ -12,21 +12,21 @@
   },
   "user_direction": "Use the newly captured original-game screenshots as style reference; do not invent a separate theme",
   "selected_reference": [
-    "13-store-counter.png",
-    "15-reputation.png",
-    "18-negotiation-empty.png"
+    "docs/竖屏主界面风格参考-v1.png",
+    "docs/主界面布局示意-三区格子版.svg"
   ],
   "preserve": [
-    "existing color and font tokens",
-    "31 approved original sprites",
+    "v0.3 economy and v2 save format",
     "Taro components",
+    "existing products",
     "no desktop automation"
   ],
   "introduce": [
-    "single in-scene workbench",
-    "real grid positions",
-    "paper transaction tablet",
-    "cash and rent display"
+    "generated empty portrait shop plate",
+    "transparent 2x2 customer atlas",
+    "diegetic live displays",
+    "perspective interactive countertop",
+    "internally scrolling warehouse"
   ],
-  "revision": "2026-11-14 v0.3"
+  "revision": "2026-11-14 v0.4"
 }

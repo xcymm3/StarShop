@@ -1,0 +1,58 @@
+{
+  "version": "0.4",
+  "reference": "docs/竖屏主界面风格参考-v1.png",
+  "assets": [
+    {
+      "role": "empty shop background",
+      "generator": "built-in image_gen",
+      "promptDocument": "docs/主界面素材与布局.md",
+      "runtimeEncoding": "WebP quality95, no resize; alpha preserved",
+      "master": {
+        "path": "src/assets/room/shop-portrait.png",
+        "size": [
+          852,
+          1846
+        ],
+        "mode": "RGB",
+        "bytes": 1490691,
+        "sha256": "87cdfc06816586c89b2d9bced9dd7b24fe91d18374d7f69258b28ab2d40bf27e"
+      },
+      "runtime": {
+        "path": "src/assets/room/shop-portrait.webp",
+        "size": [
+          852,
+          1846
+        ],
+        "mode": "RGB",
+        "bytes": 171808,
+        "sha256": "78f790d6b25124d1a727b69b5e452fe7dc0d3fdf8be68b21d58cccf3ce37293a"
+      }
+    },
+    {
+      "role": "transparent 2x2 customer atlas",
+      "generator": "built-in image_gen",
+      "promptDocument": "docs/主界面素材与布局.md",
+      "runtimeEncoding": "WebP quality95, no resize; alpha preserved",
+      "master": {
+        "path": "src/assets/visitors/customers-sheet.png",
+        "size": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "bytes": 1125401,
+        "sha256": "7d65a35c90b66ad0558169363b67200c6fc7e76e01aee32c3f8ba5b21f679b73"
+      },
+      "runtime": {
+        "path": "src/assets/visitors/customers-sheet.webp",
+        "size": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "bytes": 251826,
+        "sha256": "d2bd085dd686c6b315070564ee9198e5e3af30305f90ae41c43e7eb81013c802"
+      }
+    }
+  ]
+}

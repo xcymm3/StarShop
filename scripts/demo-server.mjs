@@ -2,11 +2,9 @@ import http from 'node:http'
 import { readFile } from 'node:fs/promises'
 const host = '127.0.0.1'
 const port = Number(process.env.STARSHOP_PORT || 4179)
-const html = await readFile(
-  new URL('../release/StarShop-demo.html', import.meta.url),
-)
+const demoFile = new URL('../release/StarShop-demo.html', import.meta.url)
 http
-  .createServer((req, res) => {
+  .createServer(async (req, res) => {
     if (req.url === '/favicon.ico') {
       res.writeHead(204)
       res.end()
@@ -17,11 +15,17 @@ http
       res.end()
       return
     }
-    res.writeHead(200, {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'no-store',
-    })
-    res.end(html)
+    try {
+      const html = await readFile(demoFile)
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+      })
+      res.end(html)
+    } catch {
+      res.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8' })
+      res.end('演示包尚未生成，请先运行 npm run build:demo。')
+    }
   })
   .listen(port, host, () =>
     console.log(

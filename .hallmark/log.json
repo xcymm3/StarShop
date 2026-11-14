@@ -31,5 +31,21 @@
       "variety": 4
     },
     "limits": "No Unity launch, no desktop automation, no WeChat device run"
+  },
+  {
+    "date": "2026-11-14",
+    "version": "0.4",
+    "macrostructure": "One continuous portrait shop matching approved generated reference",
+    "theme": "User-approved weathered industrial pixel art; layered live UI",
+    "review": "320/375/414/768; full canvas sizing, live staged counter, all customer cells, perspective hit testing, warehouse last-row scrolling",
+    "self_critique": {
+      "philosophy": 5,
+      "hierarchy": 5,
+      "execution": 4,
+      "specificity": 5,
+      "restraint": 5,
+      "variety": 4
+    },
+    "limits": "System Chinese fonts differ from painted reference; showcase uses existing save grid; no device test"
   }
 ]

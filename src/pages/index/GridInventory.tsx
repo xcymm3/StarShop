@@ -17,12 +17,14 @@ export function GridInventory({
   onItem,
   onCell,
   compact = false,
+  fill = false,
 }: {
   game: Game
   area: Area
   selected?: Item | null
   rotated?: boolean
   compact?: boolean
+  fill?: boolean
   onItem(item: Item, owned: boolean): void
   onCell(x: number, y: number): void
 }) {
@@ -41,7 +43,11 @@ export function GridInventory({
         (selected ? 'placing ' : '') +
         (compact ? 'compact-grid' : '')
       }
-      style={{ paddingBottom: (b.height / b.width) * 100 + '%' }}
+      style={
+        fill
+          ? { height: '100%', paddingBottom: 0 }
+          : { paddingBottom: (b.height / b.width) * 100 + '%' }
+      }
       data-area={area}
     >
       <View className="grid-interior">

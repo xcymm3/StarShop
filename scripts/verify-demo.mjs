@@ -14,7 +14,7 @@ const browser = await chromium.launch({
 try {
   const demoFile = path.resolve(process.argv[2] || 'release/StarShop-demo.html')
   const output = path.join(
-    'artifacts/offline-v03',
+    'artifacts/offline-v04',
     path.basename(demoFile, '.html'),
   )
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } })
@@ -47,7 +47,7 @@ try {
   const before = await page.evaluate(() => window.starshop.observe())
   assert.equal(before.day, 1)
   await page
-    .getByText(/^交易平板/)
+    .getByRole('button', { name: '交易平板', exact: true })
     .first()
     .click()
   const item = before.visitor.stock.find((i) => i.sellerAsk <= before.cash)

@@ -20,6 +20,14 @@ page,
   --scrim: #1d1b25df;
   --sheet-highlight: #e4d8a1;
   --error-ink: #863e31;
+  --terminal-amber-ink: #a56143;
+  --cash-ink: #82c7bb;
+  --clear: transparent;
+  --grid-line: #877a8b;
+  --selection-wash: #ebcd8320;
+  --button-ink: #284235;
+  --button-light: #b3c39d;
+  --toast: #292532ed;
   --font-display: 'Courier New', 'PingFang SC', monospace;
   --font-body:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
@@ -37,6 +45,15 @@ body {
   margin: 0;
   overflow-x: clip;
   background: var(--paper);
+}
+html,
+body,
+#app,
+#app > div,
+taro-page,
+.taro_page,
+.taro_router {
+  background: var(--shadow) !important;
 }
 view,
 text,

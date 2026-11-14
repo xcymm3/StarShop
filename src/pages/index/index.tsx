@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Image, Text, View, type ButtonProps } from '@tarojs/components'
+import {
+  Button,
+  Image,
+  Text,
+  View,
+  ScrollView,
+  type ButtonProps,
+} from '@tarojs/components'
 import {
   CATEGORIES,
   product,
@@ -23,8 +30,9 @@ import { load, save, restart } from '../../platform/storage'
 import {
   itemArt,
   visitorArt,
-  roomArt,
-  terminalArt,
+  portraitRoomArt,
+  customerSheet,
+  customerCell,
   magnifierArt,
 } from '../../assets'
 import { GridInventory } from './GridInventory'
@@ -135,7 +143,7 @@ export default function Index() {
   }
   if (!game)
     return (
-      <View className="game-shell recovery">
+      <View className="game-shell recovery" style={{ maxWidth: '480px' }}>
         <Text className="wordmark">STARSHOP · 存档恢复</Text>
         <Text>{error}</Text>
         <GameButton
@@ -227,11 +235,12 @@ export default function Index() {
     )
       setPanel(null)
   }
-  const grid = (area: Area, compact = false) => (
+  const grid = (area: Area, compact = true) => (
     <GridInventory
       game={game}
       area={area}
       compact={compact}
+      fill
       selected={movingItem && target === area ? movingItem : null}
       rotated={rotated}
       onItem={(item) => inspect(item)}
@@ -243,120 +252,166 @@ export default function Index() {
     !!panel || !!detail || !!game.report || game.job.active || !!confirm
 
   return (
-    <View className="game-shell">
-      <View className="status-rack">
-        <View>
-          <Text className="wordmark">STARSHOP</Text>
-          <Text className="status-sub">远星港 · 第七码头</Text>
-        </View>
-        <View className="cash-display">
-          <Text className="status-sub">可用星币</Text>
-          <Text className="cash">{game.cash}</Text>
-        </View>
+    <View className="game-shell" style={{ maxWidth: '480px' }}>
+      <View
+        style={{ fontSize: 'clamp(12px, 3.6vw, 17px)' }}
+        className="store-scene shop-stage"
+        aria-label="店铺柜台"
+      >
+        <Image
+          className="room-sprite"
+          src={portraitRoomArt}
+          mode="scaleToFill"
+        />
         <View className="date-display">
-          <Text>
-            第 {game.day} 天 · {game.progress}/5 笔
-          </Text>
-          <Text className="status-sub">
+          <Text className="day-number">第{game.day}天</Text>
+          <Text className="rent-line">
             {debt(game)
               ? '待付房租 ' + debt(game)
-              : '距收租 ' + (7 - ((game.day - 1) % 7)) + ' 天'}
+              : '距交租' + (7 - ((game.day - 1) % 7)) + '天'}
           </Text>
+          <Text className="progress-line">今日成交 {game.progress}/5</Text>
         </View>
-      </View>
-      <View className="store-scene" aria-label="店铺柜台">
-        <Image className="room-sprite" src={roomArt} mode="aspectFill" />
-        <View className="station-sign">
+        <GameButton
+          className="cash-display"
+          aria-label="查看现金账本"
+          onClick={() => openPanel('ledger')}
+        >
+          <Text className="cash">{game.cash}¢</Text>
+        </GameButton>
+        <GameButton
+          className="station-sign"
+          aria-label="打开升级"
+          onClick={() => openPanel('upgrade')}
+        >
           <Text>远星杂货</Text>
           <Text className="sign-sub">
-            Lv.{level(game)} · 声望 {game.reputation}
+            Lv.{level(game)} · 声望{game.reputation}
           </Text>
-        </View>
+        </GameButton>
+
         <View className="display-case">
           <View className="scene-label">
             <Text>展示柜</Text>
-            <Text>{shown.length}件</Text>
+            <Text className="showcase-count">{shown.length}件</Text>
           </View>
-          {grid('showcase', true)}
+          <ScrollView className="showcase-scroll" scrollY>
+            <View
+              className="showcase-content"
+              style={{
+                height:
+                  Math.max(1, bounds(game, 'showcase').height / 3) * 100 + '%',
+              }}
+            >
+              {grid('showcase')}
+            </View>
+          </ScrollView>
         </View>
+
         {v ? (
-          <Image
-            className="visitor-sprite"
-            src={visitorArt[v.role]}
-            mode="aspectFit"
-            aria-label={v.role}
-          />
+          <View className="visitor-window">
+            <Image
+              className={
+                'visitor-sprite ' +
+                (customerSheet ? 'atlas-visitor' : 'single-visitor')
+              }
+              src={customerSheet || visitorArt[v.role]}
+              mode="scaleToFill"
+              aria-label={v.role}
+              style={
+                customerSheet
+                  ? {
+                      left: -(customerCell[v.role] % 2) * 100 + '%',
+                      top: -Math.floor(customerCell[v.role] / 2) * 100 + '%',
+                    }
+                  : {}
+              }
+            />
+          </View>
         ) : (
           <Text className="closed-label">等待下一位来客</Text>
         )}
-        <View className="tool-rack">
-          <GameButton aria-label="打开账本" onClick={() => openPanel('ledger')}>
-            账本
+
+        {!movingItem && (
+          <View
+            className="dialogue-strip"
+            aria-label="查看当前顾客"
+            onClick={() =>
+              v
+                ? openPanel('trade')
+                : apply({ type: 'next' }, '按铃接待下一位顾客')
+            }
+          >
+            <Text className="client-name">
+              {v ? v.name + ' · ' + v.role : '柜台空闲'}
+            </Text>
+            <Text className="dialogue-line">
+              {v?.line ?? '整理好货物，按绿色按钮接客。'}
+            </Text>
+          </View>
+        )}
+        <GameButton
+          className="intercom-key"
+          aria-label="打开手册"
+          onClick={() => openPanel('help')}
+        >
+          ?
+        </GameButton>
+
+        <View className="counter-title">
+          <Text>柜台</Text>
+        </View>
+        <View className="counter-console">
+          <View
+            className="counter-plane"
+            style={{
+              transform: 'perspective(min(85vw, 408px)) rotateX(26deg)',
+            }}
+          >
+            {grid('counter')}
+          </View>
+        </View>
+
+        <View className="console-actions">
+          <GameButton
+            className="console-key call-key"
+            aria-label={v ? '交易平板' : '按铃接客'}
+            onClick={() =>
+              v
+                ? openPanel('trade')
+                : apply({ type: 'next' }, '按铃接待下一位顾客')
+            }
+          >
+            {v ? '▤' : '↓'}
           </GameButton>
           <GameButton
-            aria-label="打开升级"
-            onClick={() => openPanel('upgrade')}
+            className="console-key dismiss-key"
+            aria-label="送客"
+            disabled={!v}
+            onClick={() =>
+              v &&
+              apply(
+                { type: 'dismiss', visitorId: v.id },
+                '结束与当前顾客的接待',
+              )
+            }
           >
-            升级
+            ×
           </GameButton>
-          <GameButton aria-label="打开手册" onClick={() => openPanel('help')}>
-            手册
+          <GameButton
+            className="console-key ledger-key"
+            aria-label="打开账本"
+            onClick={() => openPanel('ledger')}
+          >
+            ▣
           </GameButton>
         </View>
-        <View className="dialogue-strip">
-          <Text className="client-name">
-            {v ? v.name + ' · ' + v.role : '柜台空闲'}
-          </Text>
-          <Text>{v?.line ?? '货物留在原位。整理好后，按铃接客。'}</Text>
-        </View>
-        <Image className="scene-terminal" src={terminalArt} mode="aspectFit" />
-      </View>
-      <View className="counter-console">
-        <View className="console-actions">
-          <Text className="market-label">热销 · {hot(game)}</Text>
-          {v ? (
-            <>
-              <GameButton
-                className="console-key"
-                onClick={() => openPanel('trade')}
-              >
-                交易平板{game.staged.length ? ' · ' + game.staged.length : ''}
-              </GameButton>
-              <GameButton
-                className="console-key danger-key"
-                onClick={() =>
-                  apply(
-                    { type: 'dismiss', visitorId: v.id },
-                    '结束与当前顾客的接待',
-                  )
-                }
-              >
-                送客
-              </GameButton>
-            </>
-          ) : (
-            <GameButton
-              className="console-key primary"
-              onClick={() => apply({ type: 'next' }, '按铃接待下一位顾客')}
-            >
-              按铃接客
-            </GameButton>
-          )}
-        </View>
-        <View className="tray-heading">
-          <Text>柜台暂放区</Text>
-          <Text>
-            {usedCells(game, 'counter')}/
-            {bounds(game, 'counter').width * bounds(game, 'counter').height} 格
-            · 虚线为未购来货
-          </Text>
-        </View>
-        {grid('counter')}
-        {v && (
+
+        {v && game.staged.length > 0 && (
           <View className="deal-strip">
             <Text>
-              {v.kind === 'seller' ? '待购' : '待售'} {game.staged.length} 件 ·
-              合计 {total}
+              {v.kind === 'seller' ? '待购' : '待售'}
+              {game.staged.length}件 · {total}¢
             </Text>
             <GameButton
               className="primary"
@@ -367,25 +422,36 @@ export default function Index() {
             </GameButton>
           </View>
         )}
-      </View>
-      {error && !modal && (
-        <View className="error" role="alert">
-          <Text>{error}</Text>
-          <GameButton onClick={() => setError('')}>关闭</GameButton>
+
+        <View className="warehouse-panel">
+          <View className="warehouse-heading">
+            <Text>仓库</Text>
+          </View>
+          <ScrollView className="warehouse-scroll" scrollY>
+            <View
+              className="warehouse-content"
+              style={{
+                height:
+                  Math.max(1, bounds(game, 'warehouse').height / 6) * 100 + '%',
+              }}
+            >
+              {grid('warehouse')}
+            </View>
+          </ScrollView>
+          <View className="warehouse-meter">
+            <Text>
+              库存 {usedCells(game, 'warehouse')}/
+              {bounds(game, 'warehouse').width *
+                bounds(game, 'warehouse').height}{' '}
+              格
+            </Text>
+            <Text>今日热销 · {hot(game)}</Text>
+          </View>
         </View>
-      )}
-      <View className="warehouse-panel">
-        <View className="panel-heading">
-          <Text>仓库</Text>
-          <Text>
-            {usedCells(game, 'warehouse')}/
-            {bounds(game, 'warehouse').width * bounds(game, 'warehouse').height}{' '}
-            格
-          </Text>
-        </View>
-        {movingItem ? (
+
+        {movingItem && (
           <View className="placement-tools">
-            <Text>整理：{product(movingItem).name}</Text>
+            <Text>整理 · {product(movingItem).name}</Text>
             <View className="toolbar">
               {(['warehouse', 'counter', 'showcase'] as Area[]).map((area) => (
                 <GameButton
@@ -417,32 +483,28 @@ export default function Index() {
               </GameButton>
               <GameButton onClick={() => setMoving(null)}>取消整理</GameButton>
             </View>
-            <Text className="muted">
-              点目标区域的格子放置；重叠与越界不会生效。
-            </Text>
+            <Text className="muted">点目标格子放置，重叠或越界不生效。</Text>
           </View>
-        ) : (
-          <Text className="warehouse-tip">
-            点商品查看 · 选择整理后可旋转、移入展示柜
-          </Text>
         )}
-        {grid('warehouse')}
+
+        <Text className="stage-notice">{game.notice}</Text>
+        {game.cash < 5 && !game.inventory.length && !game.report && (
+          <GameButton
+            className="relief-button"
+            onClick={() =>
+              apply({ type: 'startJob' }, '接取港口理货委托，以劳动恢复周转')
+            }
+          >
+            承接应急理货 · 报酬20
+          </GameButton>
+        )}
+        {error && !modal && (
+          <View className="error" role="alert">
+            <Text>{error}</Text>
+            <GameButton onClick={() => setError('')}>关闭</GameButton>
+          </View>
+        )}
       </View>
-      <View className="notice">
-        <Text>港口广播</Text>
-        <Text>{game.notice}</Text>
-      </View>
-      {game.cash < 5 && !game.inventory.length && !game.report && (
-        <GameButton
-          className="relief-button"
-          onClick={() =>
-            apply({ type: 'startJob' }, '接取港口理货委托，以劳动恢复周转')
-          }
-        >
-          承接应急理货 · 报酬20
-        </GameButton>
-      )}
-      <Text className="save-note">每步自动存档 · 无离线收益与惩罚</Text>
 
       {panel && !detail && !game.report && !game.job.active && (
         <View className="modal-backdrop">

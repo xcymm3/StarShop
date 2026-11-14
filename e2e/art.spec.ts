@@ -62,7 +62,7 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
       )
   }, s)
   await page.goto('/')
-  await mkdir('artifacts/art-review-v03', { recursive: true })
+  await mkdir('artifacts/art-review-v04', { recursive: true })
   async function loaded(selector: string, count: number) {
     const imgs = page.locator(selector)
     await expect(imgs).toHaveCount(count)
@@ -79,7 +79,9 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
       .toBe(true)
   }
   await loaded('.room-sprite img,img.room-sprite', 1)
-  await loaded('.scene-terminal img,img.scene-terminal', 1)
+  await expect(
+    page.getByRole('button', { name: '打开账本', exact: true }),
+  ).toBeVisible()
   await loaded('[data-area="warehouse"] .grid-item img', 24)
   for (const [n, role] of ['拾荒者', '船员', '商人', '收藏家'].entries()) {
     await page.evaluate((role) => {
@@ -91,18 +93,18 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
     await page.reload()
     await loaded('.visitor-sprite img,img.visitor-sprite', 1)
     await page.screenshot({
-      path: 'artifacts/art-review-v03/visitor-' + n + '.png',
+      path: 'artifacts/art-review-v04/visitor-' + n + '.png',
       fullPage: true,
     })
   }
   await page
-    .getByText(/^交易平板/)
+    .getByRole('button', { name: '交易平板', exact: true })
     .first()
     .click()
   await page.getByText('查看商品', { exact: true }).first().click()
   await loaded('.identify-tool img,img.identify-tool', 1)
   await page.screenshot({
-    path: 'artifacts/art-review-v03/item-inspection.png',
+    path: 'artifacts/art-review-v04/item-inspection.png',
     fullPage: true,
   })
 })
