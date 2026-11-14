@@ -1,6 +1,6 @@
 {
   "name": "starshop",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "空间站商店模拟经营游戏",
   "packageManager": "npm@10.9.3",
@@ -16,7 +16,9 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run test && npm run typecheck && npm run build:h5 && npm run build:weapp",
     "test": "tsx --test tests/*.test.ts",
+    "play": "tsx scripts/play.ts",
     "test:e2e": "playwright test",
+    "test:demo": "node scripts/verify-demo.mjs",
     "format": "prettier --write src tests e2e config playwright.config.ts",
     "format:check": "prettier --check src tests e2e config playwright.config.ts",
     "build:demo": "node scripts/build-demo.mjs",

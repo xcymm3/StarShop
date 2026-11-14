@@ -1,89 +1,88 @@
 # StarShop
 
-空间站商店模拟经营游戏首版，使用 Taro 4.3.2、React 18、TypeScript 和 Vite。H5 调试与微信小程序共用规则和界面代码。
+Taro 4.3.2 + React 18 + TypeScript 的竖屏经营 Demo。v0.3 按“手机端简化原作”重做经营流程和工作台布局，规则以 [首版方案](docs/首版方案.md) 的v0.3部分为准。
 
-![柜台、仓库、升级和账本的实际运行画面](docs/界面预览.jpg)
+![v0.3柜台、暂放与格子仓库](docs/工作台预览.png)
 
-预览来自无窗口浏览器的确定性测试状态。
+主界面采用已有原作截图的空间关系：左展示柜、中顾客、右工具、柜台暂放、下方仓库；交易和账本以纸面平板打开。素材沿用已认可的31项原创重绘，本轮不启动原游戏或桌面程序。
 
-## 当前内容
+## 已实现
 
-24 种原创商品、4 类顾客、收购与出售、一次付费鉴定、展示位、仓库扩容、店铺等级、五笔成交跨日、每周租金及欠租补缴、低价清仓、本地存档与坏档恢复入口。
+- 三个有真实坐标、占地、旋转与碰撞的区域：仓库、柜台、展示柜；点选放置与自动找位。
+- 顾客来货先暂放，成交后才取得归属；1～3件选购、批量成交、同客继续交易。
+- 未知品质、卖家声明、买前/买后鉴定；报价可能高于真实价值，不保证每件都赚钱。
+- 独立顾客预算、品质/状态偏好、展示引导需求；一次还价与声望/等级反馈。
+- 五笔成交日结，第七日主动交租、部分支付/明确延期/补缴；无离线收益和惩罚。
+- 零资金空仓理货恢复、存档先写后生效、旧v1档备份迁移、坏档保留。
+- UI与单步游玩接口共用规则；公开观察不输出隐藏品质、随机状态或议价容忍度。
 
-规则基线见 [首版方案](docs/首版方案.md)，界面来源与截图边界见 [视觉参考](docs/视觉参考.md)。数值是首版调试默认值，尚未进行长期平衡验证。原游戏截图和素材不在本仓库。
+操作顺序：交易平板挑货→暂放→确认收购→点自有货物整理→选格子/旋转/自动放置→匹配买家→报价出售。每次确认算一笔，批量仍算一笔。送客后才能接下一位。
 
-## 运行
+## 直接游玩
 
-需要 Node.js 22、npm 10：
-
-```sh
-npm ci
-npm run dev:h5
-```
-
-自行访问 `http://127.0.0.1:10086/`。开发服务只监听本机，不自动打开浏览器；结束调试后在终端停止服务。
-
-```sh
-npm run test
-npm run typecheck
-npm run build:h5
-npm run build:weapp
-npm run check
-```
-
-H5 产物为 `dist/h5`，微信小程序产物为 `dist/weapp`。微信开发者工具需由用户自行导入根目录，`touristappid` 只是开发占位，预览上传前配置自己的 AppID。尚未验证微信真机运行。
-
-## 无窗口流程验证与截图
+打开本机 `release/StarShop-demo.html`，代码、样式、图片均内嵌，无需安装依赖或联网。若浏览器限制file://本地存储：
 
 ```sh
-npx playwright install chromium --only-shell
-npm run test:e2e
+npm run demo:serve
 ```
 
-测试会自行启动和停止 H5 开发服务，只运行 headless Chromium，使用 SwiftShader 软件渲染，不打开桌面浏览器。结果位于 `artifacts/`，该目录不进入 Git。
-
-测试包含收购／鉴定／出售／存档刷新／清仓／升级／欠租／保存失败，以及 320、375、414、768 像素宽度检查。异常与后期状态通过测试文件中的确定性夹具准备，不在正式游戏提供调试入口。
-
-## 存档与边界
-
-存档保存在当前浏览器或小程序本地，操作持久化成功后才更新界面；不跨设备同步。现实时间不产生收益、损耗或额外租金。当前顾客和报价随存档恢复。
-
-存档损坏时保留原数据，重开需确认并备份旧档。清理浏览器数据会丢失本地进度。未接入登录、云服务、付费或广告。
-
-## 目录
-
-- `src/game/engine.ts`：纯规则、商品定义与存档结构校验。
-- `src/platform/storage.ts`：Taro 本地存储适配。
-- `src/pages/index/`：竖屏经营界面。
-- `tests/`：规则测试；`e2e/`：无窗口浏览器流程验证。
-- `docs/`：首版方案与视觉参考说明。
-
-## 成品 Demo（五步计划交付）
+自行访问 `http://127.0.0.1:4179/`，脚本不会打开浏览器。生成产物不提交Git，可从源码重新构建：
 
 ```sh
 npm run build:demo
 ```
 
-生成 `release/StarShop-demo.html`，这是图片、代码、样式全部内嵌的离线单文件，直接用浏览器打开即可玩，不用安装依赖或联网。已验证 file:// 打开、真实交易、本地保存和刷新恢复，未发生网络请求。现代浏览器若限制本地文件存储，可以运行 `npm run demo:serve`，自行访问 `http://127.0.0.1:4179/`。
+## 开发与验证
 
-`release/StarShop-demo.zip` 是本次交付压缩包，包含 HTML 与说明；生成产物不提交 Git，可从仓库重新构建。
-
-24 项基础价参考原 Unity 工厂方法常数，映射见 `docs/商品数值对照.md`。保持本项目原创商品名称，不声称逐物品或全部经济系统还原。
-
-## 简笔原型与原创素材
-
-美术按“简笔可玩版 → Unity 真实参考册 → 逐项原创替换”制作，规格见 [美术制作流程](docs/美术制作流程.md)，逐项来源、提示词和运行时规格见 [素材清单](docs/素材清单.json)。31 项包括 24 件商品、4 类顾客、店铺背景、交易终端、鉴定工具。界面文字、按钮和边框使用 Taro 组件绘制。
+需要Node.js 22、npm 10。
 
 ```sh
-npm run build:sketch
+npm ci
+npm run dev:h5
+npm run typecheck
+npm test
+npm run build:h5
+npm run build:weapp
+npm run test:e2e
+npm run test:demo
 ```
 
-生成可独立游玩的 `release/StarShop-sketch.html`。之后执行 `npm run build:demo` 重新生成原创美术版，简笔版文件会保留。简笔图保存在 `src/assets/sketches/`，正式图按 `items/`、`visitors/`、`room/` 分类。
+开发服务地址 `http://127.0.0.1:10086/`，仅监听本机、不自动打开浏览器。H5产物在dist/h5，小程序在dist/weapp；微信开发者工具由用户自行导入。尚未验证微信真机。
 
-原作图片与高清原创原稿留在本机 `D:/mydoc/probably-stolen-rea/starshop-art/`。`comparison-catalog.html` 为包含简笔、真实参考、原创成品的离线素材册；该目录不提交仓库。内置图像生成工具负责原创绘制，Python 只负责静态提取、预览排版和运行时尺寸打包。旧版代码像素绘制脚本仅输出到 `artifacts/legacy-pixel-assets/`，不覆盖正式美术。
+Playwright始终使用headless Chromium + SwiftShader，不使用桌面鼠标键盘控制。需要时用 `npx playwright install chromium --only-shell` 安装浏览器运行时。测试状态夹具仅用于边界功能；完整周验收从真正新局开始，逐次提交正常动作，未注入日期、资金或顾客。
+
+详情见 [验证记录](docs/验证记录.md)、[经济与流程设计](docs/经济与流程设计.md) 和 [视觉参考](docs/视觉参考.md)。
+
+## 单步游玩接口
+
+H5提供 `window.starshop.observe()` 与 `window.starshop.act(request)`。每次观察后决定一个操作，act必须携带token、唯一id和理由。近200条操作保留审计与幂等收据；保存失败不公布新状态。无加钱、跳日或生成物品入口。
+
+不启动浏览器的独立CLI：
 
 ```sh
-python scripts/check-art.py
+npm run play -- --file artifacts/play/shop.json init
+npm run play -- --file artifacts/play/shop.json observe
 ```
 
-检查 31 项正式图片的尺寸、透明通道与校验值。制作脚本依赖 Pillow；`prepare-art-catalog.py` 还需要本机 REA 工具目录中的 UnityPy 和用户提供的游戏文件，普通构建和游玩不需要这些依赖。
+完整格式见 [单步游玩接口](docs/单步游玩接口.md)。CLI档与浏览器档独立，没有自动通关命令。
+
+## 存档
+
+v2存档保存布局、未鉴定信息、当前顾客/预算、暂放、日结、租金与随机状态。首次读取旧v1档会先备份再迁移；迁移失败保留原数据，不静默重置。操作写入成功后才更新界面。没有云同步，清除浏览器数据会丢失进度。
+
+## 素材与数值
+
+24商品、4顾客、场景、终端、放大镜均沿用原创素材。真实原作截图仅存于本地逆向工作区，未复制进产品或仓库。数值表仅证明24项基础价的来源映射，不代表原作完整经济系统；部分是异类价位参考，明确记在 [商品数值对照](docs/商品数值对照.md)。
+
+`npm run build:sketch` 生成可玩简笔素材版本；随后再运行build:demo恢复正式图版本。素材规格与来源见 [美术制作流程](docs/美术制作流程.md)、[素材清单](docs/素材清单.json)。`python scripts/check-art.py` 可核验31项正式图文件。
+
+## 目录
+
+- src/game/catalog.ts、grid.ts、engine.ts：商品、格子和纯经营规则。
+- src/game/interface.ts：玩家观察、单步操作、审计和持久化控制。
+- src/platform/storage.ts：Taro存储与旧档迁移。
+- src/pages/index/：工作台、格子交互、平板与日结。
+- tests/、e2e/：规则、完整周流程、浏览器和资源检查。
+- scripts/play.ts：独立单步CLI；docs/：方案和证据说明。
+
+当前验证覆盖首周与多种边界状态，长期经济平衡、微信真机和正式发行仍需后续验证。

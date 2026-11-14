@@ -17,6 +17,9 @@ page,
   --sheet: #d8d1af;
   --sheet-ink: #393c3c;
   --visor: #668f98;
+  --scrim: #1d1b25df;
+  --sheet-highlight: #e4d8a1;
+  --error-ink: #863e31;
   --font-display: 'Courier New', 'PingFang SC', monospace;
   --font-body:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;

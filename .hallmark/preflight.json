@@ -1,9 +1,32 @@
 {
   "framework": "Taro 4.3.2 / React 18 / TypeScript",
-  "sources": ["package.json", "src/app.css", "src/pages/index/index.css"],
-  "original": {"font":"system sans", "palette":"placeholder light", "motion":"none"},
+  "sources": [
+    "package.json",
+    "src/app.css",
+    "src/pages/index/index.css"
+  ],
+  "original": {
+    "font": "system sans",
+    "palette": "placeholder light",
+    "motion": "none"
+  },
   "user_direction": "Use the newly captured original-game screenshots as style reference; do not invent a separate theme",
-  "selected_reference": ["13-store-counter.png", "15-reputation.png", "18-negotiation-empty.png"],
-  "preserve": ["Taro components", "mobile-first", "no desktop automation"],
-  "introduce": ["reference-derived color tokens", "front-facing counter composition", "four mobile stations"]
+  "selected_reference": [
+    "13-store-counter.png",
+    "15-reputation.png",
+    "18-negotiation-empty.png"
+  ],
+  "preserve": [
+    "existing color and font tokens",
+    "31 approved original sprites",
+    "Taro components",
+    "no desktop automation"
+  ],
+  "introduce": [
+    "single in-scene workbench",
+    "real grid positions",
+    "paper transaction tablet",
+    "cash and rent display"
+  ],
+  "revision": "2026-11-14 v0.3"
 }

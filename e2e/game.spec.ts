@@ -1,33 +1,60 @@
 import { test, expect, type Page } from '@playwright/test'
 import { mkdir } from 'node:fs/promises'
-import { createGame, type Game } from '../src/game/engine'
-const KEY = 'starshop-save-v1'
-function seller() {
+import {
+  createGame,
+  type Game,
+  type Visitor,
+  type Action,
+} from '../src/game/engine'
+import type { observe } from '../src/game/interface'
+type Observation = ReturnType<typeof observe>
+const KEY = 'starshop-save-v2'
+function fixture(): Game {
   const s = createGame(42)
+  const a = {
+    ...s.inventory[0],
+    uid: 'offer-a',
+    known: false,
+    claimedQuality: '稀有' as const,
+    quality: '精良' as const,
+    cost: 0,
+    area: 'counter' as const,
+    x: 0,
+    y: 0,
+  }
+  const b = {
+    ...s.inventory[2],
+    uid: 'offer-b',
+    known: false,
+    cost: 0,
+    area: 'counter' as const,
+    x: 0,
+    y: 0,
+  }
   s.visitor = {
     id: 100,
-    kind: 'seller',
     name: '阿岚',
     role: '拾荒者',
+    kind: 'seller',
     category: '机械',
+    line: '这批货可以挑着收。',
     budget: 0,
-    line: '刚从废弃货舱回来。老板，看看这件能收吗？',
-    ask: 45,
-    item: {
-      uid: 'offer-1',
-      productId: 'p0',
-      quality: '精良',
-      condition: '完好',
-      known: false,
-      cost: 0,
-    },
+    stock: [a, b],
+    asks: { 'offer-a': 45, 'offer-b': 20 },
+    remaining: 2,
+    minimumQuality: '普通',
+    acceptsDamaged: true,
+    bargained: false,
+    priceFactor: 1,
+    tolerance: 0.8,
   }
+  s.sequence = 110
   return s
 }
-async function open(page: Page, state: Game | string) {
+async function open(page: Page, state: Game | string = fixture()) {
   await page.addInitScript(
     ({ key, state }) => {
-      if (localStorage.getItem(key) === null)
+      if (!localStorage.getItem(key))
         localStorage.setItem(
           key,
           JSON.stringify({
@@ -38,6 +65,10 @@ async function open(page: Page, state: Game | string) {
     { key: KEY, state },
   )
   await page.goto('/')
+  if (typeof state !== 'string')
+    await expect
+      .poll(() => page.evaluate(() => !!(window as any).starshop))
+      .toBe(true)
 }
 async function stored(page: Page): Promise<Game> {
   return page.evaluate(
@@ -46,11 +77,34 @@ async function stored(page: Page): Promise<Game> {
   )
 }
 async function snap(page: Page, name: string) {
-  await mkdir('artifacts/screenshots', { recursive: true })
+  await mkdir('artifacts/screenshots-v03', { recursive: true })
   await page.screenshot({
-    path: `artifacts/screenshots/${name}.png`,
+    path: 'artifacts/screenshots-v03/' + name + '.png',
     fullPage: true,
   })
+}
+async function tablet(page: Page) {
+  await page
+    .getByText(/^交易平板/)
+    .first()
+    .click()
+}
+async function act(page: Page, action: Action, reason = '单步正常玩家操作') {
+  return page.evaluate(
+    ({ action, reason }) => {
+      const api = (window as any).starshop
+      return api.act({
+        id: crypto.randomUUID(),
+        token: api.observe().token,
+        reason,
+        action,
+      })
+    },
+    { action, reason },
+  )
+}
+async function observation(page: Page): Promise<Observation> {
+  return page.evaluate(() => (window as any).starshop.observe())
 }
 test.beforeEach(async ({ page }) => {
   await page.route('**/*', (route) =>
@@ -59,159 +113,343 @@ test.beforeEach(async ({ page }) => {
       : route.abort(),
   )
 })
-test('真实收购、鉴定、刷新恢复和五笔日结', async ({ page }) => {
-  const s = seller()
-  s.progress = 4
-  await open(page, s)
-  await expect(page.getByText('磁悬轴承', { exact: true })).toBeVisible()
-  await snap(page, '01-counter')
-  await page.getByText('查看 ›', { exact: true }).click()
-  await snap(page, '02-identification-detail')
-  await page.getByText('鉴定商品 · 8 星币', { exact: true }).click()
-  await expect(
-    page.getByText('机械 / 完好 / 精良', { exact: true }),
-  ).toBeVisible()
+test('工作台真实暂放、鉴定、收购、格子整理与刷新恢复', async ({ page }) => {
+  await open(page)
+  await snap(page, '01-workbench')
+  await tablet(page)
+  await snap(page, '02-trading-tablet')
+  await page.getByText('查看商品', { exact: true }).first().click()
+  await snap(page, '03-inspection')
+  await page.getByText('鉴定 · 8', { exact: true }).click()
   expect((await stored(page)).cash).toBe(642)
-  await snap(page, '03-identified')
+  await page.getByText('返回', { exact: true }).click()
+  await page.getByRole('button', { name: '选入 offer-a', exact: true }).click()
+  expect((await stored(page)).cash).toBe(642)
   await page.reload()
+  expect((await stored(page)).staged).toEqual(['offer-a'])
+  await tablet(page)
+  await snap(page, '04-staged-restored')
+  await page.getByText('确认收购', { exact: true }).last().click()
+  let s = await stored(page)
+  expect(s.cash).toBe(597)
+  expect(s.progress).toBe(1)
+  expect(s.visitor?.stock).toHaveLength(1)
+  const bought = s.inventory.find((i) => i.uid === 'offer-a')!
+  expect(bought.area).toBe('counter')
+  await snap(page, '05-owned-on-counter')
+  await page
+    .getByRole('button', { name: '库存 磁悬轴承 offer-a', exact: true })
+    .click()
+  await page.getByText('整理此物', { exact: true }).click()
+  await page
+    .locator('.placement-tools')
+    .getByText('仓库', { exact: true })
+    .click()
+  await page.getByText('旋转 0°', { exact: true }).click()
+  await page
+    .getByRole('button', { name: 'warehouse格子 7,5', exact: true })
+    .click()
   await expect(
-    page.getByText('机械 / 完好 / 精良', { exact: true }),
+    page.getByText('位置越界或与其他货物重叠。', { exact: true }),
   ).toBeVisible()
-  await page.getByText('收购 · 45', { exact: true }).click()
-  await expect(page.getByText('接待下一位', { exact: true })).toBeVisible()
-  const bought = await stored(page)
-  expect(bought.cash).toBe(597)
-  expect(bought.day).toBe(2)
-  expect(bought.progress).toBe(0)
-  expect(bought.inventory).toHaveLength(4)
-  await snap(page, '04-trade-day-change')
+  await page
+    .getByRole('button', { name: 'warehouse格子 0,3', exact: true })
+    .click()
+  s = await stored(page)
+  expect(s.inventory.find((i) => i.uid === 'offer-a')).toMatchObject({
+    area: 'warehouse',
+    x: 0,
+    y: 3,
+    rotated: true,
+  })
+  await page.reload()
+  expect(
+    (await stored(page)).inventory.find((i) => i.uid === 'offer-a')?.y,
+  ).toBe(3)
+  await snap(page, '06-grid-placement')
 })
-test('仓库展示、清仓确认和升级', async ({ page }) => {
-  await open(page, seller())
-  await page.getByText('仓库', { exact: true }).click()
-  await snap(page, '05-warehouse')
-  await page.getByText('磁悬轴承', { exact: true }).click()
-  await snap(page, '06-stock-detail')
-  await page.getByText('从展示柜撤下', { exact: true }).click()
-  expect((await stored(page)).display).not.toContain('i1')
-  await page.getByText('磁悬轴承', { exact: true }).click()
-  await page.getByText('清仓 · 回款 22', { exact: true }).click()
-  await snap(page, '07-clearance-confirm')
-  await page.getByText('确认', { exact: true }).click()
-  const cleared = await stored(page)
-  expect(cleared.cash).toBe(672)
-  expect(cleared.trades).toBe(0)
-  await page.getByText('升级', { exact: true }).click()
-  await snap(page, '08-upgrades')
-  await page.getByText('升级 · 180 星币', { exact: true }).click()
-  expect((await stored(page)).storage).toBe(1)
+test('批量交易计一笔，直接收购仍未知，收购后可鉴定', async ({ page }) => {
+  await open(page)
+  await tablet(page)
+  await page.getByRole('button', { name: '选入 offer-a', exact: true }).click()
+  await page.getByRole('button', { name: '选入 offer-b', exact: true }).click()
+  await snap(page, '07-batch-offer')
+  await page.getByText('确认收购', { exact: true }).last().click()
+  let s = await stored(page)
+  expect(s.cash).toBe(585)
+  expect(s.progress).toBe(1)
+  expect(s.inventory).toHaveLength(5)
+  expect(s.inventory.find((i) => i.uid === 'offer-a')?.known).toBe(false)
+  await page
+    .getByRole('button', { name: '库存 磁悬轴承 offer-a', exact: true })
+    .click()
+  await page.getByText('鉴定 · 8', { exact: true }).click()
+  s = await stored(page)
+  expect(s.cash).toBe(577)
+  expect(s.inventory.find((i) => i.uid === 'offer-a')?.known).toBe(true)
+  await snap(page, '08-post-purchase-inspection')
 })
-test('买家成交、欠租账本与帮助', async ({ page }) => {
-  const s = seller()
+test('买家需求、共享预算、选货和一次还价反馈', async ({ page }) => {
+  const s = fixture()
+  s.inventory.push({
+    ...s.inventory[0],
+    uid: 'extra',
+    area: 'counter',
+    x: 0,
+    y: 0,
+  })
   s.visitor = {
     id: 100,
-    kind: 'buyer',
     name: '米洛',
     role: '船员',
-    category: '机械',
-    budget: 200,
-    line: '明天就出港了。店里有没有能派上用场的货？',
-  }
-  s.debt = 90
-  await open(page, s)
-  await snap(page, '09-buyer')
-  await page.getByText('磁悬轴承', { exact: true }).click()
-  await page.getByText('出售 · 63 星币', { exact: true }).click()
-  expect((await stored(page)).cash).toBe(713)
-  await page.getByText('账本', { exact: true }).click()
-  await snap(page, '10-ledger')
-  await page.getByText('补缴租金 · 90', { exact: true }).click()
-  expect((await stored(page)).debt).toBe(0)
-  await page.getByText('店长手册', { exact: true }).click()
-  await snap(page, '11-handbook')
-})
-test('资金不足、满仓、无匹配与坏档有明确处理', async ({ page }) => {
-  const s = seller()
-  s.cash = 0
-  await open(page, s)
-  await expect(
-    page.getByText('资金不足，先出售或清仓', { exact: true }),
-  ).toBeVisible()
-  await snap(page, '12-low-cash')
-  const full = seller()
-  for (let i = 0; i < 5; i++)
-    full.inventory.push({ ...full.inventory[0], uid: `full-${i}` })
-  await page.evaluate(
-    ({ key, s }) =>
-      localStorage.setItem(key, JSON.stringify({ data: JSON.stringify(s) })),
-    { key: KEY, s: full },
-  )
-  await page.reload()
-  await expect(
-    page.getByText('仓库已满，先清理货物', { exact: true }),
-  ).toBeVisible()
-  await snap(page, '13-full-stock')
-  full.visitor = {
-    id: 101,
     kind: 'buyer',
-    name: '塔玛',
-    role: '收藏家',
-    category: '数据',
-    budget: 500,
-    line: '看看有没有合适的记录。',
-  }
-  await page.evaluate(
-    ({ key, s }) =>
-      localStorage.setItem(key, JSON.stringify({ data: JSON.stringify(s) })),
-    { key: KEY, s: full },
-  )
+    category: '机械',
+    line: '预算有限，找点实用的。',
+    budget: 120,
+    stock: [],
+    asks: {},
+    remaining: 2,
+    minimumQuality: '普通',
+    acceptsDamaged: true,
+    bargained: false,
+    priceFactor: 1,
+    tolerance: 0.2,
+  } satisfies Visitor
+  await open(page, s)
+  await tablet(page)
+  await page
+    .getByRole('button', { name: '选入 ' + s.inventory[0].uid, exact: true })
+    .click()
+  await page.getByText('还价 +10%', { exact: true }).click()
+  await expect(
+    page.getByText('还价被拒绝，仍可按原报价成交。', { exact: true }).last(),
+  ).toBeVisible()
+  await expect(page.getByText('已还价', { exact: true })).toBeDisabled()
+  await snap(page, '09-buyer-bargain')
+  await page.getByText('确认出售', { exact: true }).last().click()
+  const next = await stored(page)
+  expect(next.cash).toBe(710)
+  expect(next.visitor?.budget).toBe(60)
+  expect(next.visitor?.remaining).toBe(1)
+})
+test('日结租赁账单付款、刷新恢复且不重复收租', async ({ page }) => {
+  const s = fixture()
+  s.day = 7
+  s.progress = 4
+  s.dayStats.trades = 4
+  await open(page, s)
+  await tablet(page)
+  await page.getByRole('button', { name: '选入 offer-a', exact: true }).click()
+  await page.getByText('确认收购', { exact: true }).last().click()
+  await expect(
+    page.getByText('第 7 日 · 营业结算', { exact: true }),
+  ).toBeVisible()
+  await snap(page, '10-day-seven-rent')
   await page.reload()
   await expect(
-    page.getByText('暂时没有合适的货', { exact: true }),
+    page.getByText('第 7 日 · 营业结算', { exact: true }),
   ).toBeVisible()
-  await snap(page, '14-no-match')
-  await page.evaluate(
-    (key) => localStorage.setItem(key, JSON.stringify({ data: '{broken' })),
-    KEY,
-  )
+  await page.getByText('支付房租 · 120', { exact: true }).click()
+  expect((await stored(page)).cash).toBe(485)
+  expect((await stored(page)).bills[0].paid).toBe(120)
+  await snap(page, '11-rent-paid')
+  await page.getByText('继续营业 · 第8天', { exact: true }).click()
   await page.reload()
-  await expect(page.getByText('存档需要处理', { exact: true })).toBeVisible()
-  await snap(page, '15-save-recovery')
-  expect(
-    await page.evaluate((key) => localStorage.getItem(key), KEY),
-  ).toContain('{broken')
+  const next = await stored(page)
+  expect(next.day).toBe(8)
+  expect(next.cash).toBe(485)
+  expect(next.report).toBe(null)
 })
-test('存储写失败时不生效、不覆盖已有报价', async ({ page }) => {
-  await open(page, seller())
-  await expect(page.getByText('收购 · 45', { exact: true })).toBeVisible()
+test('零钱空仓可完成理货恢复；存储失败不显示虚假成交', async ({ page }) => {
+  const s = fixture()
+  s.cash = 0
+  s.inventory = []
+  await open(page, s)
+  await page.getByText('承接应急理货 · 报酬20', { exact: true }).click()
+  await page.getByText('机械', { exact: true }).click()
+  await expect(
+    page.getByText('分类不符，核对公开货签再试。', { exact: true }),
+  ).toBeVisible()
+  await page.getByText('补给', { exact: true }).click()
+  expect((await stored(page)).cash).toBe(20)
+  await snap(page, '12-recovery-job')
+  await act(page, { type: 'stage', uid: 'offer-b' })
   const before = await stored(page)
   await page.evaluate(() => {
     Storage.prototype.setItem = () => {
       throw new Error('测试：存储空间不足')
     }
   })
-  await page.getByText('收购 · 45', { exact: true }).click()
+  await page.getByText('确认收购', { exact: true }).first().click()
   await expect(
     page.getByText('测试：存储空间不足', { exact: true }),
   ).toBeVisible()
   expect(await stored(page)).toEqual(before)
-  await expect(page.getByText('收购 · 45', { exact: true })).toBeVisible()
 })
-test('320/375/414/768宽度无横向溢出或页面异常', async ({ page }) => {
+test('坏档保留，旧版存档备份后迁移到真实格子', async ({ page }) => {
+  await open(page, '{broken')
+  await expect(
+    page.getByText('STARSHOP · 存档恢复', { exact: true }),
+  ).toBeVisible()
+  expect(
+    await page.evaluate((key) => localStorage.getItem(key), KEY),
+  ).toContain('{broken')
+  const old = {
+    version: 1,
+    cash: 650,
+    day: 1,
+    progress: 0,
+    trades: 0,
+    storage: 0,
+    shelves: 0,
+    debt: 0,
+    seed: 42,
+    sequence: 10,
+    inventory: [
+      {
+        uid: 'old-item',
+        productId: 'p0',
+        quality: '普通',
+        condition: '完好',
+        known: true,
+        cost: 28,
+      },
+    ],
+    display: ['old-item'],
+    visitor: null,
+    entries: [],
+  }
+  await page.evaluate(
+    ({ old, key }) => {
+      localStorage.removeItem(key)
+      localStorage.setItem(
+        'starshop-save-v1',
+        JSON.stringify({ data: JSON.stringify(old) }),
+      )
+    },
+    { old, key: KEY },
+  )
+  // The init script only seeds absent data; navigate a new page without its injected fixture.
+  await page.context().clearCookies()
+  await page.evaluate((key) => localStorage.removeItem(key), KEY)
+  // Use a new page in the same context, so only the app's migration runs.
+  const clean = await page.context().newPage()
+  await clean.goto('/')
+  await expect
+    .poll(() => clean.evaluate(() => !!(window as any).starshop))
+    .toBe(true)
+  expect((await stored(clean)).inventory[0].area).toBe('showcase')
+  expect(
+    await clean.evaluate(() => localStorage.getItem('starshop-save-v1-backup')),
+  ).toContain('old-item')
+  await clean.close()
+})
+test('320/375/414/768工作台、平板和工具面板无横向溢出', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
-  await open(page, seller())
+  await open(page)
   for (const width of [320, 375, 414, 768]) {
     await page.setViewportSize({ width, height: 900 })
-    for (const tab of ['柜台', '仓库', '升级', '账本']) {
-      await page.getByText(tab, { exact: true }).click()
-      const sizes = await page.evaluate(() => ({
+    const check = async () => {
+      const size = await page.evaluate(() => ({
         w: document.documentElement.clientWidth,
         scroll: document.documentElement.scrollWidth,
       }))
-      expect(sizes.scroll).toBeLessThanOrEqual(sizes.w + 1)
+      expect(size.scroll).toBeLessThanOrEqual(size.w + 1)
+      const buttons = page.locator('.sheet .game-button:visible')
+      for (let i = 0; i < (await buttons.count()); i++) {
+        const b = buttons.nth(i)
+        expect(
+          await b.evaluate((e) => e.scrollWidth <= e.clientWidth + 2),
+        ).toBe(true)
+      }
     }
-    await snap(page, `responsive-${width}`)
+    await check()
+    await snap(page, 'workbench-' + width)
+    await tablet(page)
+    await check()
+    await snap(page, 'trade-' + width)
+    await page
+      .getByRole('button', { name: '关闭工具面板', exact: true })
+      .click()
+    for (const name of ['打开账本', '打开升级', '打开手册']) {
+      await page.getByRole('button', { name, exact: true }).click()
+      await check()
+      if (width === 375) await snap(page, name)
+      await page
+        .getByRole('button', { name: '关闭工具面板', exact: true })
+        .click()
+    }
   }
   expect(errors).toEqual([])
+})
+test('浏览器从新局通过同一单步接口完成第七日房租', async ({ page }) => {
+  test.setTimeout(180000)
+  await open(page, createGame(77))
+  for (let step = 0; step < 2500; step++) {
+    const o = await observation(page)
+    if (o.day === 8) {
+      expect(o.trades).toBe(35)
+      expect(o.bills[0].paid).toBe(120)
+      await snap(page, '13-normal-week-complete')
+      return
+    }
+    if (o.report) {
+      if (o.debt) {
+        await snap(page, '14-normal-week-rent-before')
+        await act(page, { type: 'payRent' }, '核对第七日账单后正常交租')
+        await snap(page, '15-normal-week-rent-after')
+      } else await act(page, { type: 'ackDay' }, '确认五笔日结，进入次日')
+      continue
+    }
+    const v = o.visitor
+    if (!v) {
+      await act(page, { type: 'next' })
+      continue
+    }
+    if (v.kind === 'buyer') {
+      const i = o.inventory
+        .filter(
+          (i) =>
+            i.buyerOffer! > 0 &&
+            i.buyerOffer! <= v.budget &&
+            i.buyerOffer! >= i.cost!,
+        )
+        .sort((a, b) => b.buyerOffer! - a.buyerOffer!)[0]
+      if (i && v.remaining > 0) {
+        await act(page, { type: 'stage', uid: i.uid })
+        await act(page, { type: 'sell', visitorId: v.id })
+        continue
+      }
+    } else {
+      const i = v.stock.find(
+        (i) =>
+          i.sellerAsk! <= i.estimate[0] * 0.85 &&
+          i.sellerAsk! <= o.cash - 150 &&
+          o.actions.some(
+            (a) =>
+              a.action.type === 'stage' &&
+              'uid' in a.action &&
+              a.action.uid === i.uid &&
+              a.enabled,
+          ),
+      )
+      if (i) {
+        await act(page, { type: 'stage', uid: i.uid })
+        await act(page, { type: 'buy', visitorId: v.id })
+        const after = await observation(page)
+        const move = after.actions.find(
+          (a) =>
+            a.action.type === 'autoPlace' &&
+            a.action.uid === i.uid &&
+            a.action.area === 'warehouse' &&
+            a.enabled,
+        )
+        if (move) await act(page, move.action)
+        continue
+      }
+    }
+    await act(page, { type: 'dismiss', visitorId: v.id })
+  }
+  throw new Error('未完成正常一周')
 })

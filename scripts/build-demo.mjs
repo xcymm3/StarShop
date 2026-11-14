@@ -40,7 +40,7 @@ if (/<script[^>]*\ssrc=|<link[^>]*rel="stylesheet"/i.test(html))
 await writeFile('release/StarShop-demo.html', html)
 await writeFile(
   'release/游玩说明.txt',
-  'StarShop 竖屏经营 Demo\n\n打开 StarShop-demo.html 即可游玩，无需安装依赖或联网。推荐现代 Chromium 浏览器。\n\n收购与出售均计成交，5笔一天、7天周租。操作后保存在当前浏览器本地，不跨设备同步，无离线收益和惩罚。\n\n如果浏览器限制 file:// 存储，请在项目目录运行 npm run demo:serve 并访问 http://127.0.0.1:4179/。\n\n游戏素材为参照原作视觉语言的原创重绘。数值对照见源项目docs目录。\n',
+  'StarShop v0.3 手机经营 Demo\n\n打开 StarShop-demo.html 即可游玩，无需安装依赖或联网。推荐现代 Chromium 浏览器。\n\n打开交易平板挑货，暂放后确认收购；买下的货物留在柜台，点它选择整理，可旋转、点格子放置或自动找空位。虚线为顾客的未购商品。买入不会自动鉴定。\n\n买家按偏好和共享预算购货，每客可还价一次。每次确认成交算一笔，批量仍只算一笔；五笔日结，第七日结束出房租账单，主动付款或确认延期。操作后立即存档，无离线收益和惩罚。\n\n如果浏览器限制 file:// 存储，请在项目目录运行 npm run demo:serve 并访问 http://127.0.0.1:4179/。\n\n游戏素材沿用已认可的原创重绘。数值与流程边界见源项目docs目录；微信真机和长期经济平衡尚未验证。\n',
   'utf8',
 )
 console.log('Demo ready: release/StarShop-demo.html')

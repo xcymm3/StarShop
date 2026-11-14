@@ -1,7 +1,8 @@
 import { chromium } from '@playwright/test'
-import { mkdir } from 'node:fs/promises'
 import { pathToFileURL } from 'node:url'
 import path from 'node:path'
+import { mkdir, writeFile } from 'node:fs/promises'
+import assert from 'node:assert/strict'
 const browser = await chromium.launch({
   headless: true,
   args: [
@@ -11,67 +12,85 @@ const browser = await chromium.launch({
   ],
 })
 try {
-  const context = await browser.newContext({
-    viewport: { width: 375, height: 812 },
+  const demoFile = path.resolve(process.argv[2] || 'release/StarShop-demo.html')
+  const output = path.join(
+    'artifacts/offline-v03',
+    path.basename(demoFile, '.html'),
+  )
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } })
+  const requests = [],
+    errors = []
+  page.on('request', (r) => {
+    if (/^https?:/.test(r.url())) requests.push(r.url())
   })
-  const page = await context.newPage()
-  const errors = []
-  const network = []
   page.on('pageerror', (e) => errors.push(e.message))
-  await page.route('**/*', (route) => {
-    const url = new URL(route.request().url())
-    if (url.protocol === 'file:') return route.continue()
-    network.push(url.href)
-    return route.abort()
-  })
+  await page.route('**/*', (route) =>
+    new URL(route.request().url()).protocol === 'file:'
+      ? route.continue()
+      : route.abort(),
+  )
   await page.goto(
-    pathToFileURL(path.resolve(process.argv[2] || 'release/StarShop-demo.html')).href,
+    pathToFileURL(path.resolve(process.argv[2] || 'release/StarShop-demo.html'))
+      .href,
   )
-  await page.getByText('店长手册', { exact: true }).waitFor()
-  const loaded = await page.locator('.room-sprite').evaluate((e) => {
-    const img = e.querySelector('img') || e
-    return {
-      src: img.getAttribute('src'),
-      loaded:
-        img instanceof HTMLImageElement
-          ? img.complete && img.naturalWidth > 0
-          : false,
-    }
-  })
-  if (!loaded.src?.startsWith('data:') || !loaded.loaded)
-    throw new Error(
-      `Room art is not embedded/loaded: ${JSON.stringify(loaded)}`,
+  await page.waitForFunction(() => !!window.starshop)
+  await page.waitForFunction(() => {
+    const images = [...document.querySelectorAll('img')]
+    return (
+      images.length >= 3 &&
+      images.every(
+        (img) =>
+          img.complete && img.naturalWidth > 0 && img.src.startsWith('data:'),
+      )
     )
-  const before = await page.evaluate(() =>
-    JSON.parse(JSON.parse(localStorage.getItem('starshop-save-v1')).data),
-  )
-  if (before.visitor.kind === 'seller')
-    await page
-      .locator('taro-button-core.primary')
-      .filter({ hasText: '收购' })
-      .click()
-  else await page.getByText('婉拒这位客人，不推进日期', { exact: true }).click()
-  await page.getByText('接待下一位', { exact: true }).waitFor()
-  const after = await page.evaluate(() =>
-    localStorage.getItem('starshop-save-v1'),
-  )
+  })
+  const before = await page.evaluate(() => window.starshop.observe())
+  assert.equal(before.day, 1)
+  await page
+    .getByText(/^交易平板/)
+    .first()
+    .click()
+  const item = before.visitor.stock.find((i) => i.sellerAsk <= before.cash)
+  assert.ok(item)
+  await page
+    .getByRole('button', { name: '选入 ' + item.uid, exact: true })
+    .click()
+  await page.getByText('确认收购', { exact: true }).last().click()
+  const bought = await page.evaluate(() => window.starshop.observe())
+  assert.equal(bought.cash, before.cash - item.sellerAsk)
+  assert.equal(bought.inventory.find((i) => i.uid === item.uid).quality, null)
   await page.reload()
-  await page.getByText('接待下一位', { exact: true }).waitFor()
-  if (
-    (await page.evaluate(() => localStorage.getItem('starshop-save-v1'))) !==
-    after
-  )
-    throw new Error('Standalone reload lost state')
-  await page.getByText('接待下一位', { exact: true }).click()
-  await mkdir('artifacts/demo', { recursive: true })
+  await page.waitForFunction(() => !!window.starshop)
+  const restored = await page.evaluate(() => window.starshop.observe())
+  assert.equal(restored.cash, bought.cash)
+  assert.equal(restored.inventory.length, bought.inventory.length)
+  assert.deepEqual(requests, [])
+  assert.deepEqual(errors, [])
+  await mkdir(output, { recursive: true })
   await page.screenshot({
-    path: 'artifacts/demo/standalone.png',
+    path: path.join(output, 'standalone.png'),
     fullPage: true,
   })
-  if (errors.length || network.length)
-    throw new Error(JSON.stringify({ errors, network }))
+  await writeFile(
+    path.join(output, 'verification.json'),
+    JSON.stringify(
+      {
+        scheme: 'file:',
+        file: path.basename(demoFile),
+        networkRequests: requests,
+        errors,
+        cashBefore: before.cash,
+        cashAfter: bought.cash,
+        purchased: item.uid,
+        unknownPreserved: true,
+        refreshRestored: true,
+      },
+      null,
+      2,
+    ),
+  )
   console.log(
-    'PASS: file:// demo, embedded art, real action, save/reload, zero network requests',
+    'Standalone file:// demo: images, actual purchase, unknown quality, save/reload and zero network verified.',
   )
 } finally {
   await browser.close()

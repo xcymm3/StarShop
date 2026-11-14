@@ -6,7 +6,30 @@
     "palette": "dark purple-grey / grey-green border / warm paper",
     "motion": "press feedback only; reduced-motion supported",
     "review": "320/375/414/768 widths checked in headless Chromium, counter/warehouse/ledger screenshots inspected",
-    "self_critique": {"philosophy":4,"hierarchy":4,"execution":4,"specificity":5,"restraint":4,"variety":4},
+    "self_critique": {
+      "philosophy": 4,
+      "hierarchy": 4,
+      "execution": 4,
+      "specificity": 5,
+      "restraint": 4,
+      "variety": 4
+    },
     "limits": "not a full 58-gate certification; no WeChat device run"
+  },
+  {
+    "date": "2026-11-14",
+    "macrostructure": "Screenshot-derived shop workbench; showcase/customer/tools/counter/warehouse",
+    "theme": "existing user-approved reference-derived palette and assets",
+    "motion": "press feedback only",
+    "review": "320/375/414/768 headless screenshots plus genuine new-game first-rent flow",
+    "self_critique": {
+      "philosophy": 5,
+      "hierarchy": 4,
+      "execution": 4,
+      "specificity": 5,
+      "restraint": 4,
+      "variety": 4
+    },
+    "limits": "No Unity launch, no desktop automation, no WeChat device run"
   }
 ]
