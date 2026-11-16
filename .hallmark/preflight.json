@@ -3,7 +3,8 @@
   "sources": [
     "package.json",
     "src/app.css",
-    "src/pages/index/index.css"
+    "src/pages/index/index.css",
+    "src/pages/index/mobile.css"
   ],
   "original": {
     "font": "system sans",
@@ -16,7 +17,8 @@
     "docs/主界面布局示意-三区格子版.svg"
   ],
   "preserve": [
-    "v0.3 economy and v2 save format",
+    "v0.5 economy and v3 save compatibility",
+    "approved original pixel artwork and shop composition",
     "Taro components",
     "existing products",
     "no desktop automation"
@@ -28,5 +30,11 @@
     "perspective interactive countertop",
     "internally scrolling warehouse"
   ],
-  "revision": "2026-11-14 v0.4"
+  "revision": "2026-11-16 v0.6",
+  "current_system": {
+    "font": "system sans with existing terminal display font",
+    "palette": "existing purple shop, cream paper, mint controls; darker amber ink for reading",
+    "motion": "short CSS transitions with reduced-motion support",
+    "sizing": "functional CSS pixels independent of the artwork scale"
+  }
 }
