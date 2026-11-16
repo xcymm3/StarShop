@@ -4,3 +4,5 @@ artifacts/
 package-lock.json
 # Taro matches the HTML script injection placeholder literally.
 src/index.html
+# PX intentionally opts out of Taro's artwork scaling; Prettier normalizes it to px.
+src/pages/index/mobile.css

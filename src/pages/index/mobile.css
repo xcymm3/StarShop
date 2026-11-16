@@ -1,0 +1,1326 @@
+/* Hallmark · approved pixel shop refinement · P5 H5 E4 S5 R5 V4
+ * Functional type and touch sizes use CSS pixels independently of Taro's art scale.
+ * Preserve the scene, four physical inventories, palette and original redrawn assets.
+ */
+:root,
+page {
+  --ui-rule: #8b9c91;
+  --ui-amber-ink: #754329;
+  --ui-paper-rule: #a7a486;
+  --ui-highlight: #eee5bf;
+  --ui-success: #afdcbe;
+  --ui-dimmer: #16151ce8;
+  --ui-panel-shadow: #0d1013a6;
+  --ui-focus-wash: #a4cebe24;
+  --ui-error-wash: #edab991c;
+}
+html,
+body {
+  overflow-x: clip;
+  overflow-y: auto !important;
+  height: auto;
+}
+#app,
+#app > div,
+.taro_router,
+.taro_page,
+taro-page {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+.taro_page {
+  position: relative !important;
+}
+.game-shell {
+  font-size: 16PX;
+  line-height: 1.55;
+  padding-bottom: env(safe-area-inset-bottom, 0PX);
+}
+.game-shell .game-button {
+  font-size: 14PX;
+  min-height: 44PX;
+  height: auto;
+  line-height: 1.25;
+  padding: 8PX 12PX;
+  border-width: 1PX;
+  border-radius: 2PX;
+  touch-action: manipulation;
+  transition:
+    background-color 120ms ease,
+    transform 100ms ease;
+}
+.game-shell .game-button:active {
+  transform: translateY(1PX);
+}
+.game-shell .game-button:focus-visible {
+  outline: 2PX solid var(--gold);
+  outline-offset: 3PX;
+}
+.game-shell .game-button[disabled] {
+  opacity: 0.52;
+  cursor: default;
+}
+.game-shell .primary {
+  font-weight: 700;
+}
+.game-shell .shop-stage {
+  height: 960PX;
+  padding: 0;
+  min-height: 0;
+  font-size: 16PX !important;
+}
+.room-sprite {
+  height: 100%;
+}
+.shop-stage .date-display {
+  top: 4.8%;
+  left: 7.5%;
+  width: 31%;
+  height: 8%;
+  gap: 1PX;
+}
+.shop-stage .day-number {
+  font-size: 22PX;
+  letter-spacing: 1PX;
+}
+.shop-stage .rent-line {
+  font-size: 14PX;
+}
+.shop-stage .progress-line {
+  font-size: 12PX;
+  white-space: nowrap;
+}
+.shop-stage .cash-display {
+  top: 6%;
+  left: 46%;
+  width: 19%;
+  height: 60PX;
+  padding: 3PX;
+  flex-direction: column;
+  gap: 0;
+  background: var(--toast);
+}
+.shop-stage .cash {
+  font-size: 25PX;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.shop-stage .cash-unit {
+  font-size: 12PX;
+  color: var(--accent);
+}
+.shop-stage .station-sign {
+  left: 68.5%;
+  top: 5.4%;
+  width: 27%;
+  height: 74PX;
+  padding: 4PX 1PX;
+  background: var(--toast);
+}
+.station-sign > text {
+  font-size: 16PX;
+}
+.shop-stage .sign-sub {
+  font-size: 12PX;
+}
+.shop-stage .dialogue-strip {
+  top: 15%;
+  left: 35%;
+  width: 56%;
+  max-height: none;
+  padding: 10PX 12PX;
+  line-height: 1.5;
+  border-width: 1PX;
+}
+.shop-stage .client-name {
+  font-size: 13PX;
+  margin-bottom: 4PX;
+}
+.visitor-direction {
+  display: block;
+  font-size: 15PX;
+  font-weight: 700;
+}
+.shop-stage .dialogue-line {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  font-size: 14PX;
+}
+.dialogue-more {
+  display: block;
+  padding-top: 5PX;
+  font-size: 12PX;
+  color: var(--terminal-amber-ink);
+}
+.shop-stage .visitor-window {
+  top: 24%;
+  left: 40%;
+  height: 18%;
+  width: 46%;
+}
+.shop-stage .closed-label {
+  top: 29%;
+  left: 37%;
+  width: 50%;
+  font-size: 14PX;
+}
+.shop-stage .intercom-key {
+  top: 30%;
+  left: auto;
+  right: 1%;
+  width: 44PX;
+  height: 44PX;
+  background: var(--toast);
+  padding: 0;
+  font-size: 20PX;
+}
+.shop-stage .display-case {
+  left: 7%;
+  top: 21%;
+  width: 23%;
+  height: 19.5%;
+}
+.shop-stage .scene-label {
+  font-size: 15PX;
+  line-height: 24PX;
+  height: 24PX;
+}
+.shop-stage .showcase-count {
+  font-size: 12PX;
+}
+.shop-stage .showcase-scroll {
+  top: 28PX;
+  height: calc(100% - 72PX);
+}
+.shop-stage .display-prediction {
+  top: calc(100% - 42PX);
+  font-size: 12PX;
+  line-height: 20PX;
+  padding: 2PX;
+}
+.shop-stage .showcase-zoom {
+  position: absolute;
+  top: 100%;
+  left: -6PX;
+  width: calc(100% + 12PX);
+  padding: 5PX 2PX;
+  font-size: 12PX;
+  background: var(--toast);
+}
+.shop-stage .customer-counter {
+  top: 34.5%;
+  left: 34%;
+  width: 57%;
+  height: 7%;
+}
+.shop-stage .customer-counter-label {
+  top: -24PX;
+  padding: 2PX 5PX;
+  font-size: 13PX;
+  line-height: 20PX;
+}
+.shop-stage .customer-zoom {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-height: 44PX;
+  padding: 4PX 10PX;
+  background: var(--toast);
+}
+.shop-stage .customer-empty {
+  font-size: 13PX;
+  padding: 6PX;
+}
+.shop-stage .counter-title {
+  top: 44.2%;
+  font-size: 18PX;
+  height: 28PX;
+}
+.shop-stage .counter-console {
+  top: 47%;
+  height: 12%;
+}
+.shop-stage .counter-plane {
+  inset: 0;
+}
+.shop-stage .collect-key {
+  left: 6%;
+  top: 60.3%;
+  width: 27%;
+  min-height: 48PX;
+  font-size: 14PX;
+  padding: 6PX;
+}
+.shop-stage .console-actions {
+  left: 36%;
+  top: 60.3%;
+  width: 58%;
+  height: 48PX;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6PX;
+}
+.shop-stage .console-actions .console-key {
+  width: 100%;
+  height: 48PX;
+  font-size: 14PX;
+  padding: 4PX;
+  background: var(--toast);
+}
+.shop-stage .dismiss-key {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.shop-stage .deal-strip {
+  left: 34%;
+  top: 65.4%;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  gap: 6PX;
+  font-size: 12PX;
+  z-index: 7;
+  padding: 0;
+}
+.shop-stage .deal-strip > text {
+  font-size: 12PX;
+  min-width: 0;
+}
+.shop-stage .deal-strip .game-button {
+  min-height: 44PX;
+  flex-shrink: 0;
+  padding: 5PX 8PX;
+  font-size: 13PX;
+}
+.shop-stage .warehouse-heading {
+  top: 68.8%;
+  left: 8%;
+  width: 84%;
+  height: 44PX;
+  justify-content: space-between;
+  font-size: 19PX;
+}
+.shop-stage .warehouse-zoom {
+  font-size: 13PX;
+  padding: 5PX 8PX;
+  background: var(--toast);
+}
+.shop-stage .warehouse-scroll {
+  top: 73.3%;
+  height: 19.5%;
+}
+.shop-stage .warehouse-content {
+  min-height: 100%;
+}
+.shop-stage .warehouse-meter {
+  top: 93.3%;
+  align-items: center;
+  font-size: 13PX;
+}
+.shop-stage .warehouse-position {
+  background: var(--toast);
+  padding: 4PX 6PX;
+  font-size: 12PX;
+}
+.shop-stage .stage-notice {
+  left: 6%;
+  width: 88%;
+  bottom: 0.5%;
+  font-size: 13PX;
+  line-height: 1.5;
+  overflow: visible;
+  display: block;
+  -webkit-line-clamp: unset;
+  padding: 3PX 5PX;
+  background: var(--toast);
+}
+.shop-stage .placement-tools {
+  position: fixed;
+  top: auto;
+  bottom: max(12PX, env(safe-area-inset-bottom));
+  left: 50%;
+  width: calc(100% - 24PX);
+  max-width: 448PX;
+  transform: translateX(-50%);
+  padding: 12PX;
+  font-size: 15PX;
+  z-index: 18;
+  box-shadow: 0 6PX 24PX var(--ui-panel-shadow);
+}
+.shop-stage .placement-tools .game-button {
+  min-height: 44PX;
+  font-size: 13PX;
+  padding: 4PX 8PX;
+}
+.shop-stage .placement-tools .muted {
+  font-size: 13PX;
+  padding-top: 8PX;
+}
+.shop-stage .placement-tools .toolbar {
+  gap: 6PX;
+  flex-wrap: wrap;
+}
+.shop-stage .grid-hint {
+  font-size: 12PX;
+  padding: 3PX;
+}
+.game-shell .grid-frame {
+  border-width: 1PX;
+}
+.game-shell .grid-cell {
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  border-width: 1PX;
+  border-radius: 0;
+}
+.game-shell .grid-item {
+  padding: 2PX;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  border-width: 1PX;
+  border-radius: 1PX;
+  background: var(--clear);
+}
+.game-shell .grid-item.matches {
+  background: var(--ui-focus-wash);
+  box-shadow: inset 0 0 0 1PX var(--accent);
+}
+.game-shell .grid-item.moving {
+  outline: 2PX solid var(--gold);
+  outline-offset: -2PX;
+}
+.game-shell .grid-art {
+  padding: 2PX;
+  box-sizing: border-box;
+  image-rendering: pixelated;
+}
+.game-shell .unknown-mark {
+  top: 2PX;
+  right: 2PX;
+  font-size: 11PX;
+  line-height: 14PX;
+  min-width: 12PX;
+  height: 14PX;
+  text-align: center;
+  background: var(--toast);
+  color: var(--gold);
+  border-radius: 2PX;
+  z-index: 2;
+}
+.game-shell .ownership-mark {
+  display: block;
+  position: absolute;
+  left: 1PX;
+  bottom: 1PX;
+  top: auto;
+  font-size: 10PX;
+  line-height: 14PX;
+  padding: 0 2PX;
+  color: var(--shadow);
+  background: var(--gold);
+  z-index: 2;
+}
+.game-shell .drag-ghost {
+  opacity: 0.9;
+  border-width: 1PX;
+}
+.game-shell .drag-ghost text {
+  font-size: 13PX;
+  padding: 6PX 8PX;
+  width: 180PX;
+}
+.shop-journal {
+  margin: 0 16PX 24PX;
+  padding: 16PX 4PX;
+  border-top: 1PX solid var(--line);
+  font-size: 14PX;
+}
+.journal-heading {
+  display: flex;
+  justify-content: space-between;
+  color: var(--gold);
+  gap: 8PX;
+  font-size: 13PX;
+}
+.week-goal,
+.rent-reserve,
+.save-note,
+.latest-receipt {
+  display: block;
+}
+.week-goal {
+  padding: 12PX 0 4PX;
+  font-size: 15PX;
+}
+.rent-reserve {
+  font-size: 13PX;
+  color: var(--muted);
+}
+.save-note {
+  margin-top: 14PX;
+  font-size: 12PX;
+  color: var(--accent);
+}
+.latest-receipt {
+  margin-top: 12PX;
+  padding: 10PX;
+  border-left: 2PX solid var(--line);
+  background: var(--ui-focus-wash);
+  font-size: 14PX;
+  line-height: 1.6;
+}
+.announcement,
+.receipt-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24PX);
+  max-width: 448PX;
+  bottom: max(16PX, env(safe-area-inset-bottom));
+  padding: 14PX;
+  border: 1PX solid var(--gold);
+  background: var(--toast);
+  color: var(--ink);
+  z-index: 19;
+  font-size: 14PX;
+  box-shadow: 0 4PX 20PX var(--ui-panel-shadow);
+  box-sizing: border-box;
+}
+.announcement {
+  display: flex;
+  align-items: center;
+  gap: 12PX;
+}
+.receipt-toast {
+  pointer-events: none;
+  border-color: var(--line);
+}
+.game-shell .modal-backdrop {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  padding: max(12PX, env(safe-area-inset-top)) 10PX
+    max(12PX, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  background: var(--ui-dimmer);
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transform: none;
+}
+.game-shell .sheet {
+  width: 100%;
+  max-width: 460PX;
+  max-height: calc(100vh - 24PX);
+  max-height: calc(
+    100dvh - max(24PX, env(safe-area-inset-top) + env(safe-area-inset-bottom))
+  );
+  font-size: 15PX;
+  line-height: 1.6;
+  padding: 16PX;
+  border-width: 3PX;
+  border-style: double;
+  box-shadow: 0 10PX 40PX var(--ui-panel-shadow);
+  overflow-x: clip;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.game-shell .sheet-heading {
+  position: sticky;
+  top: -16PX;
+  z-index: 3;
+  padding: 0 0 12PX;
+  margin: 0 0 12PX;
+  background: inherit;
+  font-size: 18PX;
+  border-bottom-width: 1PX;
+  gap: 12PX;
+}
+.game-shell .sheet-heading > text {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.game-shell .sheet-heading .game-button {
+  font-size: 14PX;
+  min-width: 56PX;
+  min-height: 44PX;
+  padding: 6PX 10PX;
+  flex-shrink: 0;
+}
+.game-shell .toolbar {
+  display: flex;
+  gap: 8PX;
+  margin-top: 12PX;
+}
+.game-shell .toolbar .game-button {
+  flex: 1;
+  min-width: 0;
+}
+.game-shell .wide {
+  margin-top: 10PX;
+  width: 100%;
+}
+.game-shell .body-copy {
+  padding: 8PX 0;
+  font-size: 15PX;
+  line-height: 1.7;
+}
+.game-shell .section-title {
+  display: block;
+  margin: 14PX 0 8PX;
+  font-size: 16PX;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.game-shell .muted {
+  font-size: 13PX;
+}
+.game-shell .inline-error {
+  display: block;
+  margin-top: 10PX;
+  font-size: 14PX;
+  line-height: 1.6;
+  padding: 10PX;
+  border: 1PX solid var(--error-ink);
+  background: var(--ui-error-wash);
+  color: var(--error-ink);
+}
+.game-shell .error {
+  position: fixed;
+  bottom: 12PX;
+  left: 12PX;
+  right: 12PX;
+  z-index: 18;
+  display: flex;
+  gap: 12PX;
+  padding: 12PX;
+  font-size: 14PX;
+  background: var(--toast);
+}
+.game-shell .paper-stats {
+  gap: 6PX;
+  font-size: 16PX;
+  padding: 0;
+}
+.game-shell .paper-stats text {
+  display: block;
+}
+.game-shell .bill-row {
+  font-size: 14PX;
+  padding: 10PX 0;
+  border-bottom-width: 1PX;
+}
+.game-shell .entry {
+  gap: 12PX;
+  padding: 12PX 0;
+  font-size: 14PX;
+  border-bottom-width: 1PX;
+}
+.game-shell .entry > text {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.game-shell .entry .muted {
+  display: block;
+  margin-top: 3PX;
+}
+.ledger-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6PX;
+  margin-bottom: 10PX;
+}
+.ledger-summary {
+  display: block;
+  font-size: 14PX;
+  padding: 10PX;
+  background: var(--ui-highlight);
+}
+.game-shell .upgrade-row {
+  border-top-width: 1PX;
+  padding: 12PX 0;
+  margin-top: 12PX;
+  font-size: 15PX;
+}
+.level-requirements {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6PX;
+  font-size: 14PX;
+  padding-bottom: 6PX;
+}
+.game-shell .help-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18PX;
+  padding: 0;
+  font-size: 15PX;
+  line-height: 1.85;
+}
+.game-shell .help-copy text {
+  padding: 0;
+}
+.game-shell .day-report {
+  padding: 20PX;
+}
+.game-shell .report-stamp {
+  font-size: 22PX;
+  padding: 0 0 12PX;
+  margin-bottom: 14PX;
+  border-bottom-width: 1PX;
+}
+.game-shell .rent-slip {
+  border-width: 1PX;
+  margin-top: 14PX;
+  padding: 12PX;
+}
+.game-shell .rent-slip text {
+  font-size: 14PX;
+}
+.game-shell .rent-slip .section-title {
+  margin-top: 0;
+  font-size: 16PX;
+}
+.game-shell .item-inspection {
+  gap: 14PX;
+  padding: 0;
+  margin: 12PX 0;
+}
+.game-shell .detail-art {
+  width: 84PX;
+  height: 104PX;
+  flex-shrink: 0;
+}
+.game-shell .item-inspection > view {
+  min-width: 0;
+  font-size: 14PX;
+}
+.game-shell .item-inspection text {
+  display: block;
+}
+.game-shell .item-inspection .section-title {
+  margin: 0 0 6PX;
+}
+.game-shell .estimate {
+  font-size: 14PX;
+  margin: 4PX 0;
+}
+.game-shell .ownership-note {
+  display: block;
+  padding: 10PX 0;
+  font-size: 14PX;
+  border-top-width: 1PX;
+}
+.game-shell .inspection-action {
+  gap: 12PX;
+  margin: 8PX 0;
+}
+.game-shell .identify-tool {
+  width: 44PX;
+  height: 44PX;
+}
+.game-shell .confirmation {
+  z-index: 40;
+}
+.game-shell .confirmation .sheet {
+  padding: 20PX;
+}
+.game-shell .confirmation .section-title {
+  margin-top: 0;
+}
+.game-shell .trading-backdrop .sheet {
+  height: min(850PX, calc(100vh - 24PX));
+  height: min(850PX, calc(100dvh - 24PX));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14PX;
+  margin: 0;
+  width: 100%;
+}
+.game-shell .trading-backdrop .sheet-heading {
+  position: static;
+  flex-shrink: 0;
+  padding-bottom: 8PX;
+  margin-bottom: 8PX;
+  font-size: 18PX;
+}
+.trade-summary {
+  flex-shrink: 0;
+}
+.game-shell .visitor-heading {
+  font-size: 14PX;
+  padding: 0;
+  align-items: center;
+}
+.direction-tag {
+  padding: 2PX 7PX;
+  background: var(--ui-highlight);
+  font-size: 13PX;
+}
+.budget-pinned {
+  display: block;
+  font-size: 14PX;
+  font-weight: 600;
+  padding: 7PX 0;
+  line-height: 1.55;
+}
+.game-shell .wholesale-offer {
+  display: flex;
+  align-items: center;
+  gap: 10PX;
+  padding: 8PX 0;
+  margin: 0;
+  border-width: 1PX 0 0;
+  font-size: 13PX;
+}
+.game-shell .wholesale-offer > text {
+  flex: 1;
+  font-size: 13PX;
+  line-height: 1.55;
+}
+.game-shell .wholesale-offer .game-button {
+  width: auto;
+  flex-shrink: 0;
+  font-size: 14PX;
+  min-height: 44PX;
+  padding: 6PX 10PX;
+}
+.game-shell .trade-scroll {
+  flex: 1 1 auto;
+  height: 0;
+  min-height: 100PX;
+  overflow-y: auto;
+  border-top: 1PX solid var(--ui-paper-rule);
+  border-bottom: 1PX solid var(--ui-paper-rule);
+}
+.customer-full-dialogue {
+  display: block;
+  font-size: 15PX;
+  line-height: 1.7;
+  padding: 10PX 0;
+}
+.game-shell .demand {
+  display: block;
+  padding: 8PX 10PX;
+  margin: 0 0 10PX;
+  border-width: 1PX;
+  font-size: 14PX;
+  line-height: 1.6;
+}
+.empty-copy {
+  display: block;
+  font-size: 14PX;
+  padding: 6PX 0 12PX;
+  line-height: 1.7;
+}
+.game-shell .offer-list {
+  margin: 0;
+  border-width: 0;
+}
+.game-shell .offer-row,
+.stock-row {
+  display: flex;
+  align-items: center;
+  gap: 10PX;
+  padding: 12PX 4PX;
+  border-bottom: 1PX solid var(--ui-paper-rule);
+}
+.game-shell .offer-art {
+  width: 40PX;
+  height: 48PX;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+.game-shell .offer-copy {
+  flex: 1;
+  min-width: 0;
+  font-size: 13PX;
+  line-height: 1.55;
+}
+.game-shell .offer-copy text {
+  display: block;
+}
+.game-shell .item-name {
+  font-size: 15PX;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.game-shell .offer-controls {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5PX;
+  flex-shrink: 0;
+}
+.game-shell .offer-price {
+  font-size: 14PX;
+  font-weight: 700;
+}
+.game-shell .offer-controls .game-button,
+.stock-row .game-button {
+  min-height: 44PX;
+  padding: 4PX 10PX;
+  font-size: 13PX;
+}
+.game-shell .trading-backdrop .trade-footer {
+  margin: 0;
+  padding: 10PX 0 0;
+  flex-shrink: 0;
+}
+.quote-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12PX;
+  font-size: 14PX;
+}
+.total-amount {
+  font-size: 23PX;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.game-shell .trading-backdrop .trade-footer .toolbar {
+  margin-top: 8PX;
+  gap: 8PX;
+}
+.game-shell .trading-backdrop .toolbar .game-button {
+  min-height: 48PX;
+  padding: 6PX 8PX;
+  font-size: 15PX;
+}
+.footer-hint {
+  display: block;
+  margin-top: 7PX;
+  font-size: 12PX;
+  line-height: 1.5;
+  text-align: center;
+}
+.bargain-feedback {
+  display: block;
+  font-size: 14PX;
+  padding: 10PX;
+  background: var(--ui-highlight);
+}
+.inventory-tabs,
+.inventory-filters,
+.zoom-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6PX;
+}
+.inventory-tabs .game-button {
+  flex: 1;
+  padding: 5PX 8PX;
+}
+.game-shell .game-button.selected {
+  background: var(--sheet-ink);
+  color: var(--sheet);
+  border-color: var(--sheet-ink);
+}
+.zoom-instruction {
+  display: block;
+  margin: 12PX 0;
+  font-size: 14PX;
+}
+.zoom-grid-scroll {
+  width: 100%;
+  height: 250PX;
+  max-height: 38vh;
+  overflow: auto;
+  border: 1PX solid var(--line);
+  background: var(--paper);
+}
+.zoom-grid {
+  position: relative;
+}
+.zoom-grid .grid-item {
+  color: var(--ink);
+}
+.zoom-tools {
+  align-items: center;
+  margin-bottom: 10PX;
+  font-size: 14PX;
+}
+.zoom-tools .game-button {
+  padding: 5PX 7PX;
+  font-size: 13PX;
+}
+.grid-pan-hint {
+  display: block;
+  padding: 6PX 0;
+  font-size: 12PX;
+}
+.inventory-filters {
+  padding: 8PX 0;
+}
+.inventory-filters .game-button {
+  min-height: 44PX;
+  font-size: 12PX;
+  padding: 5PX 8PX;
+}
+.inventory-list {
+  max-height: 200PX;
+  height: 180PX;
+  overflow-y: auto;
+}
+.game-shell .inventory-list-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 6PX;
+  padding: 8PX;
+  gap: 12PX;
+  text-align: left;
+  white-space: normal;
+}
+.inventory-list-row image,
+.inventory-list-row taro-image-core {
+  width: 40PX;
+  height: 48PX;
+  flex-shrink: 0;
+}
+.inventory-list-row text {
+  display: block;
+  font-size: 13PX;
+  line-height: 1.6;
+}
+.inventory-list-row text:first-child {
+  font-size: 14PX;
+  font-weight: 600;
+}
+.display-explainer {
+  display: block;
+  margin-top: 12PX;
+  font-size: 13PX;
+  line-height: 1.7;
+}
+@media (max-width: 359PX) {
+  .shop-stage .station-sign {
+    width: 28%;
+    left: 68%;
+  }
+  .station-sign > text {
+    font-size: 14PX;
+  }
+  .shop-stage .cash {
+    font-size: 22PX;
+  }
+  .shop-stage .dialogue-strip {
+    width: 58%;
+    left: 34%;
+    padding: 8PX;
+  }
+  .shop-stage .dialogue-line {
+    font-size: 13PX;
+  }
+  .shop-stage .intercom-key {
+    top: 28%;
+  }
+  .shop-stage .deal-strip {
+    left: 28%;
+    width: 66%;
+  }
+  .shop-stage .showcase-zoom {
+    font-size: 11PX;
+  }
+  .game-shell .sheet {
+    padding: 12PX;
+  }
+  .game-shell .sheet-heading {
+    top: -12PX;
+  }
+  .game-shell .trading-backdrop .sheet {
+    padding: 12PX;
+  }
+  .game-shell .item-name {
+    font-size: 14PX;
+  }
+}
+@media (min-width: 430PX) {
+  .game-shell .shop-stage {
+    height: 1080PX;
+  }
+}
+@media (max-height: 620PX) {
+  .game-shell .trading-backdrop .sheet {
+    padding: 10PX 12PX;
+  }
+  .customer-full-dialogue {
+    font-size: 14PX;
+  }
+  .game-shell .trading-backdrop .trade-footer {
+    padding-top: 6PX;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .game-shell .modal-backdrop .sheet {
+    animation: sheet-arrive 150ms ease-out;
+  }
+  .announcement,
+  .receipt-toast {
+    animation: feedback-arrive 180ms ease-out;
+  }
+  @keyframes sheet-arrive {
+    from {
+      opacity: 0.4;
+      translate: 0 8PX;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  @keyframes feedback-arrive {
+    from {
+      opacity: 0;
+      bottom: 8PX;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.shop-stage .warehouse-heading {
+  pointer-events: auto;
+}
+.shop-stage .ownership-mark {
+  right: auto;
+  white-space: nowrap;
+}
+.shop-stage .console-actions .console-key {
+  color: var(--ink);
+}
+.shop-stage .console-actions .dismiss-key {
+  color: var(--danger);
+}
+
+/* Final scene alignment and thumb-level quote shortcut. */
+.shop-stage .date-display {
+  top: 4.5%;
+  height: 64PX;
+}
+.shop-stage .dialogue-strip {
+  top: 13.7%;
+}
+.shop-stage .visitor-window {
+  top: 22%;
+  height: 21%;
+}
+.shop-stage .customer-counter {
+  top: 35.8%;
+  height: 6.3%;
+}
+.shop-stage .warehouse-heading {
+  top: 65.5%;
+}
+.shop-stage .warehouse-scroll {
+  top: 70.3%;
+  height: 20.6%;
+}
+.shop-stage .warehouse-meter {
+  pointer-events: auto;
+  font-style: normal;
+}
+.game-shell .sheet {
+  max-height: calc(
+    100dvh - max(12PX, env(safe-area-inset-top)) -
+      max(12PX, env(safe-area-inset-bottom))
+  );
+}
+.game-shell .trading-backdrop .sheet {
+  height: min(
+    850PX,
+    calc(
+      100dvh - max(12PX, env(safe-area-inset-top)) -
+        max(12PX, env(safe-area-inset-bottom))
+    )
+  );
+}
+
+.shop-stage .counter-console {
+  height: 10%;
+}
+.shop-stage .deal-strip {
+  position: absolute;
+  left: 6%;
+  top: 58%;
+  width: 88%;
+  height: 20PX;
+  padding: 0 4PX;
+  display: flex;
+  justify-content: center;
+  background: var(--toast);
+  pointer-events: none;
+}
+.shop-stage .deal-strip > text {
+  font-size: 13PX;
+}
+
+.game-shell .footer-hint.is-problem {
+  color: var(--error-ink);
+  font-weight: 700;
+  font-size: 13PX;
+}
+
+.game-shell .inventory-sheet {
+  display: flex;
+  flex-direction: column;
+  height: min(850PX, calc(100vh - 24PX));
+  height: min(850PX, calc(100dvh - 24PX));
+  overflow: hidden;
+}
+.inventory-sheet .sheet-heading,
+.inventory-tabs,
+.inventory-view-tabs,
+.inventory-filters,
+.zoom-tools,
+.zoom-instruction,
+.grid-pan-hint,
+.display-explainer {
+  flex-shrink: 0;
+}
+.inventory-view-tabs {
+  display: flex;
+  gap: 8PX;
+  margin-top: 10PX;
+}
+.inventory-view-tabs .game-button {
+  flex: 1;
+}
+.inventory-sheet .zoom-grid-scroll {
+  flex: 1;
+  height: 0;
+  min-height: 100PX;
+  max-height: none;
+}
+.inventory-sheet .inventory-list {
+  flex: 1;
+  height: 0;
+  min-height: 100PX;
+  max-height: none;
+}
+.inventory-sheet .inventory-filters .game-button {
+  font-size: 13PX;
+}
+.inventory-sheet .inventory-tabs .game-button {
+  padding: 5PX 6PX;
+  min-width: 0;
+}
+
+.game-shell .dialogue-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-weight: 400;
+  white-space: normal;
+}
+.game-shell .grid-item:focus-visible {
+  outline: 2PX solid var(--gold);
+  outline-offset: -2PX;
+}
+
+.game-shell .grid-item {
+  touch-action: none;
+}
+.game-shell .report-update,
+.upgrade-feedback {
+  display: block;
+  padding: 10PX;
+  margin: 12PX 0;
+  font-size: 14PX;
+  line-height: 1.6;
+  background: var(--ui-highlight);
+  border-left: 2PX solid var(--line);
+}
+
+.shop-stage .date-display,
+.dialogue-more {
+  color: var(--ui-amber-ink);
+}
+.game-shell .offer-controls {
+  width: auto;
+  min-width: 72PX;
+}
+.game-shell .offer-price {
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  padding-bottom: 2PX;
+}
+
+.shop-stage .console-actions .console-key {
+  text-shadow: none;
+  font-weight: 600;
+}
+
+.trade-tabs {
+  display: flex;
+  gap: 8PX;
+  padding: 8PX 0;
+  flex-shrink: 0;
+}
+.trade-tabs .game-button {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Inventory cells inherit the workshop, never the paper button surface. */
+.game-shell .zoom-grid .grid-frame,
+.game-shell .zoom-grid .grid-interior {
+  background: var(--paper);
+}
+.game-shell .zoom-grid .grid-cell,
+.game-shell .zoom-grid .grid-item {
+  background: var(--clear);
+  color: var(--ink);
+  border-color: var(--grid-line);
+}
+.game-shell .zoom-grid .grid-item.matches {
+  background: var(--ui-focus-wash);
+  border-color: var(--accent);
+}
+.game-shell .zoom-grid .grid-item.unowned {
+  border-color: var(--gold);
+}
+.game-shell .feedback {
+  flex-shrink: 0;
+  margin-top: 10PX;
+  padding-top: 8PX;
+  font-size: 13PX;
+  line-height: 1.6;
+  border-top: 1PX solid var(--ui-paper-rule);
+}
+
+.live-notice {
+  display: block;
+  margin-top: 12PX;
+  padding: 8PX 0;
+  font-size: 14PX;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.shop-stage .warehouse-meter > text,
+.shop-stage .warehouse-meter > taro-text-core {
+  padding: 4PX 6PX;
+  background: var(--toast);
+  border: 1PX solid var(--line);
+  color: var(--ink);
+  font-style: normal;
+}
+
+.trade-footer .bargain-feedback { padding: 0; margin: 6PX 0 0; font-size: 13PX; line-height: 1.4; text-align: center; background: var(--clear); }
+.ledger-summary text { display: block; }

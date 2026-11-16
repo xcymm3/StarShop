@@ -2,6 +2,7 @@ import { Button, Image, Text, View, type ITouchEvent } from '@tarojs/components'
 import {
   bounds,
   product,
+  quote,
   type Game,
   type Item,
   type Area,
@@ -9,9 +10,11 @@ import {
 import { dimensions } from '../../game/grid'
 import { itemArt } from '../../assets'
 import type { InventoryDrag } from './useInventoryDrag'
+import { TouchButton } from '../../components/TouchButton'
 // Native mini-program View with catchMove prevents scrolling while dragging an item.
 // Empty grid space remains scrollable; H5 keeps its normal button semantics.
-const ItemSurface = process.env.TARO_ENV === 'h5' ? Button : View
+const ItemSurface = process.env.TARO_ENV === 'h5' ? TouchButton : View
+const CellSurface = process.env.TARO_ENV === 'h5' ? TouchButton : Button
 
 export function GridInventory({
   game,
@@ -66,7 +69,7 @@ export function GridInventory({
           const x = n % b.width,
             y = Math.floor(n / b.width)
           return (
-            <Button
+            <CellSurface
               {...{ role: 'button' }}
               key={n}
               className="grid-cell"
@@ -80,7 +83,7 @@ export function GridInventory({
               onClick={() => onCell(x, y)}
             >
               {selected && x === 0 && y === 0 ? '·' : ''}
-            </Button>
+            </CellSurface>
           )
         })}
         {[...owned, ...incoming].map((item) => {
@@ -96,6 +99,11 @@ export function GridInventory({
               className={
                 'grid-item ' +
                 (!isOwned ? 'unowned ' : '') +
+                (isOwned &&
+                game.visitor?.kind === 'buyer' &&
+                quote(game, item) > 0
+                  ? 'matches '
+                  : '') +
                 (game.staged.includes(item.uid) ? 'reserved ' : '') +
                 (selected?.uid === item.uid || drag?.view?.uid === item.uid
                   ? 'moving'
@@ -114,7 +122,7 @@ export function GridInventory({
                 height: (size.height / b.height) * 100 + '%',
               }}
               onClick={() =>
-                drag?.canClick() !== false &&
+                drag?.canClick(item.uid) !== false &&
                 (selected ? onCell(item.x, item.y) : onItem(item, isOwned))
               }
               onTouchStart={(e) =>
@@ -135,6 +143,19 @@ export function GridInventory({
                 src={itemArt[item.productId]}
                 mode="aspectFit"
                 className="grid-art"
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  width:
+                    (item.rotated ? size.height / size.width : 1) * 100 + '%',
+                  height:
+                    (item.rotated ? size.width / size.height : 1) * 100 + '%',
+                  transform:
+                    'translate(-50%, -50%) rotate(' +
+                    (item.rotated ? 90 : 0) +
+                    'deg)',
+                }}
               />
               {!item.known && <Text className="unknown-mark">?</Text>}
               {!isOwned && <Text className="ownership-mark">待购</Text>}

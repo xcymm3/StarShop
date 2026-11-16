@@ -11,6 +11,8 @@ export default defineConfig({
     browserName: 'chromium',
     headless: true,
     viewport: { width: 375, height: 812 },
+    hasTouch: true,
+    isMobile: true,
     baseURL: 'http://127.0.0.1:10086',
     launchOptions: {
       args: [

@@ -1,0 +1,426 @@
+[
+  {
+    "number": 1,
+    "day": 1,
+    "kind": "收购",
+    "goods": [
+      "轨道怀表"
+    ],
+    "cash_before": 650,
+    "cash_after": 602,
+    "delta": -48,
+    "visitor": 14
+  },
+  {
+    "number": 2,
+    "day": 1,
+    "kind": "出售",
+    "goods": [
+      "藻类口粮"
+    ],
+    "cash_before": 602,
+    "cash_after": 628,
+    "delta": 26,
+    "visitor": 17
+  },
+  {
+    "number": 3,
+    "day": 1,
+    "kind": "收购",
+    "goods": [
+      "探测器日志"
+    ],
+    "cash_before": 628,
+    "cash_after": 599,
+    "delta": -29,
+    "visitor": 19
+  },
+  {
+    "number": 4,
+    "day": 1,
+    "kind": "收购",
+    "goods": [
+      "磁悬轴承"
+    ],
+    "cash_before": 599,
+    "cash_after": 552,
+    "delta": -47,
+    "visitor": 26
+  },
+  {
+    "number": 5,
+    "day": 1,
+    "kind": "出售",
+    "goods": [
+      "磁悬轴承"
+    ],
+    "cash_before": 552,
+    "cash_after": 612,
+    "delta": 60,
+    "visitor": 31
+  },
+  {
+    "number": 6,
+    "day": 2,
+    "kind": "收购",
+    "goods": [
+      "植物样本记录",
+      "导航陀螺"
+    ],
+    "cash_before": 612,
+    "cash_after": 507,
+    "delta": -105,
+    "visitor": 33
+  },
+  {
+    "number": 7,
+    "day": 2,
+    "kind": "收购",
+    "goods": [
+      "应急氧气罐"
+    ],
+    "cash_before": 507,
+    "cash_after": 491,
+    "delta": -16,
+    "visitor": 37
+  },
+  {
+    "number": 8,
+    "day": 2,
+    "kind": "收购",
+    "goods": [
+      "应急氧气罐"
+    ],
+    "cash_before": 491,
+    "cash_after": 481,
+    "delta": -10,
+    "visitor": 37
+  },
+  {
+    "number": 9,
+    "day": 2,
+    "kind": "出售",
+    "goods": [
+      "导航陀螺"
+    ],
+    "cash_before": 481,
+    "cash_after": 639,
+    "delta": 158,
+    "visitor": 43
+  },
+  {
+    "number": 10,
+    "day": 2,
+    "kind": "出售",
+    "goods": [
+      "磁悬轴承"
+    ],
+    "cash_before": 639,
+    "cash_after": 755,
+    "delta": 116,
+    "visitor": 45
+  },
+  {
+    "number": 11,
+    "day": 3,
+    "kind": "收购",
+    "goods": [
+      "轨道怀表"
+    ],
+    "cash_before": 575,
+    "cash_after": 501,
+    "delta": -74,
+    "visitor": 48
+  },
+  {
+    "number": 12,
+    "day": 3,
+    "kind": "收购",
+    "goods": [
+      "导航陀螺"
+    ],
+    "cash_before": 501,
+    "cash_after": 432,
+    "delta": -69,
+    "visitor": 48
+  },
+  {
+    "number": 13,
+    "day": 3,
+    "kind": "收购",
+    "goods": [
+      "修理手册"
+    ],
+    "cash_before": 432,
+    "cash_after": 388,
+    "delta": -44,
+    "visitor": 48
+  },
+  {
+    "number": 14,
+    "day": 3,
+    "kind": "出售",
+    "goods": [
+      "探测器日志"
+    ],
+    "cash_before": 388,
+    "cash_after": 455,
+    "delta": 67,
+    "visitor": 56
+  },
+  {
+    "number": 15,
+    "day": 3,
+    "kind": "出售",
+    "goods": [
+      "修理手册"
+    ],
+    "cash_before": 455,
+    "cash_after": 508,
+    "delta": 53,
+    "visitor": 56
+  },
+  {
+    "number": 16,
+    "day": 4,
+    "kind": "出售",
+    "goods": [
+      "导航陀螺"
+    ],
+    "cash_before": 508,
+    "cash_after": 693,
+    "delta": 185,
+    "visitor": 60
+  },
+  {
+    "number": 17,
+    "day": 4,
+    "kind": "出售",
+    "goods": [
+      "轨道怀表"
+    ],
+    "cash_before": 685,
+    "cash_after": 841,
+    "delta": 156,
+    "visitor": 65
+  },
+  {
+    "number": 18,
+    "day": 4,
+    "kind": "收购",
+    "goods": [
+      "矿工纪念章"
+    ],
+    "cash_before": 841,
+    "cash_after": 794,
+    "delta": -47,
+    "visitor": 70
+  },
+  {
+    "number": 19,
+    "day": 4,
+    "kind": "收购",
+    "goods": [
+      "矿工纪念章"
+    ],
+    "cash_before": 794,
+    "cash_after": 748,
+    "delta": -46,
+    "visitor": 70
+  },
+  {
+    "number": 20,
+    "day": 4,
+    "kind": "出售",
+    "goods": [
+      "矿工纪念章"
+    ],
+    "cash_before": 748,
+    "cash_after": 847,
+    "delta": 99,
+    "visitor": 76
+  },
+  {
+    "number": 21,
+    "day": 5,
+    "kind": "收购",
+    "goods": [
+      "殖民地唱片"
+    ],
+    "cash_before": 847,
+    "cash_after": 659,
+    "delta": -188,
+    "visitor": 78
+  },
+  {
+    "number": 22,
+    "day": 5,
+    "kind": "收购",
+    "goods": [
+      "应急氧气罐"
+    ],
+    "cash_before": 659,
+    "cash_after": 647,
+    "delta": -12,
+    "visitor": 78
+  },
+  {
+    "number": 23,
+    "day": 5,
+    "kind": "收购",
+    "goods": [
+      "修理手册"
+    ],
+    "cash_before": 647,
+    "cash_after": 606,
+    "delta": -41,
+    "visitor": 84
+  },
+  {
+    "number": 24,
+    "day": 5,
+    "kind": "出售",
+    "goods": [
+      "殖民地唱片"
+    ],
+    "cash_before": 606,
+    "cash_after": 816,
+    "delta": 210,
+    "visitor": 88
+  },
+  {
+    "number": 25,
+    "day": 5,
+    "kind": "收购",
+    "goods": [
+      "殖民地唱片",
+      "导航陀螺"
+    ],
+    "cash_before": 816,
+    "cash_after": 558,
+    "delta": -258,
+    "visitor": 90
+  },
+  {
+    "number": 26,
+    "day": 6,
+    "kind": "收购",
+    "goods": [
+      "医疗补给包"
+    ],
+    "cash_before": 558,
+    "cash_after": 476,
+    "delta": -82,
+    "visitor": 98
+  },
+  {
+    "number": 27,
+    "day": 6,
+    "kind": "出售",
+    "goods": [
+      "殖民地唱片"
+    ],
+    "cash_before": 476,
+    "cash_after": 872,
+    "delta": 396,
+    "visitor": 102
+  },
+  {
+    "number": 28,
+    "day": 6,
+    "kind": "出售",
+    "goods": [
+      "旧地球邮票"
+    ],
+    "cash_before": 872,
+    "cash_after": 908,
+    "delta": 36,
+    "visitor": 102
+  },
+  {
+    "number": 29,
+    "day": 6,
+    "kind": "收购",
+    "goods": [
+      "轨道怀表"
+    ],
+    "cash_before": 908,
+    "cash_after": 829,
+    "delta": -79,
+    "visitor": 105
+  },
+  {
+    "number": 30,
+    "day": 6,
+    "kind": "收购",
+    "goods": [
+      "净水滤芯"
+    ],
+    "cash_before": 829,
+    "cash_after": 813,
+    "delta": -16,
+    "visitor": 112
+  },
+  {
+    "number": 31,
+    "day": 7,
+    "kind": "收购",
+    "goods": [
+      "植物样本记录"
+    ],
+    "cash_before": 813,
+    "cash_after": 793,
+    "delta": -20,
+    "visitor": 112
+  },
+  {
+    "number": 32,
+    "day": 7,
+    "kind": "出售",
+    "goods": [
+      "轨道怀表",
+      "矿工纪念章",
+      "轨道怀表"
+    ],
+    "cash_before": 793,
+    "cash_after": 1010,
+    "delta": 217,
+    "visitor": 120
+  },
+  {
+    "number": 33,
+    "day": 7,
+    "kind": "出售",
+    "goods": [
+      "导航陀螺"
+    ],
+    "cash_before": 1010,
+    "cash_after": 1094,
+    "delta": 84,
+    "visitor": 122
+  },
+  {
+    "number": 34,
+    "day": 7,
+    "kind": "收购",
+    "goods": [
+      "微型燃料泵"
+    ],
+    "cash_before": 1094,
+    "cash_after": 1079,
+    "delta": -15,
+    "visitor": 124
+  },
+  {
+    "number": 35,
+    "day": 7,
+    "kind": "出售",
+    "goods": [
+      "医疗补给包"
+    ],
+    "cash_before": 1079,
+    "cash_after": 1229,
+    "delta": 150,
+    "visitor": 129
+  }
+]

@@ -50,6 +50,20 @@ export interface Entry {
   text: string
   delta: number
   kind: string
+  profit?: number
+}
+// Older sales recorded margin in their description; old clearances did not.
+// Missing historic cost must stay unknown instead of becoming a fabricated zero.
+export function ledgerProfit(entries: Entry[]): number | null {
+  let total = 0
+  for (const e of entries) {
+    if (e.kind !== '出售' && e.kind !== '清仓') continue
+    const old = e.kind === '出售' ? e.text.match(/毛利\s*(-?\d+)/) : null
+    const margin = e.profit ?? (old ? Number(old[1]) : null)
+    if (margin === null) return null
+    total += margin
+  }
+  return total
 }
 export interface Bill {
   day: number
@@ -127,7 +141,7 @@ export type Action =
       y: number
       rotated: boolean
     }
-  | { type: 'autoPlace'; uid: string; area: Area }
+  | { type: 'autoPlace'; uid: string; area: Area; rotated?: boolean }
   | { type: 'clearance'; uid: string }
   | { type: 'upgrade'; target: 'storage' | 'shelves' }
   | { type: 'payRent' }
@@ -343,8 +357,21 @@ function rand(s: Game) {
 function pick<T>(s: Game, values: readonly T[]): T {
   return values[Math.floor(rand(s) * values.length)]
 }
-function entry(s: Game, text: string, delta = 0, kind = '操作') {
-  s.entries.unshift({ id: ++s.sequence, day: s.day, text, delta, kind })
+function entry(
+  s: Game,
+  text: string,
+  delta = 0,
+  kind = '操作',
+  profit?: number,
+) {
+  s.entries.unshift({
+    id: ++s.sequence,
+    day: s.day,
+    text,
+    delta,
+    kind,
+    ...(profit === undefined ? {} : { profit }),
+  })
   s.entries = s.entries.slice(0, 180)
   s.notice = text
   if (delta > 0) s.dayStats.income += delta
@@ -501,7 +528,13 @@ export function createGame(seed = 20261114): Game {
   return s
 }
 function finish(s: Game, text: string, delta: number, profit = 0) {
-  entry(s, text, delta, delta >= 0 ? '出售' : '收购')
+  entry(
+    s,
+    text,
+    delta,
+    delta >= 0 ? '出售' : '收购',
+    delta >= 0 ? profit : undefined,
+  )
   s.trades++
   s.progress++
   s.dayStats.trades++
@@ -744,6 +777,8 @@ export function transition(input: Game, action: Action): Game {
       const item = itemById(s, action.uid)
       need(item, '未找到物品。')
       const owned = s.inventory.some((i) => i.uid === item.uid)
+      if (action.type === 'autoPlace' && action.rotated !== undefined)
+        need(typeof action.rotated === 'boolean', '物品方向无效。')
       need(
         ['warehouse', 'showcase', 'counter', 'customer'].includes(action.area),
         '不存在的库存区域。',
@@ -765,6 +800,7 @@ export function transition(input: Game, action: Action): Game {
               action.area,
               item.uid,
               occupied(s),
+              action.rotated === undefined ? [false, true] : [action.rotated],
             )
       need(pos, '这个区域没有完整空位。')
       need(
@@ -803,7 +839,7 @@ export function transition(input: Game, action: Action): Game {
       s.cash += price
       s.inventory = s.inventory.filter((i) => i.uid !== item.uid)
       s.dayStats.profit += price - item.cost
-      entry(s, '清仓 ' + product(item).name, price, '清仓')
+      entry(s, '清仓 ' + product(item).name, price, '清仓', price - item.cost)
       break
     }
     case 'upgrade': {
@@ -1063,7 +1099,8 @@ export function validateGame(raw: unknown): raw is Game {
           !integer(e.day) ||
           typeof e.text !== 'string' ||
           typeof e.kind !== 'string' ||
-          !Number.isSafeInteger(e.delta),
+          !Number.isSafeInteger(e.delta) ||
+          (e.profit !== undefined && !Number.isSafeInteger(e.profit)),
       )
     )
       return false

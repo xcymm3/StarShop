@@ -50,8 +50,9 @@ export function firstFit(
   area: Area,
   uid: string,
   others: Located[],
+  orientations: boolean[] = [false, true],
 ): Placement | null {
-  for (const rotated of [false, true]) {
+  for (const rotated of orientations) {
     const size = dimensions(shape, rotated)
     for (let y = 0; y <= bounds.height - size.height; y++)
       for (let x = 0; x <= bounds.width - size.width; x++) {

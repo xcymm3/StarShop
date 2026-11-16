@@ -14,12 +14,104 @@ import {
   migrateV2,
   tradeRows,
   wholesalePrice,
+  ledgerProfit,
   type Game,
   type Visitor,
   type Action,
 } from '../src/game/engine'
-import { dimensions, fits } from '../src/game/grid'
+import { dimensions, fits, firstFit } from '../src/game/grid'
 import { PlayerController, observe } from '../src/game/interface'
+
+test('流水记录真实出售和清仓毛利，兼容旧存档且不虚构缺失成本', () => {
+  const s = createGame()
+  const item = s.inventory[0]
+  const cleared = transition(s, { type: 'clearance', uid: item.uid })
+  const margin = cleared.cash - s.cash - item.cost
+  assert.equal(cleared.entries[0].profit, margin)
+  assert.equal(ledgerProfit(cleared.entries), margin)
+  assert.equal(cleared.trades, 0)
+  delete cleared.entries[0].profit
+  assert.ok(validateGame(cleared))
+  assert.equal(ledgerProfit(cleared.entries), null)
+  assert.equal(
+    ledgerProfit([
+      { ...cleared.entries[0], kind: '出售', text: '出售1件 · 毛利 -7' },
+    ]),
+    -7,
+  )
+  s.visitor = {
+    ...s.visitor!,
+    kind: 'buyer',
+    category: '机械',
+    stock: [],
+    asks: {},
+    budget: 300,
+    remaining: 2,
+    minimumQuality: '普通',
+    acceptsDamaged: true,
+  }
+  const sold = transition(transition(s, { type: 'stage', uid: item.uid }), {
+    type: 'sell',
+    visitorId: s.visitor.id,
+  })
+  assert.equal(sold.entries[0].profit, sold.cash - s.cash - item.cost)
+  assert.equal(sold.trades, 1)
+  assert.ok(validateGame(sold))
+  sold.entries[0].profit = NaN
+  assert.equal(validateGame(sold), false)
+})
+
+test('自动找位尊重玩家选定方向，省略方向时仍兼容原有接口', () => {
+  const s = createGame()
+  const item = s.inventory[2]
+  const fixed = transition(s, {
+    type: 'autoPlace',
+    uid: item.uid,
+    area: 'warehouse',
+    rotated: true,
+  })
+  assert.equal(fixed.inventory.find((i) => i.uid === item.uid)!.rotated, true)
+  assert.equal(fixed.cash, s.cash)
+  assert.equal(fixed.trades, 0)
+  assert.equal(
+    firstFit(
+      { width: 1, height: 2 },
+      { width: 2, height: 1 },
+      'warehouse',
+      'shape',
+      [],
+      [false],
+    ),
+    null,
+  )
+  assert.equal(
+    firstFit(
+      { width: 1, height: 2 },
+      { width: 2, height: 1 },
+      'warehouse',
+      'shape',
+      [],
+      [true],
+    )?.rotated,
+    true,
+  )
+  assert.ok(validateGame(fixed))
+  assert.ok(
+    validateGame(
+      transition(s, { type: 'autoPlace', uid: item.uid, area: 'warehouse' }),
+    ),
+  )
+  assert.throws(
+    () =>
+      transition(s, {
+        type: 'autoPlace',
+        uid: item.uid,
+        area: 'warehouse',
+        rotated: 'yes' as unknown as boolean,
+      }),
+    /方向无效/,
+  )
+})
 
 function seller(s: Game, prices = [30, 20]): Visitor {
   const stock = prices.map((_, n) => ({

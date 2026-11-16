@@ -1,4 +1,4 @@
-// Interactive review instrument: one explicit human/agent decision per input line.
+// Interactive review instrument: explicit UI gestures supplied by the reviewer.
 // No trading strategy, game-state editing, seed overrides or automatic progression.
 import { chromium } from '@playwright/test'
 import http from 'node:http'
@@ -38,9 +38,19 @@ const server = http.createServer(async (req, res) => {
     'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'no-store',
   })
-  res.end(html)
+  res.end(
+    process.env.STARSHOP_REVIEW_LIVE === '1'
+      ? await readFile('release/StarShop-demo.html')
+      : html,
+  )
 })
-await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
+await new Promise((resolve) =>
+  server.listen(
+    Number(process.env.STARSHOP_REVIEW_PORT || 0),
+    '127.0.0.1',
+    resolve,
+  ),
+)
 const base = 'http://127.0.0.1:' + server.address().port
 const browser = await chromium.launch({
   headless: true,
@@ -55,6 +65,7 @@ const context = await browser.newContext({
   hasTouch: true,
   isMobile: true,
   deviceScaleFactor: 1,
+  storageState: process.env.STARSHOP_REVIEW_STATE || undefined,
 })
 const page = await context.newPage()
 const cdp = await context.newCDPSession(page)
@@ -268,6 +279,7 @@ async function execute(c) {
     await page.reload()
     await page.waitForFunction(() => !!window.starshop)
   } else if (c.op === 'sample') {
+    await page.waitForTimeout(220)
     const name =
       String(++serial).padStart(3, '0') +
       '-' +

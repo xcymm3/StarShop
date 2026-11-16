@@ -54,6 +54,7 @@ export function useInventoryDrag(
   const viewRef = useRef<DragView | null>(null)
   const [view, setView] = useState<DragView | null>(null)
   const suppressUntil = useRef(0)
+  const suppressedItem = useRef<string | null>(null)
   const [scrollLock, setScrollLock] = useState(false)
   const updateView = (v: DragView | null) => {
     viewRef.current = v
@@ -89,6 +90,7 @@ export function useInventoryDrag(
     }
   }
   const start = (uid: string, x: number, y: number, source: Rect) => {
+    suppressUntil.current = 0
     const s = current.current.game
     const item = s && itemById(s, uid)
     if (!s || !item || s.report || s.job.active) return
@@ -200,6 +202,7 @@ export function useInventoryDrag(
         )
       else
         current.current.reject(v?.message ?? '未放入有效区域，物品已留在原位。')
+      suppressedItem.current = pending.current?.uid ?? null
       suppressUntil.current = Date.now() + 450
     }
     cancel()
@@ -213,13 +216,64 @@ export function useInventoryDrag(
     }
   }
   useEffect(() => {
+    if (process.env.TARO_ENV !== 'h5' || !view?.uid) return
+    let edge = '',
+      entered = 0
+    // Keep the held item alive while revealing the next row or the lower work area.
+    const timer = setInterval(() => {
+      const currentView = viewRef.current
+      if (!currentView) return
+      const { x, y } = currentView
+      const scroller = document
+        .elementFromPoint(x, y)
+        ?.closest<HTMLElement>('.inventory-viewport')
+      let changed = false
+      const rect = scroller?.getBoundingClientRect()
+      const activeEdge =
+        rect &&
+        scroller!.scrollHeight > scroller!.clientHeight + 1 &&
+        (y < rect.top + 32 || y > rect.bottom - 32)
+          ? y < rect.top + 32
+            ? 'inventory-up'
+            : 'inventory-down'
+          : y < 42
+            ? 'page-up'
+            : y > window.innerHeight - 42
+              ? 'page-down'
+              : ''
+      if (activeEdge !== edge) {
+        edge = activeEdge
+        entered = Date.now()
+      }
+      if (!edge || Date.now() - entered < 220) return
+      if (scroller && scroller.scrollHeight > scroller.clientHeight + 1) {
+        const r = scroller.getBoundingClientRect()
+        const delta = y < r.top + 32 ? -10 : y > r.bottom - 32 ? 10 : 0
+        const before = scroller.scrollTop
+        scroller.scrollTop += delta
+        changed = before !== scroller.scrollTop
+      }
+      if (!changed && (y < 42 || y > window.innerHeight - 42)) {
+        const before = window.scrollY
+        window.scrollBy(0, y < 42 ? -10 : 10)
+        changed = before !== window.scrollY
+      }
+      if (changed) {
+        measure()
+        move(x, y)
+      }
+    }, 40)
+    return () => clearInterval(timer)
+  }, [view?.uid])
+  useEffect(() => {
     if (process.env.TARO_ENV !== 'h5') return
     const down = (e: PointerEvent) => {
       if (e.button !== 0 || !e.isPrimary) return
       const el = (e.target as Element).closest<HTMLElement>(
         '.grid-item[data-uid]',
       )
-      if (el) start(el.dataset.uid!, e.clientX, e.clientY, rect(el))
+      if (el && !el.closest('.zoom-grid'))
+        start(el.dataset.uid!, e.clientX, e.clientY, rect(el))
     }
     const moving = (e: PointerEvent) => {
       if (pending.current) {
@@ -228,10 +282,21 @@ export function useInventoryDrag(
       }
     }
     const up = (e: PointerEvent) => {
-      if (pending.current) end(e.clientX, e.clientY)
+      if (!pending.current) return
+      if (e.pointerType === 'touch' && pending.current.started) {
+        // Keep the source stable through release processing. The tap component
+        // separately handles browsers that omit the compatibility click.
+        suppressedItem.current = pending.current.uid
+        suppressUntil.current = Date.now() + 450
+        requestAnimationFrame(() => end(e.clientX, e.clientY))
+      } else end(e.clientX, e.clientY)
     }
     const click = (e: MouseEvent) => {
-      if (Date.now() < suppressUntil.current) {
+      const item = (e.target as HTMLElement).closest<HTMLElement>('.grid-item')
+      if (
+        Date.now() < suppressUntil.current &&
+        item?.dataset.uid === suppressedItem.current
+      ) {
         e.preventDefault()
         e.stopPropagation()
       }
@@ -286,7 +351,8 @@ export function useInventoryDrag(
       if (process.env.TARO_ENV !== 'h5')
         end(t.clientX ?? t.pageX, t.clientY ?? t.pageY)
     },
-    canClick: () => Date.now() >= suppressUntil.current,
+    canClick: (uid: string) =>
+      uid !== suppressedItem.current || Date.now() >= suppressUntil.current,
   }
 }
 function rect(el: Element): Rect {

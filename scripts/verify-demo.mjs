@@ -14,7 +14,7 @@ const browser = await chromium.launch({
 try {
   const demoFile = path.resolve(process.argv[2] || 'release/StarShop-demo.html')
   const output = path.join(
-    'artifacts/offline-v05',
+    'artifacts/offline-v06',
     path.basename(demoFile, '.html'),
   )
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } })

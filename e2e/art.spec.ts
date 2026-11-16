@@ -71,7 +71,7 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
       )
   }, s)
   await page.goto('/')
-  await mkdir('artifacts/art-review-v05', { recursive: true })
+  await mkdir('artifacts/art-review-v06', { recursive: true })
   async function loaded(selector: string, count: number) {
     const imgs = page.locator(selector)
     await expect(imgs).toHaveCount(count)
@@ -102,14 +102,14 @@ test('全部原创商品图与四类顾客在格子工作台正常加载', async
     await page.reload()
     await loaded('.visitor-sprite img,img.visitor-sprite', 1)
     await page.screenshot({
-      path: 'artifacts/art-review-v05/visitor-' + n + '.png',
+      path: 'artifacts/art-review-v06/visitor-' + n + '.png',
       fullPage: true,
     })
   }
   await page.locator('.grid-item[data-uid="art-offer"]').click()
   await loaded('.identify-tool img,img.identify-tool', 1)
   await page.screenshot({
-    path: 'artifacts/art-review-v05/item-inspection.png',
+    path: 'artifacts/art-review-v06/item-inspection.png',
     fullPage: true,
   })
 })

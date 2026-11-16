@@ -1,0 +1,660 @@
+{
+  "version": "0.6.0",
+  "compiled_build_sha256": "6308e857ce14e16baf2882cdbb4800ce89d75be45ed01eae6c2bed9c0f3180bf",
+  "played_build_sha256": "6e60f5f44fc42abdbacb11d5809611465a32288bc8e2d5c20e275bad049526d5",
+  "play_log_sha256": "15d795610526a7abca59411aeee42161c5c55f31340e9347f408e619ad0f5c62",
+  "actions": 329,
+  "screenshots": 38,
+  "initial_cash": 650,
+  "trade_delta": 767,
+  "other_expenses": [
+    {
+      "command": {
+        "op": "tap",
+        "name": "升级 · 180"
+      },
+      "delta": -180
+    },
+    {
+      "command": {
+        "op": "tap",
+        "name": "鉴定 · 8星币"
+      },
+      "delta": -8
+    },
+    {
+      "command": {
+        "op": "tap",
+        "name": "支付房租 · 120"
+      },
+      "delta": -120
+    }
+  ],
+  "completed": {
+    "day": 8,
+    "progress": 0,
+    "cash": 1109,
+    "trades": 35,
+    "debt": 0,
+    "notice": "第 8 天 · 今日热销 数据。当前顾客与货物已保留。",
+    "hot": "数据",
+    "displayCategory": null,
+    "level": 2,
+    "report": null,
+    "bills": [
+      {
+        "day": 7,
+        "amount": 120,
+        "paid": 120,
+        "deferred": false
+      }
+    ],
+    "inventory": [
+      {
+        "uid": "i34",
+        "name": "植物样本记录",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 6,
+        "y": 0,
+        "w": 2,
+        "h": 1,
+        "rotated": false,
+        "known": false,
+        "condition": "磨损",
+        "cost": 30,
+        "offer": 0,
+        "estimate": [
+          21,
+          47
+        ]
+      },
+      {
+        "uid": "i38",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 2,
+        "y": 1,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 16,
+        "offer": 0,
+        "estimate": [
+          20,
+          44
+        ]
+      },
+      {
+        "uid": "i40",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 6,
+        "y": 1,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 10,
+        "offer": 0,
+        "estimate": [
+          12,
+          26
+        ]
+      },
+      {
+        "uid": "i81",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 3,
+        "y": 0,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 12,
+        "offer": 0,
+        "estimate": [
+          12,
+          26
+        ]
+      },
+      {
+        "uid": "i85",
+        "name": "修理手册",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 4,
+        "y": 0,
+        "w": 2,
+        "h": 2,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 41,
+        "offer": 0,
+        "estimate": [
+          50,
+          110
+        ]
+      },
+      {
+        "uid": "i114",
+        "name": "净水滤芯",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 7,
+        "y": 1,
+        "w": 1,
+        "h": 2,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 16,
+        "offer": 0,
+        "estimate": [
+          18,
+          40
+        ]
+      },
+      {
+        "uid": "i115",
+        "name": "植物样本记录",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 4,
+        "y": 2,
+        "w": 2,
+        "h": 1,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 20,
+        "offer": 0,
+        "estimate": [
+          25,
+          55
+        ]
+      },
+      {
+        "uid": "i126",
+        "name": "微型燃料泵",
+        "cat": "机械",
+        "area": "warehouse",
+        "x": 0,
+        "y": 2,
+        "w": 1,
+        "h": 2,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 15,
+        "offer": 0,
+        "estimate": [
+          15,
+          33
+        ]
+      }
+    ],
+    "visitor": {
+      "id": 129,
+      "name": "阿岚",
+      "role": "船员",
+      "kind": "buyer",
+      "line": "明天出港，找点能用的东西。磨损和损坏也可以看看。",
+      "category": "补给",
+      "budget": 31,
+      "remaining": 0,
+      "minimumQuality": "普通",
+      "acceptsDamaged": true,
+      "bargained": false,
+      "variety": false,
+      "wholesaleDiscount": 14,
+      "stock": []
+    },
+    "quote": [],
+    "total": 0,
+    "wholesale": 0,
+    "visible": [],
+    "scrollY": 0,
+    "errors": []
+  },
+  "resumed": {
+    "day": 8,
+    "progress": 0,
+    "cash": 1109,
+    "trades": 35,
+    "debt": 0,
+    "notice": "微型燃料泵已放入仓库；移动不产生付款。",
+    "hot": "数据",
+    "displayCategory": null,
+    "level": 2,
+    "report": null,
+    "bills": [
+      {
+        "day": 7,
+        "amount": 120,
+        "paid": 120,
+        "deferred": false
+      }
+    ],
+    "inventory": [
+      {
+        "uid": "i34",
+        "name": "植物样本记录",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 6,
+        "y": 0,
+        "w": 2,
+        "h": 1,
+        "rotated": false,
+        "known": false,
+        "condition": "磨损",
+        "cost": 30,
+        "offer": 0,
+        "estimate": [
+          21,
+          47
+        ]
+      },
+      {
+        "uid": "i38",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 2,
+        "y": 1,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 16,
+        "offer": 0,
+        "estimate": [
+          20,
+          44
+        ]
+      },
+      {
+        "uid": "i40",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 6,
+        "y": 1,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 10,
+        "offer": 0,
+        "estimate": [
+          12,
+          26
+        ]
+      },
+      {
+        "uid": "i81",
+        "name": "应急氧气罐",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 3,
+        "y": 0,
+        "w": 1,
+        "h": 3,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 12,
+        "offer": 0,
+        "estimate": [
+          12,
+          26
+        ]
+      },
+      {
+        "uid": "i85",
+        "name": "修理手册",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 4,
+        "y": 0,
+        "w": 2,
+        "h": 2,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 41,
+        "offer": 0,
+        "estimate": [
+          50,
+          110
+        ]
+      },
+      {
+        "uid": "i114",
+        "name": "净水滤芯",
+        "cat": "补给",
+        "area": "warehouse",
+        "x": 7,
+        "y": 1,
+        "w": 1,
+        "h": 2,
+        "rotated": false,
+        "known": false,
+        "condition": "损坏",
+        "cost": 16,
+        "offer": 0,
+        "estimate": [
+          18,
+          40
+        ]
+      },
+      {
+        "uid": "i115",
+        "name": "植物样本记录",
+        "cat": "数据",
+        "area": "warehouse",
+        "x": 4,
+        "y": 2,
+        "w": 2,
+        "h": 1,
+        "rotated": false,
+        "known": false,
+        "condition": "完好",
+        "cost": 20,
+        "offer": 0,
+        "estimate": [
+          25,
+          55
+        ]
+      },
+      {
+        "uid": "i126",
+        "name": "微型燃料泵",
+        "cat": "机械",
+        "area": "warehouse",
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 2,
+        "rotated": true,
+        "known": false,
+        "condition": "损坏",
+        "cost": 15,
+        "offer": 0,
+        "estimate": [
+          15,
+          33
+        ]
+      }
+    ],
+    "visitor": {
+      "id": 129,
+      "name": "阿岚",
+      "role": "船员",
+      "kind": "buyer",
+      "line": "明天出港，找点能用的东西。磨损和损坏也可以看看。",
+      "category": "补给",
+      "budget": 31,
+      "remaining": 0,
+      "minimumQuality": "普通",
+      "acceptsDamaged": true,
+      "bargained": false,
+      "variety": false,
+      "wholesaleDiscount": 14,
+      "stock": []
+    },
+    "quote": [],
+    "total": 0,
+    "wholesale": 0,
+    "visible": [],
+    "scrollY": 0,
+    "errors": []
+  },
+  "images": [
+    {
+      "file": "main.png",
+      "title": "最终构建：默认新店主界面",
+      "phase": "final",
+      "sha256": "12199432f8d836672cb4801d76b29b4b3da5b97660262b31c9d6c1d8143d75f0"
+    },
+    {
+      "file": "main-final.png",
+      "title": "第八天恢复后的主界面",
+      "phase": "final",
+      "sha256": "bcad77a6309f6d03c17380903b214cf2c4cd4970a87e70d18fa7a43a30410cf2"
+    },
+    {
+      "file": "bottom-320.png",
+      "title": "320×568：仓位、行号和营业日志不重叠",
+      "phase": "final",
+      "sha256": "9669db1e98af23f3af7e7679fc6450b4e2828532ccb08da7b5af4af3cdcdd5c3"
+    },
+    {
+      "file": "bottom-375.png",
+      "title": "375×667：完整仓库和保存状态可达",
+      "phase": "final",
+      "sha256": "a2b6533cf80d714b6e3ebcaccdf7be501d388723721564ae4e19343cb28ecd98"
+    },
+    {
+      "file": "bottom-414.png",
+      "title": "414×736：短屏底部",
+      "phase": "final",
+      "sha256": "958b46400027d215217b0167c7cc2106afa66da628fc6560808fdaad91e785bd"
+    },
+    {
+      "file": "bottom-768.png",
+      "title": "768×900：竖屏工作区",
+      "phase": "final",
+      "sha256": "e6b8253976f7967ae5d41cd91a554a0ad4f38501ff900fecd08f06b8967c67b2"
+    },
+    {
+      "file": "warehouse-grid.png",
+      "title": "最终格子底色与44像素格子",
+      "phase": "final",
+      "sha256": "902f4ee2644d03d1de16a0961520316490e21002cb6ab5a576550384ccb22668"
+    },
+    {
+      "file": "warehouse-list.png",
+      "title": "商品清单与品质筛选",
+      "phase": "final",
+      "sha256": "ee80d7afe8dd4d9072c61a0afa8ee709a4ea9efbc9b78f482d0e1ecd0a390aad"
+    },
+    {
+      "file": "ledger.png",
+      "title": "已付清账本与日汇总",
+      "phase": "final",
+      "sha256": "9a2665cdf6917803545559a12b8970ff596df7384d55ac19af6079a04ac6ef21"
+    },
+    {
+      "file": "ledger-day7.png",
+      "title": "第七天收入、支出、毛利与明细",
+      "phase": "final",
+      "sha256": "a0cd1d1e8a9135aec119f6b103c6cf6f0a296ca93992326a6c191bbd5f95b7d5"
+    },
+    {
+      "file": "help-320.png",
+      "title": "手机操作指引",
+      "phase": "final",
+      "sha256": "75c23185074f49b7b2791a704e551d89035f37297d05b9e9622d268861a3cb0e"
+    },
+    {
+      "file": "help-bottom.png",
+      "title": "长说明滚动后关闭入口仍可达",
+      "phase": "final",
+      "sha256": "56fb97f6aad8038f1dcdfa084a51b2c5da18898a69284751a3dafed4a6fe04ff"
+    },
+    {
+      "file": "showcase.png",
+      "title": "展示引导规则说明",
+      "phase": "final",
+      "sha256": "5cb071c9d4b975822610215581d1fbb4f47e16ca3c53d628693d29c643b2511c"
+    },
+    {
+      "file": "reload-final.png",
+      "title": "最终构建刷新后仍为35笔、1109星币、零欠租",
+      "phase": "final",
+      "sha256": "bcad77a6309f6d03c17380903b214cf2c4cd4970a87e70d18fa7a43a30410cf2"
+    },
+    {
+      "file": "budget-320.png",
+      "title": "最终构建边界夹具：320宽预算不足",
+      "phase": "fixture",
+      "sha256": "3e2bfc0f25e1beb46a91fe67fda875334f4b181d0445689762db69f6a86c7f2d"
+    },
+    {
+      "file": "budget-375.png",
+      "title": "最终构建边界夹具：375宽预算不足",
+      "phase": "fixture",
+      "sha256": "4e2253f1a7f756fea9f5c1fcd6fb58bcb7d8cd7c86eb347716f94dc3e5948e20"
+    },
+    {
+      "file": "budget-414.png",
+      "title": "最终构建边界夹具：414宽预算不足",
+      "phase": "fixture",
+      "sha256": "26ecb35e5f1005abf867cfd8e0b0ce7e7d43c52cf43a53d1a073b6dc34167641"
+    },
+    {
+      "file": "budget-768.png",
+      "title": "最终构建边界夹具：768宽预算不足",
+      "phase": "fixture",
+      "sha256": "bec24bef4338d8dcfecd1f818b794a4dbe0bb09ac80834e4dd41a69ce04c1694"
+    },
+    {
+      "file": "bargain-0.8.png",
+      "title": "最终构建边界夹具：还价成功",
+      "phase": "fixture",
+      "sha256": "2ac95b8c8c6cf3073b2176a376e71fcc8f6645c7ba4ea507ef031e96df5b4a7a"
+    },
+    {
+      "file": "bargain-0.2.png",
+      "title": "最终构建边界夹具：还价被拒绝",
+      "phase": "fixture",
+      "sha256": "f64a8e5f1fcd58c4361f734914bcd9e2de6e87a5b062df32c87d1f3791e0a7c7"
+    },
+    {
+      "file": "bargain-0.01.png",
+      "title": "最终构建边界夹具：顾客因还价离开",
+      "phase": "fixture",
+      "sha256": "6518a338a545b9740371511571090992651db86371d373c87c327f1c71d0e59c"
+    },
+    {
+      "file": "play-first-offer.png",
+      "title": "首客来货和整批报价",
+      "phase": "play",
+      "sha256": "b64e44d7da809f49da7864e72caf6ffac200f421f1b816793fee0e5f47b75d02"
+    },
+    {
+      "file": "play-purchase-receipt.png",
+      "title": "首笔收购回执",
+      "phase": "play",
+      "sha256": "eff36213b70168c2f1350968517af4fd9f48ac6bd4295a12ca99c6911f67df90"
+    },
+    {
+      "file": "play-first-touch-sale.png",
+      "title": "触摸拖货后立即核价出售",
+      "phase": "play",
+      "sha256": "24e731ada1b7cbfd6637064e5acae548736a9ef4324b91f2165b5a63ddbcdc18"
+    },
+    {
+      "file": "play-refusal-320.png",
+      "title": "真实收藏家拒收",
+      "phase": "play",
+      "sha256": "39fad05741e527fccd93f541b4401f19ba11d7435fa6b9d755bc590c4ac81e91"
+    },
+    {
+      "file": "play-budget-320.png",
+      "title": "真实经营中两件商品超过预算",
+      "phase": "play",
+      "sha256": "6533e1d08b6d7dc872d0841223c8649a3bfeab9fd79c897216ada9d47bdb0e71"
+    },
+    {
+      "file": "play-day1-report.png",
+      "title": "第一天日结",
+      "phase": "play",
+      "sha256": "bda6c9d4790bca0e8ac6880a55e1c2a594f19f2b30744b9b69e566d7786ac898"
+    },
+    {
+      "file": "play-upgraded.png",
+      "title": "花费180扩仓，现有货不挪位",
+      "phase": "play",
+      "sha256": "4bd2a7f78f65d4d2459b9c2880c681730ab12259ab8f634bdfcb3cfdf4fee390"
+    },
+    {
+      "file": "play-level2-day3-report.png",
+      "title": "第三日结算时解锁二级店铺",
+      "phase": "play",
+      "sha256": "dc679d01457bf1618137588d449cde0f205f0389aa3cd0456fa68d63a38a62e6"
+    },
+    {
+      "file": "play-identified.png",
+      "title": "花费8星币鉴定后的商品",
+      "phase": "play",
+      "sha256": "62b4cdf678a1f81a77bea97154ec4ac08d038e204642ef7707254116fa12546c"
+    },
+    {
+      "file": "play-same-product-comparison.png",
+      "title": "同名商品的成本与坐标",
+      "phase": "play",
+      "sha256": "e66992590c443c5be8207ef3d7727076e016b086baf1d58757706cd5ca23d9db"
+    },
+    {
+      "file": "play-day5-retained-goods.png",
+      "title": "批发触发日结，留台商品跨日保留",
+      "phase": "play",
+      "sha256": "a50c4af7844131a74377dcc20a7f60f1035d0043abd0aa7f23468a205eec608d"
+    },
+    {
+      "file": "play-buyer-finished.png",
+      "title": "买家已买够的明确状态",
+      "phase": "play",
+      "sha256": "ce7d565ebd1bbd257d5320799c1d08329a1e03bcf96011917e4091ce17b4878a"
+    },
+    {
+      "file": "play-three-item-sale.png",
+      "title": "真实三件合售，一次确认算一笔",
+      "phase": "play",
+      "sha256": "63aed769893b896f297ecdfe661ce611001d18fda4f70fe4620de3f7dfaef4bf"
+    },
+    {
+      "file": "play-rent-due-375.png",
+      "title": "第七天房租账单",
+      "phase": "play",
+      "sha256": "1d931d14e4c5ca144f0f758e9f088311b49989d9b6f82ed70dd374cfc71954cb"
+    },
+    {
+      "file": "play-rent-due-320.png",
+      "title": "320窄屏房租账单",
+      "phase": "play",
+      "sha256": "87f25ce6ff1ae794340ae16d978090f83d69e8df284badc6dc2ae81a82a91cf0"
+    },
+    {
+      "file": "play-rent-paid.png",
+      "title": "首周目标达成与租金付清",
+      "phase": "play",
+      "sha256": "590c9a996066728d2cc1d5c27a5951896b54f090ca8aec960763d36b4e79633d"
+    },
+    {
+      "file": "play-completed-reloaded.png",
+      "title": "连续35笔交易完成后的首次刷新",
+      "phase": "play",
+      "sha256": "fedd76e4adab5f2d3bac9b9b625ad4d21c64b7d0c994944a6469cc78d111d264"
+    }
+  ],
+  "phases": "先完成连续35笔实玩；修正截图细节后使用本次独立存档复核最终构建。边界夹具不计入35笔。",
+  "limits": [
+    "H5 headless Chromium touch emulation, not a WeChat real device",
+    "Locator taps may scroll buttons into view; synthetic drags do not prove human finger success rate"
+  ]
+}

@@ -78,9 +78,9 @@ async function stored(page: Page): Promise<Game> {
   )
 }
 async function snap(page: Page, name: string) {
-  await mkdir('artifacts/screenshots-v05', { recursive: true })
+  await mkdir('artifacts/screenshots-v06', { recursive: true })
   await page.screenshot({
-    path: 'artifacts/screenshots-v05/' + name + '.png',
+    path: 'artifacts/screenshots-v06/' + name + '.png',
     fullPage: true,
   })
 }
@@ -89,6 +89,9 @@ async function tablet(page: Page) {
     .getByRole('button', { name: '交易平板', exact: true })
     .first()
     .click()
+  await page.locator('.trading-backdrop .sheet').evaluate(async (el) => {
+    await Promise.all(el.getAnimations().map((animation) => animation.finished))
+  })
 }
 async function act(page: Page, action: Action, reason = '单步正常玩家操作') {
   return page.evaluate(
@@ -107,6 +110,283 @@ async function act(page: Page, action: Action, reason = '单步正常玩家操�
 async function observation(page: Page): Promise<Observation> {
   return page.evaluate(() => (window as any).starshop.observe())
 }
+
+test('手机短屏可滚到完整仓库与保存状态，主要按钮达到44像素', async ({
+  page,
+}) => {
+  await open(page)
+  for (const [width, height] of [
+    [320, 568],
+    [375, 667],
+    [375, 812],
+    [414, 736],
+    [768, 900],
+  ]) {
+    await page.setViewportSize({ width, height })
+    await page.evaluate(() => window.scrollTo(0, 0))
+    const sizes = await page
+      .locator('.console-key,.collect-key,.warehouse-zoom,.intercom-key')
+      .evaluateAll((els) =>
+        els.map((el) => {
+          const r = el.getBoundingClientRect()
+          return { w: r.width, h: r.height }
+        }),
+      )
+    for (const size of sizes) {
+      expect(size.w).toBeGreaterThanOrEqual(43.9)
+      expect(size.h).toBeGreaterThanOrEqual(43.9)
+    }
+    await page.locator('.save-note').scrollIntoViewIfNeeded()
+    expect(await page.evaluate(() => scrollY)).toBeGreaterThan(0)
+    const r = await page.locator('.warehouse-meter').boundingBox()
+    expect(r!.y).toBeGreaterThanOrEqual(0)
+    expect(r!.y + r!.height).toBeLessThanOrEqual(height)
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(width)
+    await page.screenshot({
+      path: 'artifacts/mobile-fixed-' + width + '-' + height + '.png',
+    })
+  }
+})
+
+test('预算不足和全部拒收时保留预算、逐件明细及固定确认栏', async ({ page }) => {
+  const s = fixture()
+  s.visitor = {
+    ...s.visitor!,
+    kind: 'buyer',
+    stock: [],
+    asks: {},
+    category: '机械',
+    budget: 1,
+    remaining: 3,
+  }
+  await open(page, s)
+  await act(page, { type: 'stage', uid: s.inventory[0].uid })
+  for (const [width, height] of [
+    [320, 568],
+    [375, 667],
+    [414, 736],
+    [768, 900],
+  ]) {
+    await page.setViewportSize({ width, height })
+    await tablet(page)
+    await expect(page.locator('.budget-pinned')).toContainText(
+      '剩余预算 1 星币',
+    )
+    expect(
+      await page.locator('.trade-scroll').evaluate((el) => el.clientHeight),
+    ).toBeGreaterThanOrEqual(100)
+    await expect(page.locator('.offer-row').first()).toBeInViewport()
+    await expect(
+      page.getByRole('button', { name: '确认出售', exact: true }),
+    ).toHaveCount(1)
+    await expect(
+      page.getByRole('button', { name: '确认出售', exact: true }),
+    ).toBeDisabled()
+    const footer = await page.locator('.trade-footer').boundingBox()
+    expect(footer!.y + footer!.height).toBeLessThanOrEqual(height)
+    await page.screenshot({ path: 'artifacts/budget-fixed-' + width + '.png' })
+    await page.getByRole('button', { name: '关闭工具面板' }).click()
+  }
+  await act(page, { type: 'unstage', uid: s.inventory[0].uid })
+  await act(page, { type: 'stage', uid: s.inventory[1].uid })
+  await tablet(page)
+  await expect(page.locator('.offer-row.refused')).toContainText(
+    '不符合求购类别',
+  )
+})
+
+test('来货报价与批发不再隐藏，确认前不扣钱、确认后就地反馈', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 })
+  await open(page)
+  await tablet(page)
+  await expect(
+    page.getByRole('button', { name: '整批收购', exact: true }),
+  ).toBeInViewport()
+  await page.getByRole('button', { name: '挑选 offer-a' }).click()
+  expect((await stored(page)).cash).toBe(650)
+  await expect(page.locator('.offer-row')).toContainText('45星币')
+  await expect(
+    page.getByRole('button', { name: '确认收购', exact: true }),
+  ).toHaveCount(1)
+  await page.getByRole('button', { name: '确认收购', exact: true }).tap()
+  await expect(page.locator('.modal-backdrop')).toHaveCount(0)
+  await expect(page.locator('.receipt-toast')).toContainText('已收购 1 件')
+  await page.reload()
+  await expect(page.locator('.save-note')).toContainText('已恢复存档')
+  expect((await stored(page)).cash).toBe(605)
+})
+
+test('放大格子44像素、清晰列表筛选、方向一致、旋转图像与手动落位', async ({
+  page,
+}) => {
+  await open(page)
+  await page.getByRole('button', { name: '放大仓库' }).click()
+  const cell = page.locator('.zoom-grid .grid-cell').first()
+  const r = await cell.boundingBox()
+  expect(r!.width).toBeCloseTo(44, 0)
+  expect(r!.height).toBeCloseTo(44, 0)
+  await page.getByRole('button', { name: '商品清单', exact: true }).click()
+  await page.getByRole('button', { name: '已鉴定', exact: true }).click()
+  await expect(page.locator('.inventory-list-row')).toHaveCount(2)
+  await page.getByRole('button', { name: '检视 ' + safestamp() }).click()
+  await page.getByRole('button', { name: '整理此物', exact: true }).click()
+  await page.getByRole('button', { name: '旋转', exact: true }).click()
+  await page.getByRole('button', { name: '找空位', exact: true }).click()
+  const item = (await stored(page)).inventory.find(
+    (i) => i.uid === safestamp(),
+  )!
+  expect(item.rotated).toBe(true)
+  const transform = await page
+    .locator('.zoom-grid [data-uid="' + safestamp() + '"] .grid-art')
+    .evaluate((el) => getComputedStyle(el).transform)
+  expect(transform).not.toBe('none')
+})
+function safestamp() {
+  return fixture().inventory[2].uid
+}
+
+test('小屏还价反馈固定可见，成功、拒绝、离开都不发生隐式付款', async ({
+  browser,
+}) => {
+  for (const [tolerance, label] of [
+    [0.8, '已降价10%'],
+    [0.2, '还价被拒'],
+    [0.01, '离开'],
+  ] as const) {
+    const context = await browser.newContext({
+      baseURL: 'http://127.0.0.1:10086',
+      viewport: { width: 320, height: 568 },
+      isMobile: true,
+      hasTouch: true,
+    })
+    try {
+      const page = await context.newPage(),
+        s = fixture()
+      s.visitor!.tolerance = tolerance
+      await open(page, s)
+      await page.getByRole('button', { name: '交易平板', exact: true }).tap()
+      await page
+        .getByRole('button', { name: '挑选 offer-a', exact: true })
+        .tap()
+      await page.getByRole('button', { name: '还价 −10%', exact: true }).tap()
+      if (tolerance < 0.08)
+        await expect(page.locator('.empty-trade')).toContainText('离开')
+      else {
+        await expect(page.locator('.bargain-feedback')).toContainText(label)
+        await expect(page.locator('.bargain-feedback')).toBeInViewport({
+          ratio: 1,
+        })
+        await expect(page.locator('.offer-row').first()).toBeInViewport({
+          ratio: 1,
+        })
+      }
+      expect((await stored(page)).cash).toBe(650)
+      expect((await stored(page)).trades).toBe(0)
+      await mkdir('artifacts/screenshots-v06', { recursive: true })
+      await page.screenshot({
+        path: 'artifacts/screenshots-v06/bargain-' + tolerance + '-320.png',
+      })
+    } finally {
+      await context.close()
+    }
+  }
+})
+
+test('四种手机宽度连续轻触只付款一次，关闭报价不穿透到仓库或货物', async ({
+  browser,
+}) => {
+  for (const [width, height] of [
+    [320, 568],
+    [375, 812],
+    [414, 736],
+    [768, 900],
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width, height },
+      isMobile: true,
+      hasTouch: true,
+    })
+    try {
+      const page = await context.newPage()
+      await open(page)
+      await page.getByRole('button', { name: '交易平板', exact: true }).tap()
+      await page
+        .getByRole('button', { name: '挑选 offer-a', exact: true })
+        .tap()
+      expect((await stored(page)).cash).toBe(650)
+      await page.getByRole('button', { name: '确认收购', exact: true }).tap()
+      await expect(page.locator('.modal-backdrop')).toHaveCount(0)
+      await page.getByRole('button', { name: '收回柜台自有货物' }).tap()
+      const s = await stored(page)
+      expect(s.cash).toBe(605)
+      expect(s.progress).toBe(1)
+      expect(s.inventory.find((i) => i.uid === 'offer-a')?.area).toBe(
+        'warehouse',
+      )
+      await page.locator('[data-uid="offer-a"]').tap()
+      await expect(page.getByText('商品检视', { exact: true })).toBeVisible()
+      await page.getByRole('button', { name: '返回', exact: true }).tap()
+      await expect(page.locator('.modal-backdrop')).toHaveCount(0)
+    } finally {
+      await context.close()
+    }
+  }
+})
+
+test('送客与关闭不混淆，未付款来货送走前需要确认', async ({ page }) => {
+  await open(page)
+  await tablet(page)
+  await page.getByRole('button', { name: '关闭工具面板' }).click()
+  expect((await stored(page)).visitor?.id).toBe(100)
+  await page.getByRole('button', { name: '送客', exact: true }).click()
+  await expect(page.locator('.confirmation')).toContainText(
+    '未付款来货将被带走',
+  )
+  await page
+    .locator('.confirmation')
+    .getByRole('button', { name: '取消', exact: true })
+    .click()
+  expect((await stored(page)).visitor?.id).toBe(100)
+  await page.getByRole('button', { name: '送客', exact: true }).click()
+  await page
+    .locator('.confirmation')
+    .getByRole('button', { name: '确认', exact: true })
+    .click()
+  expect((await stored(page)).visitor).toBeNull()
+})
+
+test('买够、首周完成、已付清账本和微信触屏优先说明都有明确状态', async ({
+  page,
+}) => {
+  const s = createGame()
+  s.day = 8
+  s.trades = 35
+  s.bills = [{ day: 7, amount: 120, paid: 120, deferred: false }]
+  s.visitor = {
+    ...s.visitor!,
+    kind: 'buyer',
+    stock: [],
+    asks: {},
+    remaining: 0,
+  }
+  await open(page, s)
+  await expect(page.locator('.visitor-direction')).toHaveText(
+    '已买够 · 可以送客',
+  )
+  await expect(page.locator('.week-goal')).toContainText('首周目标已达成')
+  await page.getByRole('button', { name: '打开账本' }).click()
+  await expect(page.getByRole('button', { name: '支付房租 · 0' })).toHaveCount(
+    0,
+  )
+  await page.getByRole('button', { name: '关闭工具面板' }).click()
+  await page.getByRole('button', { name: '打开手册' }).click()
+  await expect(page.locator('.help-copy')).toContainText('① 收货')
+  await expect(page.locator('.help-copy')).toContainText('格子小时用“放大整理”')
+})
 test.beforeEach(async ({ page }) => {
   await page.route('**/*', (route) =>
     new URL(route.request().url()).hostname === '127.0.0.1'
@@ -123,6 +403,10 @@ async function drag(
   y: number,
   rotate = false,
 ) {
+  await page.locator('.counter-console').scrollIntoViewIfNeeded()
+  await page
+    .locator('.grid-item[data-uid="' + uid + '"]')
+    .scrollIntoViewIfNeeded()
   const source = await page
     .locator('.grid-item[data-uid="' + uid + '"]')
     .boundingBox()
@@ -153,6 +437,7 @@ test('实物来货拖动、撤回、非法投放、刷新与单件付款', async
   expect(s.inventory.some((i) => i.uid === 'offer-a')).toBe(false)
   await tablet(page)
   await snap(page, '02-staged-quote')
+  await page.getByRole('button', { name: '关闭工具面板' }).click()
   await drag(page, 'offer-a', 'warehouse', 0, 3)
   expect((await stored(page)).cash).toBe(650)
   expect((await stored(page)).stagePositions['offer-a'].area).toBe('counter')
@@ -213,6 +498,7 @@ test('独立整批报价付款一次，收回按钮不再扣钱', async ({ page 
   await drag(page, 'offer-b', 'counter', 0, 0)
   expect((await stored(page)).cash).toBe(650)
   await tablet(page)
+  await page.getByRole('button', { name: '挑选货物', exact: true }).click()
   await page.getByRole('button', { name: '整批收购', exact: true }).click()
   await page.locator('.confirmation').getByText('确认', { exact: true }).click()
   let s = await stored(page)
@@ -306,11 +592,13 @@ test('拖动写入失败不改变已发布状态，坏档不覆盖', async ({ pa
   await drag(page, 'offer-a', 'counter', 0, 0)
   expect(await stored(page)).toEqual(before)
   await expect(
-    page.getByText('测试：存储空间不足', { exact: true }),
+    page.getByText('保存失败，本次操作未提交。请检查存储空间后重试。', {
+      exact: true,
+    }),
   ).toBeVisible()
 })
 
-test('320/375/414/768竖屏布局无横向溢出，报价窗口不封锁柜台', async ({
+test('320/375/414/768竖屏布局无横向溢出，报价单关闭后可继续搬货', async ({
   page,
 }) => {
   await open(page)
@@ -329,7 +617,7 @@ test('320/375/414/768竖屏布局无横向溢出，报价窗口不封锁柜台',
   }
 })
 
-test('首位卖家在矮窗口滚动后，来货无遮挡且付款按钮不随账单内容滚走', async ({
+test('首位卖家在矮窗口打开完整报价单，付款按钮不随内容滚走', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 592, height: 590 })
@@ -340,16 +628,11 @@ test('首位卖家在矮窗口滚动后，来货无遮挡且付款按钮不随�
   await drag(page, uid, 'counter', 0, 0)
   await tablet(page)
   await page.evaluate(() => window.scrollTo(0, 200))
-  const layout = await page.evaluate(() => {
-    const quote = document
-      .querySelector('.trading-backdrop .sheet')!
-      .getBoundingClientRect()
-    const goods = document
-      .querySelector('.customer-counter')!
-      .getBoundingClientRect()
-    return { quoteBottom: quote.bottom, goodsTop: goods.top }
-  })
-  expect(layout.quoteBottom).toBeLessThanOrEqual(layout.goodsTop)
+  const bodyHeight = await page
+    .locator('.trade-scroll')
+    .evaluate((el) => el.clientHeight)
+  expect(bodyHeight).toBeGreaterThanOrEqual(100)
+  await expect(page.locator('.budget-pinned')).toBeVisible()
   const confirm = page
     .locator('.trade-footer')
     .getByText('确认收购', { exact: true })
@@ -490,11 +773,13 @@ test('柜台透视格子可点击，扩仓末行可在店内滚动后操作', as
     .click()
   await page.getByText('整理此物', { exact: true }).click()
   await page
+    .locator('.zoom-grid')
     .getByRole('button', { name: 'counter格子 5,0', exact: true })
     .click()
   expect(
     (await stored(page)).inventory.find((i) => i.uid === 'offer-a'),
   ).toMatchObject({ area: 'counter', x: 5, y: 0 })
+  await page.getByRole('button', { name: '关闭工具面板' }).click()
   const warehouseItem = page.getByRole('button', {
     name: '库存 磁悬轴承 ' + s.inventory[0].uid,
     exact: true,
@@ -550,6 +835,8 @@ test('H5触摸拖动使用相同规则且不会产生点开详情的误触', asy
     .toEqual(['offer-a'])
   expect((await stored(page)).cash).toBe(650)
   await expect(page.getByText('商品检视', { exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: '交易平板', exact: true }).tap()
+  await expect(page.locator('.trade-footer')).toContainText('确认收购')
 })
 
 test('旧v2未付款存档先备份后迁移，坏档保留', async ({ page }) => {
